@@ -13,7 +13,9 @@ export class MainPage extends React.Component {
         this.redirectToDayPage = this.redirectToDayPage.bind(this);
     }
 
-    redirectToDayPage(id) {
+    redirectToDayPage(event) {
+        debugger;
+        const id = event.format('MMMDDYYYY');
         browserHistory.push(`/day/${id}`);
     }
 
@@ -32,11 +34,8 @@ export class MainPage extends React.Component {
                     disabledDays={[0,6]}
                     minDate={minDate}
                     keyboardSupport={true}
+                    afterSelect={this.redirectToDayPage}
                 />
-                <input type="submit"
-                    value="Go To Day"
-                    className="btn btn-primary"
-                    onClick={this.redirectToDayPage}/>
             </div>
         );
     }
