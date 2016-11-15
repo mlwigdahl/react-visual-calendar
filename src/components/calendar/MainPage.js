@@ -1,6 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { browserHistory } from 'react-router';
+import InfiniteCalendar from 'react-infinite-calendar';
+import 'react-infinite-calendar/styles.css'; // Make sure to import the default stylesheet
+
 // import { bindActionCreators } from 'redux';
 
 export class MainPage extends React.Component {
@@ -15,9 +18,21 @@ export class MainPage extends React.Component {
     }
 
     render() {
+
+        let today = new Date();
+        let minDate = Number(new Date()) - (24*60*60*1000) * 52; // One week before today
+
         return (
             <div>
                 <h1>Calendar</h1>
+                <InfiniteCalendar
+                    width={400}
+                    height={600}
+                    selectedDate={today}
+                    disabledDays={[0,6]}
+                    minDate={minDate}
+                    keyboardSupport={true}
+                />
                 <input type="submit"
                     value="Go To Day"
                     className="btn btn-primary"
