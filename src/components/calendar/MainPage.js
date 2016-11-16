@@ -14,7 +14,6 @@ export class MainPage extends React.Component {
     }
 
     redirectToDayPage(event) {
-        debugger;
         const id = event.format('MMMDDYYYY');
         browserHistory.push(`/day/${id}`);
     }
