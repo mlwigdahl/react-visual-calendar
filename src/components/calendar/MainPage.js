@@ -1,8 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { browserHistory } from 'react-router';
-import InfiniteCalendar from 'react-infinite-calendar';
-import 'react-infinite-calendar/styles.css'; // Make sure to import the default stylesheet
+//import InfiniteCalendar from 'react-infinite-calendar';
+//import 'react-infinite-calendar/styles.css'; // Make sure to import the default stylesheet
 
 // import { bindActionCreators } from 'redux';
 
@@ -19,13 +19,14 @@ export class MainPage extends React.Component {
     }
 
     render() {
-
-        let today = new Date();
-        let minDate = Number(new Date()) - (24*60*60*1000) * 52; // One week before today
-
         return (
             <div>
                 <h1>Calendar</h1>
+            </div>
+        );
+    }
+}
+/*
                 <InfiniteCalendar
                     width={400}
                     height={600}
@@ -35,10 +36,7 @@ export class MainPage extends React.Component {
                     keyboardSupport={true}
                     afterSelect={this.redirectToDayPage}
                 />
-            </div>
-        );
-    }
-}
+*/
 
 function mapStateToProps(/*state, ownProps*/) {
 /*    const mapped = {
