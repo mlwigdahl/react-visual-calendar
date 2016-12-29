@@ -29,7 +29,6 @@
   "author": "Matt Wigdahl",
   "license": "MIT",
   "dependencies": {
-    "babel-plugin-transform-object-rest-spread": "^6.16.0",
     "babel-polyfill": "^6.8.0",
     "bootstrap": "^3.3.6",
     "jsdom": "9.8.3",
@@ -38,12 +37,11 @@
     "react-addons-css-transition-group": "15.3.2",
     "react-addons-shallow-compare": "15.3.2",
     "react-dom": "15.3.2",
-    "react-infinite-calendar": "1.2.2",
     "react-redux": "4.4.5",
     "react-router": "2.8.1",
     "react-router-redux": "4.0.6",
     "redux": "3.6.0",
-    "redux-thunk": "2.1.0"
+    "redux-saga": "0.14.0"
   },
   "devDependencies": {
     "autoprefixer": "6.5.1",
@@ -52,8 +50,10 @@
     "babel-eslint": "7.0.0",
     "babel-loader": "6.2.5",
     "babel-plugin-react-display-name": "2.0.0",
+    "babel-plugin-transform-object-rest-spread": "^6.16.0",
     "babel-plugin-transform-react-constant-elements": "6.9.1",
     "babel-plugin-transform-react-remove-prop-types": "0.2.10",
+    "babel-plugin-transform-regenerator": "6.20.0",
     "babel-preset-latest": "6.16.0",
     "babel-preset-react": "6.16.0",
     "babel-preset-react-hmre": "1.1.1",
@@ -91,8 +91,6 @@
     "replace": "0.3.0",
     "rimraf": "2.5.4",
     "sass-loader": "4.0.2",
-    "sinon": "1.17.6",
-    "sinon-chai": "2.8.0",
     "style-loader": "0.13.1",
     "url-loader": "0.5.7",
     "webpack": "2.1.0-beta.25",

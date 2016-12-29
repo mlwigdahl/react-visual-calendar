@@ -25,6 +25,7 @@
     "mocha": true
   },
   "rules": {
+    "no-unused-vars": 1,
     "quotes": 0,
     "no-console": 1,
     "no-debugger": 1,
@@ -36,6 +37,8 @@
     "no-alert": 0,
     "no-lone-blocks": 0,
     "jsx-quotes": 1,
+    "import/default": 1,
+    "import/extensions": 1,
     "react/display-name": [ 1, {"ignoreTranspilerName": false }],
     "react/forbid-prop-types": [1, {"forbid": ["any"]}],
     "react/jsx-boolean-value": 0,
