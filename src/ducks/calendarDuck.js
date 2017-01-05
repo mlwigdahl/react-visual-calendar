@@ -1,7 +1,6 @@
 // TODO -- need to make sure the saga exceptions are properly cracked into strings...
 
-import { takeEvery } from 'redux-saga';
-import { put, call } from 'redux-saga/effects';
+import { put, call, takeEvery } from 'redux-saga/effects';
 
 import initialState from './initialState';
 import CalendarApi from '../api/mockCalendarApi';
@@ -47,7 +46,7 @@ export function reducer(state = initialState.calendar, action) {
             return action.calendar;
         
         case actions.LOAD_CALENDAR_FAILURE:
-            return {}; // TODO more here?
+            return {}; // TODO more here?  Probably update global message...
 
         case actions.LOAD_DATE_RANGE_SUCCESS:
             return { 
@@ -56,7 +55,7 @@ export function reducer(state = initialState.calendar, action) {
             };
 
         case actions.LOAD_DATE_RANGE_FAILURE:
-            return {}; // TODO more here?
+            return {}; // TODO more here?  Probably update global message...
 
         case actions.INSERT_DATE_SUCCESS:
             return  {
@@ -68,7 +67,7 @@ export function reducer(state = initialState.calendar, action) {
             };
 
         case actions.INSERT_DATE_FAILURE:
-            return {}; // TODO more here?
+            return {}; // TODO more here?  Probably update global message...
 
         case actions.UPDATE_DATE_SUCCESS:
             return { 
@@ -80,7 +79,7 @@ export function reducer(state = initialState.calendar, action) {
             };
 
         case actions.UPDATE_DATE_FAILURE:
-            return {}; // TODO more here?
+            return {}; // TODO more here?  Probably update global message...
 
         case actions.DELETE_DATE_SUCCESS:
             return {
@@ -91,7 +90,7 @@ export function reducer(state = initialState.calendar, action) {
             };
 
         case actions.DELETE_DATE_FAILURE:
-            return {}; // TODO more here?
+            return {}; // TODO more here?  Probably update global message...
 
         case actions.LOAD_DATEICON_SUCCESS:
             return { 
@@ -106,7 +105,7 @@ export function reducer(state = initialState.calendar, action) {
             };
 
         case actions.LOAD_DATEICON_FAILURE:
-            return {}; // TODO more here?
+            return {}; // TODO more here?  Probably update global message...
 
         case actions.UPDATE_DATEICON_SUCCESS:
             return { 
@@ -121,7 +120,7 @@ export function reducer(state = initialState.calendar, action) {
             };
 
         case actions.UPDATE_DATEICON_FAILURE:
-            return {}; // TODO more here?
+            return {}; // TODO more here?  Probably update global message...
 
         default:
             return state;
@@ -136,7 +135,7 @@ export const sagas = {
             yield takeEvery(actions.LOAD_CALENDAR_REQUEST, sagas.workers.loadCalendar);
         },
         LOAD_DATE_RANGE_REQUEST: function* () {
-            yield takeEvery(actions.LOAD_DATE_REQUEST, sagas.workers.loadDate);
+            yield takeEvery(actions.LOAD_DATE_RANGE_REQUEST, sagas.workers.loadDateRange);
         },
         INSERT_DATE_REQUEST: function* () {
             yield takeEvery(actions.INSERT_DATE_REQUEST, sagas.workers.insertDate);
@@ -164,63 +163,62 @@ export const sagas = {
             catch (e) {
                 yield put(ajax.creators.ajaxError(e));
             }
-
         },
-        loadDateRange: function* (startDate, endDate) {
+        loadDateRange: function* (action) {
             try {
                 yield put(ajax.creators.ajaxRequest());
-                const dates = yield call(CalendarApi.loadDateRange, startDate, endDate);
+                const dates = yield call(CalendarApi.loadDateRange, action.startDate, action.endDate, action.calId);
                 yield put(creators.loadDateRangeSuccess(dates));
             }
             catch (e) {
                 yield put(ajax.creators.ajaxError(e));
             }
         },
-        insertDate: function* (date) {
+        insertDate: function* (action) {
             try {
                 yield put(ajax.creators.ajaxRequest());
-                const dateRet = yield call(CalendarApi.insertDate, date);
+                const dateRet = yield call(CalendarApi.insertDate, action.date, action.calId);
                 yield put(creators.insertDateSuccess(dateRet));
             }
             catch (e) {
                 yield put(ajax.creators.ajaxError(e));
             }
         },
-        updateDate: function* (date) {
+        updateDate: function* (action) {
             try {
                 yield put(ajax.creators.ajaxRequest());
-                const dateRet = yield call(CalendarApi.updateDate, date);
+                const dateRet = yield call(CalendarApi.updateDate, action.date, action.calId);
                 yield put(creators.updateDateSuccess(dateRet));
             }
             catch (e) {
                 yield put(ajax.creators.ajaxError(e));
             }
         },
-        deleteDate: function* (dateId) {
+        deleteDate: function* (action) {
             try {
                 yield put(ajax.creators.ajaxRequest());
-                const dateIdRet = yield call(CalendarApi.deleteDate, dateId);
+                const dateIdRet = yield call(CalendarApi.deleteDate, action.dateId, action.calId);
                 yield put(creators.deleteDateSuccess(dateIdRet));
             }
             catch (e) {
                 yield put(ajax.creators.ajaxError(e));
             }
         },
-        loadDateIcon: function* (dateId) {
+        loadDateIcon: function* (action) {
             try {
                 yield put(ajax.creators.ajaxRequest());
-                const icon = yield call(CalendarApi.loadDateIcon, dateId);
-                yield put(creators.loadDateIconSuccess(icon, dateId));
+                const icon = yield call(CalendarApi.loadDateIcon, action.dateId, action.calId);
+                yield put(creators.loadDateIconSuccess(icon, action.dateId));
             }
             catch (e) {
                 yield put(ajax.creators.ajaxError(e));
             }
         },
-        updateDateIcon: function* (icon, dateId) {
+        updateDateIcon: function* (action) {
             try {
                 yield put(ajax.creators.ajaxRequest());
-                const iconRet = yield call(CalendarApi.updateDateIcon, icon, dateId);
-                yield put(creators.updateDateIconSuccess(iconRet, dateId));
+                const iconRet = yield call(CalendarApi.updateDateIcon, action.icon, action.dateId, action.calId);
+                yield put(creators.updateDateIconSuccess(iconRet, action.dateId));
             }
             catch (e) {
                 yield put(ajax.creators.ajaxError(e));
@@ -253,8 +251,8 @@ export const creators = {
         return { type: actions.LOAD_DATE_RANGE_FAILURE, error };
     },
 
-    loadDateRangeRequest: (pastDetent, futureDetent) => {
-        return { type: actions.LOAD_DATE_RANGE_REQUEST, pastDetent, futureDetent };
+    loadDateRangeRequest: (startDate, endDate, calId) => {
+        return { type: actions.LOAD_DATE_RANGE_REQUEST, startDate, endDate, calId };
     },
     
     insertDateSuccess: (date) => {
@@ -265,8 +263,8 @@ export const creators = {
         return { type: actions.INSERT_DATE_FAILURE, error };
     },
 
-    insertDateRequest: (date) => {
-        return { type: actions.INSERT_DATE_REQUEST, date };
+    insertDateRequest: (date, calId) => {
+        return { type: actions.INSERT_DATE_REQUEST, date, calId };
     },
 
     updateDateSuccess: (date) => {
@@ -277,8 +275,8 @@ export const creators = {
         return { type: actions.UPDATE_DATE_FAILURE, error };
     },
 
-    updateDateRequest: (date) => {
-        return { type: actions.UPDATE_DATE_REQUEST, date };
+    updateDateRequest: (date, calId) => {
+        return { type: actions.UPDATE_DATE_REQUEST, date, calId };
     },
 
     deleteDateSuccess: (dateId) => {
@@ -289,8 +287,8 @@ export const creators = {
         return { type: actions.DELETE_DATE_FAILURE, error };
     },
 
-    deleteDateRequest: (dateId) => {
-        return { type: actions.DELETE_DATE_REQUEST, dateId };
+    deleteDateRequest: (dateId, calId) => {
+        return { type: actions.DELETE_DATE_REQUEST, dateId, calId };
     },
 
     loadDateIconSuccess: (icon, dateId) => {
@@ -301,8 +299,8 @@ export const creators = {
         return { type: actions.LOAD_DATE_ICON_FAILURE, error };
     },
 
-    loadDateIconRequest: (icon, dateId) => {
-        return { type: actions.LOAD_DATE_ICON_REQUEST, icon, dateId };
+    loadDateIconRequest: (dateId, calId) => {
+        return { type: actions.LOAD_DATE_ICON_REQUEST, dateId, calId };
     },
 
     updateDateIconSuccess: (icon, dateId) => {
@@ -313,7 +311,7 @@ export const creators = {
         return { type: actions.UPDATE_DATE_ICON_FAILURE, error };
     },
 
-    updateDateIconRequest: (icon, dateId) => {
-        return { type: actions.UPDATE_DATE_ICON_REQUEST, icon, dateId };
+    updateDateIconRequest: (icon, dateId, calId) => {
+        return { type: actions.UPDATE_DATE_ICON_REQUEST, icon, dateId, calId };
     }
 };

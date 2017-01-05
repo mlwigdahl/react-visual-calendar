@@ -1,5 +1,4 @@
-import { takeEvery } from 'redux-saga';
-import { put, select } from 'redux-saga/effects';
+import { put, select, takeEvery } from 'redux-saga/effects';
 
 import initialState from './initialState';
 import * as calendar from './calendarDuck';
