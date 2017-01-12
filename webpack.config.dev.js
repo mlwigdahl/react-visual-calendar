@@ -49,7 +49,7 @@ export default {
         postcss: () => [autoprefixer],
       }
     }),
-    new BundleAnalyzerPlugin({analyzerMode: 'static', analyzerPort: 5000}) //???*/
+    //new BundleAnalyzerPlugin({analyzerMode: 'static', Port: 5000}) //???*/
   ],
   module: {
     loaders: [

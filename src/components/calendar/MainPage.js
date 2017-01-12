@@ -1,6 +1,9 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { browserHistory } from 'react-router';
+import { browserHistory, withRouter } from 'react-router';
+import Calendar from './Calendar';
+import LogonPage from '../logon/LogonPage';
+
 //import InfiniteCalendar from 'react-infinite-calendar';
 //import 'react-infinite-calendar/styles.css'; // Make sure to import the default stylesheet
 
@@ -14,49 +17,39 @@ export class MainPage extends React.Component {
     }
 
     redirectToDayPage(event) {
+        // TODO almost certainly incorrect event format
         const id = event.format('MMMDDYYYY');
         browserHistory.push(`/day/${id}`);
     }
 
     render() {
+/*        if (this.props.id === undefined) {
+            browserHistory.push(`/logon`);
+            return (<LogonPage />);
+        } */ // TODO logon
+        // need props for calendar
         return (
             <div>
-                <h1>Calendar</h1>
+                <Calendar 
+                    id={this.props.id} 
+                    afterSelect={this.redirectToDayPage}
+                />
             </div>
         );
     }
 }
-/*
-                <InfiniteCalendar
-                    width={400}
-                    height={600}
-                    selectedDate={today}
-                    disabledDays={[0,6]}
-                    minDate={minDate}
-                    keyboardSupport={true}
-                    afterSelect={this.redirectToDayPage}
-                />
-*/
 
-function mapStateToProps(/*state, ownProps*/) {
-/*    const mapped = {
-        authors: [...state.authors].sort( (a, b) => {
-            return a.id.localeCompare(b.id);
-        })
-    };
+function mapStateToProps(state) {
     
-    return mapped; */
-    return {};
-}
+    const cal = state.calendar;
 
-function mapDispatchToProps(/*dispatch*/) {
-    return {
-//        actions: bindActionCreators(authorActions, dispatch)
+    return { 
+        id: cal.id
     };
 }
 
 MainPage.propTypes = {
-//    actions: PropTypes.object.isRequired
+    id: PropTypes.string
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(MainPage);
+export default withRouter(connect(mapStateToProps)(MainPage));

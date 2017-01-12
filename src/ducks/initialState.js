@@ -13,7 +13,10 @@ export default {
         selectedDate: undefined
     },
     calendar: {
-        date: []
+        width: 600,
+        height: 400,
+        minDate: '',
+        maxDate: '',
     }
 };
 
