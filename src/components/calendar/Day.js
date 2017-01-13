@@ -1,15 +1,18 @@
 import React from 'react';
 
-const Day = ({date}) => {
+const Day = ({date, onClick}) => {
     return (
-        <span className='day'>
+        <div 
+            className="day"
+            onClick={onClick}>
             {date.day}
-        </span>
+        </div>
     );
 };
 
 Day.propTypes = {
-    date: React.PropTypes.object.isRequired
+    date: React.PropTypes.object.isRequired,
+    onClick: React.PropTypes.func.isRequired
 };
 
 export default Day;

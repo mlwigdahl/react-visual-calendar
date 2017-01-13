@@ -19,6 +19,10 @@ nav {
     padding-top: 20px;
 }
 
-span.day {
+div.day {
+    display: inline-block;
     border: 2px solid blue;
+    min-width: 90px;
+    min-height: 90px;
+    background-color: cornflowerblue;
 }

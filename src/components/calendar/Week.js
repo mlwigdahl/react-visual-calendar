@@ -1,18 +1,20 @@
 import React from 'react';
 import Day from './Day';
 
-const Week = ({week}) => {
+const Week = ({week, onClick}) => {
     return (
         <div className="week">
             {week.map(obj => {
-                return (<Day key={obj.format('MMDD')} date={{ day: obj.format("ddd, MMM DD") }} />);
+                const key = obj.format('MMDD');
+                return (<Day key={key} id={key} date={{ day: obj.format("MMM DD") }} onClick={onClick} />);
             })}
         </div>
     );
 };
 
 Week.propTypes = {
-    week: React.PropTypes.array.isRequired
+    week: React.PropTypes.array.isRequired,
+    onClick: React.PropTypes.func.isRequired,
 };
 
 export default Week;

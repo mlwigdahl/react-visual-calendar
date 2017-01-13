@@ -14,7 +14,7 @@ export class Calendar extends React.Component {
             currentDate: moment().format("YYYYMMDD"),
         };
 
-//        this.updateAuthorState = this.updateAuthorState.bind(this);
+        this.onDayClick = this.onDayClick.bind(this);
     }
 
     visibleDays(minDate, maxDate, currentDate) {
@@ -45,10 +45,16 @@ export class Calendar extends React.Component {
                 first.add(1, 'day');
             }
 
-            days.push(<Week key={startOfWeek.format("ww")} week={[...week]}/>);
+            const key = startOfWeek.format("ww");
+            days.push(<Week key={key} id={key} week={[...week]} onClick={this.onDayClick}/>);
         }
 
         return days;
+    }
+
+    onDayClick(event) {
+        debugger;
+        return;
     }
 
     render() {
