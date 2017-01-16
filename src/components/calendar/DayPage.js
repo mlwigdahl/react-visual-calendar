@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {PropTypes} from 'react';
 import { connect } from 'react-redux';
 import { browserHistory } from 'react-router';
 // import { bindActionCreators } from 'redux';
@@ -18,6 +18,7 @@ export class DayPage extends React.Component {
         return (
             <div>
                 <h1>Day</h1>
+                <div>{this.props.id}</div>
                 <input type="submit"
                     value="Go To Main"
                     className="btn btn-primary"
@@ -27,15 +28,16 @@ export class DayPage extends React.Component {
     }
 }
 
-function mapStateToProps(/*state, ownProps*/) {
-/*    const mapped = {
-        authors: [...state.authors].sort( (a, b) => {
-            return a.id.localeCompare(b.id);
-        })
+DayPage.propTypes = {
+    id: PropTypes.string.isRequired,
+};
+
+function mapStateToProps(state, ownProps) {
+    const id = ownProps.params.id; // from the path '/course/:id'
+
+    return {
+        id
     };
-    
-    return mapped; */
-    return {};
 }
 
 function mapDispatchToProps(/*dispatch*/) {
@@ -43,9 +45,5 @@ function mapDispatchToProps(/*dispatch*/) {
 //        actions: bindActionCreators(authorActions, dispatch)
     };
 }
-
-DayPage.propTypes = {
-//    actions: PropTypes.object.isRequired
-};
 
 export default connect(mapStateToProps, mapDispatchToProps)(DayPage);

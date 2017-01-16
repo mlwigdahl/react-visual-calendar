@@ -35,7 +35,7 @@ export const actions = {
 
     UPDATE_DATEICON_SUCCESS: 'react-visual-calendar/calendar/UPDATE_DATEICON_SUCCESS',
     UPDATE_DATEICON_FAILURE: 'react-visual-calendar/calendar/UPDATE_DATEICON_FAILURE',
-    UPDATE_DATEICON_REQUEST: 'react-visual-calendar/calendar/UPDATE_DATEICON_REQUEST'
+    UPDATE_DATEICON_REQUEST: 'react-visual-calendar/calendar/UPDATE_DATEICON_REQUEST',
 };
 
 // reducer
@@ -313,5 +313,5 @@ export const creators = {
 
     updateDateIconRequest: (icon, dateId, calId) => {
         return { type: actions.UPDATE_DATE_ICON_REQUEST, icon, dateId, calId };
-    }
+    },
 };

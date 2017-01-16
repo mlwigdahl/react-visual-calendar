@@ -6,6 +6,8 @@ import DayPage from './components/calendar/DayPage'; //eslint-disable-line impor
 import AboutPage from './components/about/AboutPage';
 import NotFoundPage from './components/common/NotFoundPage';
 
+// note:  day ID format is YYYYMMDD
+
 export default (
     <Route path="/" component={App}>
         <IndexRoute component={MainPage} />

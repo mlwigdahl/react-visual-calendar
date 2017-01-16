@@ -12,14 +12,6 @@ import LogonPage from '../logon/LogonPage';
 export class MainPage extends React.Component {
     constructor(props, context) {
         super(props, context);
-        
-        this.redirectToDayPage = this.redirectToDayPage.bind(this);
-    }
-
-    redirectToDayPage(event) {
-        // TODO almost certainly incorrect event format
-        const id = event.format('MMMDDYYYY');
-        browserHistory.push(`/day/${id}`);
     }
 
     render() {
@@ -31,8 +23,7 @@ export class MainPage extends React.Component {
         return (
             <div>
                 <Calendar 
-                    id={this.props.id} 
-                    afterSelect={this.redirectToDayPage}
+                    id={this.props.id}
                 />
             </div>
         );
@@ -44,12 +35,12 @@ function mapStateToProps(state) {
     const cal = state.calendar;
 
     return { 
-        id: cal.id
+        id: cal.id,
     };
 }
 
 MainPage.propTypes = {
-    id: PropTypes.string
+    id: PropTypes.string,
 };
 
 export default withRouter(connect(mapStateToProps)(MainPage));

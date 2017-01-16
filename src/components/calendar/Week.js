@@ -5,8 +5,8 @@ const Week = ({week, onClick}) => {
     return (
         <div className="week">
             {week.map(obj => {
-                const key = obj.format('MMDD');
-                return (<Day key={key} id={key} date={{ day: obj.format("MMM DD") }} onClick={onClick} />);
+                const key = obj.format('YYYYMMDD');
+                return (<Day key={key} date={{ day: obj.format("MMM DD") }} onClick={onClick} />);
             })}
         </div>
     );
