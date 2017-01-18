@@ -1,8 +1,8 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { browserHistory, withRouter } from 'react-router';
+import { /*browserHistory, */withRouter } from 'react-router';
 import Calendar from './Calendar';
-import LogonPage from '../logon/LogonPage';
+//import LogonPage from '../logon/LogonPage';
 
 //import InfiniteCalendar from 'react-infinite-calendar';
 //import 'react-infinite-calendar/styles.css'; // Make sure to import the default stylesheet

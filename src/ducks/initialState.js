@@ -1,5 +1,3 @@
-import moment from 'moment';
-
 export default {
     ajax: {
         callsActive: 0,

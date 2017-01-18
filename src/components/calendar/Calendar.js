@@ -88,7 +88,7 @@ Calendar.propTypes = {
     actions: PropTypes.object.isRequired,
 };
 
-function mapStateToProps(state, ownProps) {
+function mapStateToProps(state/*, ownProps*/) {
     const cal = state.calendar;
 
     // TODO need id here?  shouldn't -- it's passed in
