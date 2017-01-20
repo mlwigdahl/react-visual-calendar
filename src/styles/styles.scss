@@ -1,6 +1,7 @@
 /* Variables */
 $app-gray: #4d4d4d;
 $active: orange;
+$color-date: maroon;
 
 /* Styles */
 #app {
@@ -19,14 +20,36 @@ nav {
     padding-top: 20px;
 }
 
+div.week {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-around;
+}
+
 div.day {
-    display: inline-block;
     border: 1px solid blue;
-    min-width: 114px;
+    width: 14.28%;
     min-height: 90px;
     background-color: lightgrey;
 }
 
 div.calendar-class {
     border: 1px solid blue;
+}
+
+span.date-day {
+    font-weight: 600;
+    color: $color-date;
+}
+
+span.date-label {
+    font-weight: 600;
+}
+
+span.date-start {
+    margin-left: 10px;
+}
+
+span.date-end {
+    margin-left: 10px;
 }

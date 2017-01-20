@@ -7,9 +7,11 @@ function renderEvents(dates) {
     return dates.map(date => date.events.map(
         (event, index) => {
             return (<div key={index}>
-                <span>{`${event.label}`}</span>
+                <span className="date-label">{`${event.label}`}</span>
                 <br/>
-                <span>{`${event.startTime} - ${event.endTime}`}</span>
+                <span className="date-start">{`${event.startTime}`}</span>
+                <br/>
+                <span className="date-end">{`${event.endTime}`}</span>
             </div>);
         }
     ));
@@ -20,7 +22,7 @@ const Day = ({date, onClick, events}) => {
         <div 
             className="day"
             onClick={onClick}>
-            <span>{date.day}</span>
+            <span className="date-day">{date.day}</span>
             <br/>
             {renderEvents(events)}
         </div>
