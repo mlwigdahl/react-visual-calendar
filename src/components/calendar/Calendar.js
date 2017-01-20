@@ -40,7 +40,7 @@ export class Calendar extends React.Component {
             }
 
             const key = startOfWeek.format("wwYYYY");
-            days.push(<Week key={key} week={[...week]} onClick={this.onDayClick} cal={this.props.calendar}/>);
+            days.push(<Week key={key} week={[...week]} onClick={this.onDayClick} calendar={this.props.calendar}/>);
         }
 
         return days;
