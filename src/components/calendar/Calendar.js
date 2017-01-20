@@ -16,23 +16,15 @@ export class Calendar extends React.Component {
         };
 
         this.onDayClick = this.onDayClick.bind(this);
+        this.onScroll = this.onScroll.bind(this);
     }
 
-    // TODO pull out into separate file
-    visibleDays(minDate, maxDate, currentDate) {
+    renderDays() {
+        // comments preserved for later API implementation...
         // start with the current date.  Go back two weeks and forward three weeks, then pull in the full week for each of those points.  Can't be earlier than min or later than max
-
-        let first = moment(currentDate).subtract(2, 'weeks').startOf('week');
-        
-        if (first.isBefore(minDate)) { // TODO load some more data?
-            first = moment(minDate);
-        }
-
-        let last = moment(currentDate).add(3, 'weeks').endOf('week');
-
-        if (last.isAfter(maxDate)) { // TODO load some more data?
-            last = moment(maxDate);
-        }
+        // may involve an API call as we'll be retrieving calendar data.  Pass the current date and allow it to set application state to the appropriate window, loading data as necessary.
+        let first = moment(this.props.calendar.minDate);
+        let last  = moment(this.props.calendar.maxDate);
 
         let days = [];
         let week = [];
@@ -66,12 +58,17 @@ export class Calendar extends React.Component {
         return;
     }
 
+    onScroll(/*event*/) {
+        // TODO if we're at the end of our loaded data, we'll need to pull some more in.
+        return;
+    }
+
     render() {
         return (
             <div>
                 <h1>Prototype Visual Calendar</h1>
-                <div>
-                    {this.visibleDays(this.props.minDate, this.props.maxDate, this.props.currentDate)}
+                <div className="calendar-class" onScroll={this.onScroll}>
+                    {this.renderDays()}
                 </div>
             </div>
         );
@@ -79,27 +76,18 @@ export class Calendar extends React.Component {
 }
 
 Calendar.propTypes = {
-    id: PropTypes.string,
+    currentDate: PropTypes.string.isRequired,
     width: PropTypes.number.isRequired,
     height: PropTypes.number.isRequired,
-    minDate: PropTypes.string.isRequired,
-    maxDate: PropTypes.string.isRequired,
-    currentDate: PropTypes.string.isRequired,
+    calendar: PropTypes.object,
     actions: PropTypes.object.isRequired,
 };
 
-function mapStateToProps(state/*, ownProps*/) {
-    const cal = state.calendar;
 
-    // TODO need id here?  shouldn't -- it's passed in
-    return { 
-        width: cal.width || 600,
-        height: cal.height || 400,
-        minDate: cal.minDate || moment().subtract(2, 'months').format("YYYYMMDD"),
-        maxDate: cal.maxDate || moment().add(2, 'months').format("YYYYMMDD"),
-        currentDate: moment().format("YYYYMMDD"),
-    };
+function mapStateToProps(/*state, ownProps*/) {
+    return {};
 }
+
 
 function mapDispatchToProps(dispatch) {
     return {

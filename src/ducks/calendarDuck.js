@@ -40,20 +40,25 @@ export const actions = {
 
 // reducer
 
-export function reducer(state = initialState.calendar, action) {
+export function reducer(state = initialState.calendars, action) {
     switch (action.type) {
         case actions.LOAD_CALENDAR_SUCCESS:
-            return action.calendar;
+            return [...state, action.calendar];
         
         case actions.LOAD_CALENDAR_FAILURE:
-            return {}; // TODO more here?  Probably update global message...
+            return state; // TODO more here?  Probably update global message...
 
         case actions.LOAD_DATE_RANGE_SUCCESS:
-            return { 
-                ...state,
-                date: [...(state.date), [...action.dates]]
-            };
+        {
+            // TODO add new items to existing calendar...
+            const newState = [...state];
+            let cal = newState.find(cal => cal.id == action.calendar.id);
 
+            const newDates = action.calendar.dateInfo.map(item => item.date);
+            cal.dateInfo = [...cal.dateInfo.filter(item => !newDates.includes(item.date)), ...action.calendar.dateInfo];
+
+            return newState;
+        }
         case actions.LOAD_DATE_RANGE_FAILURE:
             return {}; // TODO more here?  Probably update global message...
 
