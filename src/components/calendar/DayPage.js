@@ -14,11 +14,25 @@ export class DayPage extends React.Component {
         browserHistory.push('/');
     }
 
+    renderEvents(dates) {
+        return dates.map(date => date.events.map(
+            (event, index) => {
+                return (<div key={index}>
+                    <span className="date-label">{`${event.label}`}</span>
+                    <br/>
+                    <span className="date-start">{`${event.startTime}`}</span>
+                    <br/>
+                    <span className="date-end">{`${event.endTime}`}</span>
+                </div>);
+            }
+        ));
+    }
+
     render() {
         return (
             <div>
                 <h1>Day</h1>
-                <div>{this.props.id}</div>
+                <div>{this.renderEvents(this.props.dates)}</div>
                 <input type="submit"
                     value="Go To Main"
                     className="btn btn-primary"
@@ -30,13 +44,18 @@ export class DayPage extends React.Component {
 
 DayPage.propTypes = {
     id: PropTypes.string.isRequired,
+    dates: PropTypes.array.isRequired,
 };
 
 function mapStateToProps(state, ownProps) {
     const id = ownProps.params.id; // from the path '/course/:id'
+    const dates = state.calendars
+        .find(cal => cal.id == state.app.activeCalId)
+        .dateInfo.filter(info => info.date == id) || [];
 
     return {
-        id
+        id,
+        dates,
     };
 }
 

@@ -2,7 +2,7 @@ import React, {PropTypes} from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import moment from 'moment';
-import { withRouter, browserHistory } from 'react-router';
+import { withRouter } from 'react-router';
 
 import * as calendar from '../../ducks/calendarDuck';
 import Week from './Week';
@@ -15,7 +15,6 @@ export class Calendar extends React.Component {
             currentDate: moment().format("YYYYMMDD"),
         };
 
-        this.onDayClick = this.onDayClick.bind(this);
         this.onScroll = this.onScroll.bind(this);
     }
 
@@ -40,22 +39,10 @@ export class Calendar extends React.Component {
             }
 
             const key = startOfWeek.format("wwYYYY");
-            days.push(<Week key={key} week={[...week]} onClick={this.onDayClick} calendar={this.props.calendar}/>);
+            days.push(<Week key={key} week={[...week]} curDate={this.state.currentDate} calendar={this.props.calendar}/>);
         }
 
         return days;
-    }
-
-    onDayClick(event) {
-        // get the information on what was clicked from the DOM, then push new page
-
-        const date = moment(event.target.innerText, 'MMM DD');
-        const now = moment(this.props.currentDate, 'YYYYMMDD');
-        const year = now.year() - ((now.month() < date.month()) ? 1 : 0);
-        
-        browserHistory.push(`/day/${moment({ year, month: date.month(), day: date.date() }).format('YYYYMMDD')}`);
-        
-        return;
     }
 
     onScroll(/*event*/) {

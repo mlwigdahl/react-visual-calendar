@@ -1,4 +1,6 @@
 import React from 'react';
+import { browserHistory } from 'react-router';
+import moment from 'moment';
 
 // TODO -- fix rendering layout
 // TODO -- deal with click now that we've extended the text
@@ -17,11 +19,20 @@ function renderEvents(dates) {
     ));
 }
 
-const Day = ({date, onClick, events}) => {
+const Day = ({date, curDate, events}) => {
+
+    const day = date.day;
+
+    function onClick() {
+        const date = moment(day, 'MMM DD');
+        const now = moment(curDate, 'YYYYMMDD');
+        const year = now.year() - ((now.month() < date.month()) ? 1 : 0);
+        
+        browserHistory.push(`/day/${moment({ year, month: date.month(), day: date.date() }).format('YYYYMMDD')}`);
+    }
+
     return (
-        <div 
-            className="day"
-            onClick={onClick}>
+        <div className="day" onClick={onClick}>
             <span className="date-day">{date.day}</span>
             <br/>
             {renderEvents(events)}
@@ -31,7 +42,7 @@ const Day = ({date, onClick, events}) => {
 
 Day.propTypes = {
     date: React.PropTypes.object.isRequired,
-    onClick: React.PropTypes.func.isRequired,
+    curDate: React.PropTypes.string.isRequired,
     events: React.PropTypes.array.isRequired,
 };
 
