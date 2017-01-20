@@ -11,7 +11,7 @@ export default {
             name: undefined,
         },
         width: 600,
-        height: 400,
+        height: 600,
         currentDate: moment().format("YYYYMMDD"),
         activeCalId: 0,
     },
@@ -19,8 +19,8 @@ export default {
         {
             id: 0,
             selectedDate: '20170101',
-            minDate: '20161218',
-            maxDate: '20170128',
+            minDate: '20161211',
+            maxDate: '20170204',
             dateInfo: [
                 {
                     date: '20170101',
@@ -28,7 +28,7 @@ export default {
                         {
                             icon: 'icon_slug',
                             label: 'label_text',
-                            startTime: '8:15 AM',
+                            startTime: '08:15 AM',
                             endTime: '10:15 AM',
                             endDate: '20170101',
                         }

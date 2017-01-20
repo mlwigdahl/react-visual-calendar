@@ -63,12 +63,15 @@ export class Calendar extends React.Component {
         return;
     }
 
+    // TODO not sure if this setup is optimal for scrolling / display
     render() {
         return (
             <div>
                 <h1>Prototype Visual Calendar</h1>
-                <div className="calendar-class" onScroll={this.onScroll}>
-                    {this.renderDays()}
+                <div style={{overflowY: 'scroll', maxHeight: this.props.height}} onScroll={this.onScroll}>
+                    <div className="calendar-class">
+                        {this.renderDays()}
+                    </div>
                 </div>
             </div>
         );
