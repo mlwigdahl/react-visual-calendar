@@ -1,7 +1,7 @@
 import moment from 'moment';
 
 export default {
-    ajax: {
+    async: {
         callsActive: 0,
         lastError: undefined
     },
@@ -26,8 +26,8 @@ export default {
                     date: '20170101',
                     events: [
                         {
-                            icon: 'icon_slug',
-                            label: 'label_text',
+                            icon: 'scissors.jpg',
+                            label: 'Haircut',
                             startTime: '08:15 AM',
                             endTime: '10:15 AM',
                             endDate: '20170101',

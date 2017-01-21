@@ -1,6 +1,8 @@
 import React, {PropTypes} from 'react';
 import { connect } from 'react-redux';
 import { browserHistory } from 'react-router';
+import moment from 'moment';
+
 // import { bindActionCreators } from 'redux';
 
 export class DayPage extends React.Component {
@@ -8,6 +10,16 @@ export class DayPage extends React.Component {
         super(props, context);
         
         this.redirectToMainPage = this.redirectToMainPage.bind(this);
+        
+        this.state = {
+            formattedDate: moment(props.id).format("MMM DD")
+        };
+    }
+
+    componentWillReceiveProps(nextProps) {
+        this.setState({
+            formattedDate: moment(nextProps.id).format("MMM DD")
+        });
     }
 
     redirectToMainPage() {
@@ -31,7 +43,7 @@ export class DayPage extends React.Component {
     render() {
         return (
             <div>
-                <h1>Day</h1>
+                <h1>{this.state.formattedDate}</h1>
                 <div>{this.renderEvents(this.props.dates)}</div>
                 <input type="submit"
                     value="Go To Main"

@@ -1,13 +1,13 @@
 // Set up your root reducer here...
 import { combineReducers } from 'redux';
 import * as calendar from './calendarDuck';
-import * as ajax from './ajaxDuck';
+import * as async from './asyncDuck';
 import * as app from './appDuck';
 import { routerReducer } from 'react-router-redux';
 
 const reducer = combineReducers({
     calendars: calendar.reducer,
-    ajax: ajax.reducer,
+    async: async.reducer,
     routing: routerReducer,
     app: app.reducer,
 });

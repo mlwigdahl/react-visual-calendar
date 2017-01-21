@@ -4,7 +4,7 @@ import { put, call, takeEvery } from 'redux-saga/effects';
 
 import initialState from './initialState';
 import CalendarApi from '../api/mockCalendarApi';
-import * as ajax from './ajaxDuck';
+import * as async from './asyncDuck';
 
 // actions
 
@@ -161,72 +161,72 @@ export const sagas = {
     workers: {
         loadCalendar: function* () {
             try {
-                yield put(ajax.creators.ajaxRequest());
+                yield put(async.creators.asyncRequest());
                 const calendar = yield call(CalendarApi.loadCalendar);
                 yield put(creators.loadCalendarSuccess(calendar));
             }
             catch (e) {
-                yield put(ajax.creators.ajaxError(e));
+                yield put(async.creators.asyncError(e));
             }
         },
         loadDateRange: function* (action) {
             try {
-                yield put(ajax.creators.ajaxRequest());
+                yield put(async.creators.asyncRequest());
                 const dates = yield call(CalendarApi.loadDateRange, action.startDate, action.endDate, action.calId);
                 yield put(creators.loadDateRangeSuccess(dates));
             }
             catch (e) {
-                yield put(ajax.creators.ajaxError(e));
+                yield put(async.creators.asyncError(e));
             }
         },
         insertDate: function* (action) {
             try {
-                yield put(ajax.creators.ajaxRequest());
+                yield put(async.creators.asyncRequest());
                 const dateRet = yield call(CalendarApi.insertDate, action.date, action.calId);
                 yield put(creators.insertDateSuccess(dateRet));
             }
             catch (e) {
-                yield put(ajax.creators.ajaxError(e));
+                yield put(async.creators.asyncError(e));
             }
         },
         updateDate: function* (action) {
             try {
-                yield put(ajax.creators.ajaxRequest());
+                yield put(async.creators.asyncRequest());
                 const dateRet = yield call(CalendarApi.updateDate, action.date, action.calId);
                 yield put(creators.updateDateSuccess(dateRet));
             }
             catch (e) {
-                yield put(ajax.creators.ajaxError(e));
+                yield put(async.creators.asyncError(e));
             }
         },
         deleteDate: function* (action) {
             try {
-                yield put(ajax.creators.ajaxRequest());
+                yield put(async.creators.asyncRequest());
                 const dateIdRet = yield call(CalendarApi.deleteDate, action.dateId, action.calId);
                 yield put(creators.deleteDateSuccess(dateIdRet));
             }
             catch (e) {
-                yield put(ajax.creators.ajaxError(e));
+                yield put(async.creators.asyncError(e));
             }
         },
         loadDateIcon: function* (action) {
             try {
-                yield put(ajax.creators.ajaxRequest());
+                yield put(async.creators.asyncRequest());
                 const icon = yield call(CalendarApi.loadDateIcon, action.dateId, action.calId);
                 yield put(creators.loadDateIconSuccess(icon, action.dateId));
             }
             catch (e) {
-                yield put(ajax.creators.ajaxError(e));
+                yield put(async.creators.asyncError(e));
             }
         },
         updateDateIcon: function* (action) {
             try {
-                yield put(ajax.creators.ajaxRequest());
+                yield put(async.creators.asyncRequest());
                 const iconRet = yield call(CalendarApi.updateDateIcon, action.icon, action.dateId, action.calId);
                 yield put(creators.updateDateIconSuccess(iconRet, action.dateId));
             }
             catch (e) {
-                yield put(ajax.creators.ajaxError(e));
+                yield put(async.creators.asyncError(e));
             }
         }
     }
