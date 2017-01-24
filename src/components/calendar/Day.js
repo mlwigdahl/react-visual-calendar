@@ -5,18 +5,24 @@ import moment from 'moment';
 // TODO -- fix rendering layout
 // TODO -- deal with click now that we've extended the text
 
+function renderMore(length) {
+    if (length > 1) {
+        return (<span className="date-label">{`(more)`}</span>);
+    }
+}
+
 function renderEvents(dates) {
-    return dates.map(date => date.events.map(
-        (event, index) => {
-            return (<div key={index}>
-                <span className="date-label">{`${event.label}`}</span>
+    if (dates.length > 0 && dates[0].events.length > 0) {
+        return (<div>
+                <span className="date-label">{`${dates[0].events[0].label}`}</span>
                 <br/>
-                <span className="date-start">{`${event.startTime}`}</span>
+                <span className="date-start">{`${dates[0].events[0].startTime}`}</span>
                 <br/>
-                <span className="date-end">{`${event.endTime}`}</span>
+                <span className="date-end">{`${dates[0].events[0].endTime}`}</span>
+                <br/>
+                {renderMore(dates[0].events.length)}
             </div>);
-        }
-    ));
+    }
 }
 
 const Day = ({date, curDate, events}) => {
