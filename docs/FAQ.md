@@ -16,7 +16,7 @@ Unfortunately, scripts in package.json can't be commented inline because the JSO
 | create-dist | Creates the dist folder and the necessary subfolders. |
 | prebuild | Runs automatically before build script (due to naming convention). Cleans dist folder, builds html, and builds sass. |
 | build | Bundles all JavaScript using webpack and writes it to /dist. |
-| test | Runs tests (files ending in .spec.js) using Mocha and outputs results to the command line. Watches all files so tests are re-run upon save. |
+| test | Runs tests (files ending in .test.js) using Mocha and outputs results to the command line. Watches all files so tests are re-run upon save. |
 | test:cover | Runs tests as described above. Generates a HTML coverage report to ./coverage/index.html |
 | test:cover:travis | Runs coverage as described above, however sends machine readable lcov data to Coveralls. This should only be used from the travis build! |
 
@@ -166,14 +166,14 @@ Nope. Redux is useful for applications with more complex data flows. If your app
 * Places the resulting built project files into /dist. (This is the folder you'll expose to the world).
 
 ### Why are test files placed alongside the file under test (instead of centralized)?
-Streamlined automated testing is a core feature of this starter kit. All tests are placed in files that end in .spec.js. Spec files are placed in the same directory as the file under test. Why?
-+ The existence of tests is highly visible. If a corresponding .spec file hasn't been created, it's obvious.
+Streamlined automated testing is a core feature of this starter kit. All tests are placed in files that end in .test.js. Test files are placed in the same directory as the file under test. Why?
++ The existence of tests is highly visible. If a corresponding .test file hasn't been created, it's obvious.
 + Easy to open since they're in the same folder as the file being tested.
 + Easy to create new test files when creating new source files.
 + Short import paths are easy to type and less brittle.
 + As files are moved, it's easy to move tests alongside.
 
-That said, you can of course place your tests under /test instead, which is the Mocha default. If you do, you can simplify the test script to no longer specify the path. Then Mocha will simply look in /test to find your spec files.
+That said, you can of course place your tests under /test instead, which is the Mocha default. If you do, you can simplify the test script to no longer specify the path. Then Mocha will simply look in /test to find your test files.
 
 ### How do I debug?
 Since browsers don't currently support ES6, we're using Babel to compile our ES6 down to ES5. This means the code that runs in the browser looks different than what we wrote. But good news, a [sourcemap](http://www.html5rocks.com/en/tutorials/developertools/sourcemaps/) is generated to enable easy debugging. This means your original JS source will be displayed in your browser's dev console.

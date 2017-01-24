@@ -1,6 +1,7 @@
 // TODO -- need to make sure the saga exceptions are properly cracked into strings...
 
 import { put, call, takeEvery } from 'redux-saga/effects';
+import { browserHistory } from 'react-router';
 
 import initialState from './initialState';
 import CalendarApi from '../api/mockCalendarApi';
@@ -164,6 +165,7 @@ export const sagas = {
                 yield put(async.creators.asyncRequest());
                 const calendar = yield call(CalendarApi.loadCalendar, action.userId);
                 yield put(creators.loadCalendarSuccess(calendar));
+                browserHistory.push('/');
             }
             catch (e) {
                 yield put(async.creators.asyncError(e));
