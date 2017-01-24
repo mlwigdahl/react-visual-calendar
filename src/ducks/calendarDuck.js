@@ -165,7 +165,7 @@ export const sagas = {
                 yield put(async.creators.asyncRequest());
                 const calendar = yield call(CalendarApi.loadCalendar, action.userId);
                 yield put(creators.loadCalendarSuccess(calendar));
-                browserHistory.push('/');
+                yield call(browserHistory.push, '/');
             }
             catch (e) {
                 yield put(async.creators.asyncError(e));
