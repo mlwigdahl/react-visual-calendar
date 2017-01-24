@@ -22,6 +22,11 @@ export class Calendar extends React.Component {
         // comments preserved for later API implementation...
         // start with the current date.  Go back two weeks and forward three weeks, then pull in the full week for each of those points.  Can't be earlier than min or later than max
         // may involve an API call as we'll be retrieving calendar data.  Pass the current date and allow it to set application state to the appropriate window, loading data as necessary.
+
+        if (this.props.calendar === undefined) {
+            return;
+        }
+
         let first = moment(this.props.calendar.minDate);
         let last  = moment(this.props.calendar.maxDate);
 

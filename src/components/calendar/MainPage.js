@@ -46,7 +46,7 @@ function mapStateToProps(state) {
         height: app.height,
         currentDate: app.currentDate,
         calId: app.activeCalId,
-        calendar: cal !== undefined ? {...cal} : {},
+        calendar: cal !== undefined ? {...cal} : undefined,
     };
 }
 

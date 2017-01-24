@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 
-const LoginForm = ({onSubmit, validToLogin}) => {
+const LoginForm = ({onSubmit, onChange, validToLogin, name, error}) => {
     return (
         <div>
             <h1>Login</h1>
@@ -9,7 +9,9 @@ const LoginForm = ({onSubmit, validToLogin}) => {
                     <label htmlFor="usr">Username</label>
                     <input 
                         name="usr"
+                        value={name}
                         type="text"
+                        onChange={onChange}
                         className="form-control"
                     />
                 </div>
@@ -18,6 +20,7 @@ const LoginForm = ({onSubmit, validToLogin}) => {
                     <input 
                         name="pwd"
                         type="password"
+                        onChange={onChange}
                         className="form-control"
                     />
                 </div>
@@ -26,7 +29,9 @@ const LoginForm = ({onSubmit, validToLogin}) => {
                     disabled={!validToLogin()}
                     value={"Submit"}
                     className="btn btn-primary"
-                    onClick={onSubmit} />                
+                    onClick={onSubmit} />
+                <p />
+                <span className="app-error">{error}</span>
             </form>
         </div>
     );
@@ -34,7 +39,10 @@ const LoginForm = ({onSubmit, validToLogin}) => {
 
 LoginForm.propTypes = {
     onSubmit: PropTypes.func.isRequired,
-    validToLogin: PropTypes.func.isRequired
+    onChange: PropTypes.func.isRequired,
+    validToLogin: PropTypes.func.isRequired,
+    name: PropTypes.string,
+    error: PropTypes.string,
 };
 
 export default LoginForm;

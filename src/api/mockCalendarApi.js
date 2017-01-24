@@ -1,6 +1,36 @@
 import delay from './delay';
 // import moment from 'moment'; // TODO no need for this at the moment...
 
+
+const calendar = {
+    id: 0,
+    selectedDate: '20170101',
+    minDate: '20161211',
+    maxDate: '20170204',
+    dateInfo: [
+        {
+            date: '20170101',
+            events: [
+                {
+                    icon: 'scissors.jpg',
+                    label: 'Haircut',
+                    startTime: '08:15 AM',
+                    endTime: '10:15 AM',
+                    endDate: '20170101',
+                },
+                {
+                    icon: 'food.jpg',
+                    label: 'Lunch! 😁',
+                    startTime: '11:30 AM',
+                    endTime: '12:30 PM',
+                    endDate: '20170101',
+                }
+            ]
+        }
+    ]
+};
+
+
 const dates = [
     { id: 1, date: new Date(2017, 1, 1), 
         events: 
@@ -16,16 +46,10 @@ const dates = [
 
 let maxDate = 2;
 
-const calendar = {
-    user: "Test User",
-    id: 1,
-    dates
-};
-
 const icon = "test-icon-url";
 
 class CalendarApi {
-    static loadCalendar() {
+    static loadCalendar(userId) {
         return new Promise((resolve) => {
             setTimeout(() => {
                 resolve({...calendar});

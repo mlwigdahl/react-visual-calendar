@@ -159,10 +159,10 @@ export const sagas = {
         }
     },
     workers: {
-        loadCalendar: function* () {
+        loadCalendar: function* (action) {
             try {
                 yield put(async.creators.asyncRequest());
-                const calendar = yield call(CalendarApi.loadCalendar);
+                const calendar = yield call(CalendarApi.loadCalendar, action.userId);
                 yield put(creators.loadCalendarSuccess(calendar));
             }
             catch (e) {
@@ -244,8 +244,8 @@ export const creators = {
         return { type: actions.LOAD_CALENDAR_FAILURE, error };
     },
 
-    loadCalendarRequest: () => {
-        return { type: actions.LOAD_CALENDAR_REQUEST };
+    loadCalendarRequest: (userId) => {
+        return { type: actions.LOAD_CALENDAR_REQUEST, userId };
     },
 
     loadDateRangeSuccess: (dates) => {

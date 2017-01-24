@@ -12,13 +12,16 @@ const reducer = combineReducers({
     app: app.reducer,
 });
 
+function* sagaLoader(watchers) {
+    for(let watcher in watchers) {
+        yield watchers[watcher]();
+    }
+}
+
 const saga = function * () {
     yield [
-        ...(function* (watchers) {
-            for(let watcher in watchers) {
-                yield watchers[watcher]();
-            }
-        })(calendar.sagas.watchers),
+        ...(sagaLoader)(calendar.sagas.watchers),
+        ...(sagaLoader)(app.sagas.watchers),
     ];
 };
  
