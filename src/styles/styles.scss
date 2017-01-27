@@ -33,6 +33,10 @@ div.day {
     background-color: lightgrey;
 }
 
+div.cur-day {
+    background-color: palegoldenrod;
+}
+
 div.calendar-class {
     border: 1px solid blue;
 }
@@ -44,12 +48,18 @@ span.date-day {
 
 span.date-label {
     font-weight: 600;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 
-span.date-start {
+span.date-start  {
     margin-left: 10px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 
-span.date-end {
+span.date-end  {
     margin-left: 10px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }

@@ -16,13 +16,22 @@ function renderEvents(dates) {
         return (<div>
                 <span className="date-label">{`${dates[0].events[0].label}`}</span>
                 <br/>
-                <span className="date-start">{`${dates[0].events[0].startTime}`}</span>
-                <br/>
-                <span className="date-end">{`${dates[0].events[0].endTime}`}</span>
+                <span className="date-start">{`${dates[0].events[0].startTime} - ${dates[0].events[0].endTime}`}</span>
                 <br/>
                 {renderMore(dates[0].events.length)}
             </div>);
     }
+}
+
+function dayClass(day, curDate) {
+    const date = moment(day, 'MMM DD').format("MMDD");
+    const now = moment(curDate, 'YYYYMMDD').format("MMDD");
+
+    if (date == now) {
+        return "day cur-day";
+    }
+
+    return "day";
 }
 
 const Day = ({date, curDate, events}) => {
@@ -38,7 +47,7 @@ const Day = ({date, curDate, events}) => {
     }
 
     return (
-        <div className="day" onClick={onClick}>
+        <div className={dayClass(day, curDate)} onClick={onClick}>
             <span className="date-day">{date.day}</span>
             <br/>
             {renderEvents(events)}
