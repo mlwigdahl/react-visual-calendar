@@ -11,6 +11,16 @@ import AppApi from '../api/mockAppApi';
 
 // setup
 
+const initialState = {
+    app: {
+        user: {
+            id: undefined,
+            name: undefined,
+            error: undefined,
+        }
+    }
+};
+
 // helper functions
 
 function drainGenerator(gen) {
@@ -22,16 +32,6 @@ function drainGenerator(gen) {
 }
 
 // reducer tests
-
-const initialState = {
-    app: {
-        user: {
-            id: undefined,
-            name: undefined,
-            error: undefined,
-        }
-    }
-};
 
 describe('App Duck', () => {
     it('saga should start an async request and return proper data on login', () => {
@@ -67,7 +67,7 @@ describe('App Duck', () => {
             .run({ silenceTimeout: true });
     });
 
-    it('reducer should update the status when the reducer is exercised on login', () => {
+    it('reducer should update the status on login success', () => {
         const user = drainGenerator(AppApi.loginAttempt());
 
         const action = app.creators.loginSuccess(user);
@@ -77,5 +77,15 @@ describe('App Duck', () => {
         expect(newState.user.id).to.equal(1);
         expect(newState.user.name).to.equal('Test User');
     }); 
+
+    it ('reducer should update the status on login failure', () => {
+        const action = app.creators.loginFailure('nasty API error');
+
+        const newState = app.reducer(initialState.app, action);
+
+        expect(newState.user.id).to.be.undefined;
+        expect(newState.user.name).to.be.undefined;
+        expect(newState.user.error).to.equal('nasty API error');
+    });
 });
 
