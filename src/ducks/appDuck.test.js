@@ -31,7 +31,7 @@ function drainGenerator(gen) {
     return val.value;
 }
 
-// reducer tests
+// duck tests
 
 describe('App Duck', () => {
     it('saga should start an async request and return proper data on login', () => {
