@@ -8,6 +8,7 @@ import * as async from './asyncDuck';
 import * as calendar from './calendarDuck';
 import AppApi from '../api/mockAppApi';
 // import AppApi, { target, apiPath, port } from '../api/appApi'; // when we have a real API to test...
+import * as testhelpers from '../common/TestHelpers';
 
 // setup
 
@@ -21,21 +22,11 @@ const initialState = {
     }
 };
 
-// helper functions
-
-function drainGenerator(gen) {
-    let val;
-    do {
-        val = gen.next();
-    } while (!val.done)
-    return val.value;
-}
-
 // duck tests
 
 describe('App Duck', () => {
     it('saga should start an async request and return proper data on login', () => {
-        const user = drainGenerator(AppApi.loginAttempt());
+        const user = testhelpers.drainGenerator(AppApi.loginAttempt());
 
         const saga = testSaga(app.sagas.workers.loginRequest, app.creators.loginRequest('test', 'pwd'));
         return saga
@@ -68,7 +59,7 @@ describe('App Duck', () => {
     });
 
     it('reducer should update the status on login success', () => {
-        const user = drainGenerator(AppApi.loginAttempt());
+        const user = testhelpers.drainGenerator(AppApi.loginAttempt());
 
         const action = app.creators.loginSuccess(user);
 

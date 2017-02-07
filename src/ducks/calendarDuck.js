@@ -6,6 +6,7 @@ import { browserHistory } from 'react-router';
 import initialState from './initialState';
 import CalendarApi from '../api/mockCalendarApi';
 import * as async from './asyncDuck';
+import * as helpers from '../common/Helpers';
 
 // actions
 
@@ -165,7 +166,8 @@ export const sagas = {
                 yield put(async.creators.asyncRequest());
                 const calendar = yield call(CalendarApi.loadCalendar, action.userId);
                 yield put(creators.loadCalendarSuccess(calendar));
-                yield call(browserHistory.push, '/');
+                const bh = yield call(helpers.getBrowserHistory);
+                yield call(bh.push, '/');
             }
             catch (e) {
                 yield put(async.creators.asyncError(e));

@@ -1,6 +1,8 @@
 import delay from './delay';
 // import moment from 'moment'; // TODO no need for this at the moment...
 
+import { call, apply, put } from 'redux-saga/effects';
+import { target, apiPath, port, cors } from '../api/AppApi';
 
 const calendar = {
     id: 0,
@@ -30,18 +32,23 @@ const calendar = {
     ]
 };
 
+const state = {
+    calendars: [
+        calendar,
+    ],
+}
 
 const dates = [
-    { id: 1, date: new Date(2017, 1, 1), 
+    { date: '20170101', 
         events: 
         [
-            { time: new Date(2017, 1, 1, 15, 45, 0, 0), icon: "meeting-icon-url", text: "3:45 meeting 😒😒\nRed conference room" },
-            { time: new Date(2017, 1, 1, 11, 30, 0, 0), icon: "lunch-icon-url", text: "Lunch! 😁"}
+            { startTime: '03:45 PM', endTime: '04:45 PM', endDate: '20170101', icon: "meeting-icon-url", label: "3:45 meeting 😒😒 (Red conference room)" },
+            { startTime: '11:30 AM', endTime: '12:30 PM', endDate: '20170101', icon: "lunch-icon-url", label: "Lunch! 😁" },
         ]
     },
-    { id: 2, date: new Date(2016, 12, 31),
-        events: []
-    }
+    { date: '20161231',
+        events: [],
+    },
 ];
 
 let maxDate = 2;
@@ -49,20 +56,31 @@ let maxDate = 2;
 const icon = "test-icon-url";
 
 class CalendarApi {
-    static loadCalendar(userId) {
-        return new Promise((resolve) => {
-            setTimeout(() => {
-                resolve({...calendar});
-            }, delay);
-        });
+    static loadCalendar = function* (userId) {
+        try {
+            yield call(fetch, 
+                `http://${target}:${port}/${apiPath}/user/${userId}/calendar`,
+                { method: 'GET', mode: cors }); 
+            const resp = new Response(); // minor differences to the main API since we don't actually call fetch...
+            const json = yield apply(resp, resp.json);
+            return { ...state.calendars[0] };
+        } catch(error) {
+            return []; // TODO more here
+        }
     }
 
-    static loadDateRange(startDate, endDate, calId) {
-        return new Promise((resolve) => {
-            setTimeout(() => {
-                resolve([...(dates.filter(item => item.date.getTime() >= startDate.getTime() && item.date.getTime() <= endDate.getTime()))]);
-            }, delay);
-        });
+    static loadDateRange = function* (startDate, endDate, calId) {
+        try {
+            yield call(fetch,
+                `http://${target}:${port}/${apiPath}/calendar/${calId}/dateRange?${startDate}&${endDate}&${calId}`,
+                { method: 'GET', mode: cors });
+            const resp = new Response(); // minor differences to the main API since we don't actually call fetch...
+            const json = yield apply(resp, resp.json);
+            return [...(dates.filter(item => parseInt(item.date, 10) >= parseInt(startDate, 10) 
+                    && parseInt(item.date, 10) <= parseInt(endDate, 10)))];
+        } catch(error) {
+            return []; // TODO more here
+        }
     }
 
     static insertDate(date, calId) {
