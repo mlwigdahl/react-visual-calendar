@@ -65,7 +65,7 @@ export default {
 //    new webpack.optimize.DedupePlugin(), // removed in webpack 2.0
 
     // Minify JS
-    new webpack.optimize.UglifyJsPlugin(), // TODO Testing
+    new webpack.optimize.UglifyJsPlugin({ sourceMap: true }), // TODO Testing
 
     new webpack.LoaderOptionsPlugin({
       minimize: true,

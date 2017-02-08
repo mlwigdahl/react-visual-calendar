@@ -54,15 +54,15 @@ export function reducer(state = initialState.calendars, action) {
         {
             // TODO add new items to existing calendar...
             const newState = [...state];
-            let cal = newState.find(cal => cal.id == action.calendar.id);
+            let cal = newState.find(cal => cal.id == action.calId);
 
-            const newDates = action.calendar.dateInfo.map(item => item.date);
-            cal.dateInfo = [...cal.dateInfo.filter(item => !newDates.includes(item.date)), ...action.calendar.dateInfo];
+            const newDates = action.dates.map(item => item.date);
+            cal.dateInfo = [...cal.dateInfo.filter(item => !newDates.includes(item.date)), ...action.dates];
 
             return newState;
         }
         case actions.LOAD_DATE_RANGE_FAILURE:
-            return {}; // TODO more here?  Probably update global message...
+            return state; // TODO more here?  Probably update global message...
 
         case actions.INSERT_DATE_SUCCESS:
             return  {
@@ -177,7 +177,7 @@ export const sagas = {
             try {
                 yield put(async.creators.asyncRequest());
                 const dates = yield call(CalendarApi.loadDateRange, action.startDate, action.endDate, action.calId);
-                yield put(creators.loadDateRangeSuccess(dates));
+                yield put(creators.loadDateRangeSuccess(dates, action.calId));
             }
             catch (e) {
                 yield put(async.creators.asyncError(e));
@@ -252,8 +252,8 @@ export const creators = {
         return { type: actions.LOAD_CALENDAR_REQUEST, userId };
     },
 
-    loadDateRangeSuccess: (dates) => {
-        return { type: actions.LOAD_DATE_RANGE_SUCCESS, dates };
+    loadDateRangeSuccess: (dates, calId) => {
+        return { type: actions.LOAD_DATE_RANGE_SUCCESS, dates, calId };
     },
 
     loadDateRangeFailure: (error) => {

@@ -14,6 +14,12 @@ import * as helpers from '../common/Helpers';
 
 const mockBrowserHistory = { push: () => {} }; // mock browserHistory
 
+// setup
+
+const initialState = {
+    calendars: [],
+};
+
 // duck tests
 
 describe('Calendar Duck', () => {
@@ -24,15 +30,6 @@ describe('Calendar Duck', () => {
                 .take(calendar.actions.LOAD_CALENDAR_REQUEST)
                 .dispatch(calendar.creators.loadCalendarRequest(1))
                 .dispatch(calendar.creators.loadCalendarRequest(2))
-                .run({ silenceTimeout: true });
-        });
-
-        it ('should have LOAD_DATE_RANGE_REQUEST pick up multiple requests', () => {
-            return expectSaga(calendar.sagas.watchers.LOAD_DATE_RANGE_REQUEST)
-                .take(calendar.actions.LOAD_DATE_RANGE_REQUEST)
-                .take(calendar.actions.LOAD_DATE_RANGE_REQUEST)
-                .dispatch(calendar.creators.loadDateRangeRequest('1/1/2017', '2/1/2017', 1))
-                .dispatch(calendar.creators.loadCalendarRequest('12/1/2016', '1/1/2016', 2))
                 .run({ silenceTimeout: true });
         });
 
@@ -68,25 +65,65 @@ describe('Calendar Duck', () => {
         });
 
         it('should have loadDateRange start an async request and return success', () => {
-            const dr = testhelpers.drainGenerator(CalendarApi.loadDateRange('20161231', '20170101', 1));
+            const dr = testhelpers.drainGenerator(CalendarApi.loadDateRange('20161231', '20170101', 0));
 
-            const saga = testSaga(calendar.sagas.workers.loadDateRange, calendar.creators.loadDateRangeRequest('20161231', '20170101', 1));
+            const saga = testSaga(calendar.sagas.workers.loadDateRange, calendar.creators.loadDateRangeRequest('20161231', '20170101', 0));
             return saga
                 .next()
                 .put(async.creators.asyncRequest()) // starts AJAX
                 .next()
-                .call(CalendarApi.loadDateRange, '20161231', '20170101', 1)
+                .call(CalendarApi.loadDateRange, '20161231', '20170101', 0)
                 .next(dr)
-                .put(calendar.creators.loadDateRangeSuccess(dr))
+                .put(calendar.creators.loadDateRangeSuccess(dr, 0))
                 .next()
                 .isDone();
         });
     });
-/*
+
     describe('reducers', () => {
+        it('should have LOAD_CALENDAR_SUCCESS update the status', () => {
+            const cal = testhelpers.drainGenerator(CalendarApi.loadCalendar(1));
 
+            const action = calendar.creators.loadCalendarSuccess(cal);
+
+            const newState = calendar.reducer(initialState.calendars, action);
+
+            expect(newState.length).to.equal(1);
+            expect(newState[0].selectedDate).to.equal('20170101');
+        }); 
+
+        it ("should have LOAD_CALENDAR_FAILURE update the status (although it doesn't actually do anything at the moment)", () => {
+            const action = calendar.creators.loadCalendarFailure("oops");
+            
+            const newState = calendar.reducer(initialState.calendars, action);
+
+            expect(newState.length).to.equal(0);
+        });
+
+        it ('should have LOAD_DATE_RANGE_SUCCESS update the status', () => {
+            const cal = testhelpers.drainGenerator(CalendarApi.loadCalendar(1));
+            const dr = testhelpers.drainGenerator(CalendarApi.loadDateRange('20161231', '20170101', 0));
+
+            const action = calendar.creators.loadCalendarSuccess(cal);
+
+            const newState = calendar.reducer(initialState.calendars, action);
+
+            const action2 = calendar.creators.loadDateRangeSuccess(dr, 0);
+
+            const newState2 = calendar.reducer(newState, action2);
+
+            expect(newState2.length).to.equal(1);
+            expect(newState2[0].dateInfo.length).to.equal(2);
+            expect(newState2[0].dateInfo[0].events.length).to.equal(2); // TODO this assumes ordering, clean up
+        });
+
+        it ("should have LOAD_DATE_RANGE_FAILURE update the status (although it doesn't actually do anything at the moment)", () => {
+            const action = calendar.creators.loadDateRangeFailure("oops");
+
+            const newState = calendar.reducer(initialState.calendars, action);
+
+            expect(newState.length).to.equal(0);
+        });
     });
-*/
-
 });
 
