@@ -4,6 +4,6 @@ export function drainGenerator(gen) {
     let val;
     do {
         val = gen.next();
-    } while (!val.done)
+    } while (!val.done);
     return val.value;
 }

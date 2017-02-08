@@ -80,7 +80,7 @@ describe('Calendar Duck', () => {
         });
     });
 
-    describe('reducers', () => {
+    describe('reducer', () => {
         it('should have LOAD_CALENDAR_SUCCESS update the status', () => {
             const cal = testhelpers.drainGenerator(CalendarApi.loadCalendar(1));
 

@@ -16,12 +16,12 @@
           "es2015": {
             "modules": false
           }  
-        }],
+        }]
       ],
       "plugins": [
         "transform-regenerator",
         "transform-react-constant-elements",
-        "transform-react-remove-prop-types"
+        "transform-react-remove-prop-types",
       ]
     },
     "test": {

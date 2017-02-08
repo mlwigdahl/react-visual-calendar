@@ -1,7 +1,7 @@
-import delay from './delay';
+// import delay from './delay';
 // import moment from 'moment'; // TODO no need for this at the moment...
 
-import { call, apply, put } from 'redux-saga/effects';
+import { call, apply/*, put*/ } from 'redux-saga/effects';
 import { target, apiPath, port, cors } from '../api/AppApi';
 
 const calendar = {
@@ -36,7 +36,7 @@ const state = {
     calendars: [
         calendar,
     ],
-}
+};
 
 const dates = [
     { date: '20170101', 
@@ -51,77 +51,80 @@ const dates = [
     },
 ];
 
-let maxDate = 2;
+/*let maxDate = 2;
 
-const icon = "test-icon-url";
+const icon = "test-icon-url";*/
 
-class CalendarApi {
-    static loadCalendar = function* (userId) {
+const CalendarApi = {
+    loadCalendar: function* (userId) {
         try {
             yield call(fetch, 
                 `http://${target}:${port}/${apiPath}/user/${userId}/calendar`,
                 { method: 'GET', mode: cors }); 
             const resp = new Response(); // minor differences to the main API since we don't actually call fetch...
-            const json = yield apply(resp, resp.json);
+            /*const json =*/ yield apply(resp, resp.json);
             return { ...state.calendars[0] };
         } catch(error) {
             return []; // TODO more here
         }
-    }
+    },
 
-    static loadDateRange = function* (startDate, endDate, calId) {
+    loadDateRange: function* (startDate, endDate, calId) {
         try {
             yield call(fetch,
                 `http://${target}:${port}/${apiPath}/calendar/${calId}/dateRange?${startDate}&${endDate}&${calId}`,
                 { method: 'GET', mode: cors });
             const resp = new Response(); // minor differences to the main API since we don't actually call fetch...
-            const json = yield apply(resp, resp.json);
+            /*const json =*/ yield apply(resp, resp.json);
             return [...(dates.filter(item => parseInt(item.date, 10) >= parseInt(startDate, 10) 
                     && parseInt(item.date, 10) <= parseInt(endDate, 10)))];
         } catch(error) {
             return []; // TODO more here
         }
-    }
+    },
 
-    static insertDate(date, calId) {
+// TODO more here
+/*
+    insertDate: function* (date, calId) {
         return new Promise((resolve) => {
             setTimeout(() => {
                 resolve({...date, id: maxDate++});
             }, delay);
         });
-    }
+    },
 
-    static updateDate(date, calId) {
+    updateDate: function* (date, calId) {
         return new Promise((resolve) => {
             setTimeout(() => {
                 resolve({...date});
             }, delay);
         });
-    }
+    },
 
-    static deleteDate(dateId, calId) {
+    deleteDate: function* (dateId, calId) {
         return new Promise((resolve) => {
             setTimeout(() => {
                 resolve(dateId);
             }, delay);
         });
-    }
+    },
 
-    static loadDateIcon(dateId, calId) {
+    loadDateIcon: function* (dateId, calId) {
         return new Promise((resolve) => {
             setTimeout(() => {
                 resolve(icon);
             }, delay);
         });
-    }
+    },
     
-    static updateDateIcon(icon, dateId, calId) {
+    updateDateIcon: function* (icon, dateId, calId) {
         return new Promise((resolve) => {
             setTimeout(() => {
                 resolve(dateId);
             }, delay);
         });
     }
-}
+*/
+};
 
 export default CalendarApi;

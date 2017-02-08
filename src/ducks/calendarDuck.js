@@ -1,7 +1,6 @@
 // TODO -- need to make sure the saga exceptions are properly cracked into strings...
 
 import { put, call, takeEvery } from 'redux-saga/effects';
-import { browserHistory } from 'react-router';
 
 import initialState from './initialState';
 import CalendarApi from '../api/mockCalendarApi';
