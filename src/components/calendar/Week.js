@@ -5,7 +5,7 @@ function findEvents(calendar, date) {
     return calendar.dateInfo.filter(info => info.date == date);
 }
 
-const Week = ({week, curDate, calendar}) => {
+function Week({week, curDate, calendar}) {
     return (
         <div className="week">
             {week.map(obj => {
@@ -14,7 +14,7 @@ const Week = ({week, curDate, calendar}) => {
             })}
         </div>
     );
-};
+}
 
 Week.propTypes = {
     week: React.PropTypes.array.isRequired,

@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 
-const LoginForm = ({onSubmit, onChange, validToLogin, name, error}) => {
+function LoginForm({onSubmit, onChange, validToLogin, name, error}) {
     return (
         <div>
             <h1>Login</h1>
@@ -35,7 +35,7 @@ const LoginForm = ({onSubmit, onChange, validToLogin, name, error}) => {
             </form>
         </div>
     );
-};
+}
 
 LoginForm.propTypes = {
     onSubmit: PropTypes.func.isRequired,

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router';
 
-const NotFoundPage = () => {
+function NotFoundPage() {
   return (
     <div>
       <h4>
@@ -11,6 +11,6 @@ const NotFoundPage = () => {
       <Link to="/"> Go back to the main calendar page </Link>
     </div>
   );
-};
+}
 
 export default NotFoundPage;

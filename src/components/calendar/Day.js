@@ -34,7 +34,7 @@ function dayClass(day, curDate) {
     return "day";
 }
 
-const Day = ({date, curDate, events}) => {
+function Day({date, curDate, events}) {
 
     const day = date.day;
 
@@ -53,7 +53,7 @@ const Day = ({date, curDate, events}) => {
             {renderEvents(events)}
         </div>
     );
-};
+}
 
 Day.propTypes = {
     date: React.PropTypes.object.isRequired,
