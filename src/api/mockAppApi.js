@@ -1,6 +1,6 @@
 
-import { call, apply/*, put*/ } from 'redux-saga/effects';
-import { target, apiPath, port, cors } from '../api/AppApi';
+//import { call, apply/*, put*/ } from 'redux-saga/effects';
+//import { target, apiPath, port, cors } from '../api/AppApi';
 
 const state = {
     app: {
@@ -22,6 +22,7 @@ const AppApi = {
             const resp = new Response(); // minor differences to the main API since we don't actually call fetch...
             yield apply(resp, resp.json);
             */
+            yield 1; // to suppress lint error
             return {...state.app.user};
         } catch(error) {
             return []; // TODO more here

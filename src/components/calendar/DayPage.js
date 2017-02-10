@@ -18,6 +18,13 @@ export class DayPage extends React.Component {
         };
     }
 
+    componentDidMount() {
+         if (this.props.user == 0) {
+            browserHistory.push(`/login`);
+//            return (<LoginPage />); // TODO remove?
+        }
+    }
+
     componentWillReceiveProps(nextProps) {
         this.setState({
             formattedDate: moment(nextProps.id).format("MMM DD")
@@ -84,6 +91,14 @@ DayPage.propTypes = {
 };
 
 function mapStateToProps(state, ownProps) {
+
+    if (state.calendar.dateInfo === undefined) {
+        return {
+            user: 0,
+            id: '',
+            dates: [],
+        };
+    }
 
     const id = ownProps.params.id; // from the path '/course/:id'
     const dates = state.calendar.dateInfo.filter(info => info.date == id) || [];

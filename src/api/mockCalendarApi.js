@@ -1,8 +1,8 @@
 // import delay from './delay';
 // import moment from 'moment'; // TODO no need for this at the moment...
 
-import { call, apply/*, put*/ } from 'redux-saga/effects';
-import { target, apiPath, port, cors } from '../api/AppApi';
+//import { call, apply/*, put*/ } from 'redux-saga/effects';
+//import { target, apiPath, port, cors } from '../api/AppApi';
 
 const calendar = {
     selectedDate: '20170101',
@@ -64,6 +64,7 @@ const CalendarApi = {
             const resp = new Response(); // minor differences to the main API since we don't actually call fetch...
             yield apply(resp, resp.json);
             */
+            yield 1; // to suppress lint error
             return { ...state.calendar };
         } catch(error) {
             return []; // TODO more here
@@ -79,6 +80,7 @@ const CalendarApi = {
             const resp = new Response(); // minor differences to the main API since we don't actually call fetch...
             yield apply(resp, resp.json);
             */
+            yield 1; // to suppress lint error
             return [...(dates.filter(item => parseInt(item.date, 10) >= parseInt(startDate, 10) 
                     && parseInt(item.date, 10) <= parseInt(endDate, 10)))];
         } catch(error) {

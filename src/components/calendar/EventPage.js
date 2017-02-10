@@ -28,6 +28,13 @@ export class EventPage extends React.Component {
         }; // TODO does this all really need to be state?
     }
 
+    componentDidMount() {
+         if (this.props.user == 0) {
+            browserHistory.push(`/login`);
+//            return (<LoginPage />); // TODO remove?
+        }
+    }
+
     componentWillReceiveProps(nextProps) {
     }
 
@@ -106,6 +113,15 @@ EventPage.propTypes = {
 
 function mapStateToProps(state, ownProps) {
     // user, id and eventId come in via the routing as params
+
+    if (state.calendar.dateInfo === undefined) {
+        return {
+            user: 0,
+            id: '',
+            eventId: 0,
+            add: false,
+        };
+    }
 
     if (ownProps.params.eventId == 'new') {
         return {
