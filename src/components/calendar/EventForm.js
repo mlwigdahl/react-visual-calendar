@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 
-function EventForm({onSubmit, onDelete, onChange, onCancel, title, startTime, endTime, add, isSubmitValid, isDeleteValid}) {
+function EventForm({onSubmit, onChange, onCancel, title, startTime, endTime, add, isSubmitValid}) {
     return (
         <form>
             <div className="form-group">
@@ -17,6 +17,7 @@ function EventForm({onSubmit, onDelete, onChange, onCancel, title, startTime, en
                 <label htmlFor="start-time">Start Time</label>
                 <input 
                     name="start-time"
+                    value={startTime}
                     type="text"
                     onChange={onChange}
                     className="form-control"
@@ -26,6 +27,7 @@ function EventForm({onSubmit, onDelete, onChange, onCancel, title, startTime, en
                 <label htmlFor="end-time">End Time</label>
                 <input 
                     name="end-time"
+                    value={endTime}
                     type="text"
                     onChange={onChange}
                     className="form-control"
@@ -39,12 +41,6 @@ function EventForm({onSubmit, onDelete, onChange, onCancel, title, startTime, en
                 onClick={onSubmit} />
             <input
                 type="submit"
-                disabled={!isDeleteValid()}
-                value={"Delete"}
-                className="btn btn-primary"
-                onClick={onDelete} />
-            <input
-                type="submit"
                 value={"Submit"}
                 className="btn btn-primary"
                 onClick={onCancel} />
@@ -54,7 +50,6 @@ function EventForm({onSubmit, onDelete, onChange, onCancel, title, startTime, en
 
 EventForm.propTypes = {
     onSubmit: PropTypes.func.isRequired,
-    onDelete: PropTypes.func.isRequired,
     onChange: PropTypes.func.isRequired,
     onCancel: PropTypes.func.isRequired,
     title: PropTypes.string,
@@ -62,7 +57,6 @@ EventForm.propTypes = {
     endTime: PropTypes.string,
     add: PropTypes.bool.isRequired,
     isSubmitValid: PropTypes.func.isRequired,
-    isDeleteValid: PropTypes.func.isRequired,
 };
 
 export default EventForm;

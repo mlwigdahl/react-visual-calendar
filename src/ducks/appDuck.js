@@ -42,7 +42,7 @@ export const sagas = {
         loginRequest: function* (action) {
             try {
                 yield put(async.creators.asyncRequest());
-                let user = yield call(AppApi.loginAttempt, action.data.username, action.data.password);
+                const user = yield call(AppApi.loginAttempt, action.data.username, action.data.password);
                 yield put(creators.loginSuccess(user));
                 yield put(calendar.creators.loadCalendarRequest(user.id));
             }

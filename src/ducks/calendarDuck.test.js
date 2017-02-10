@@ -17,7 +17,7 @@ const mockBrowserHistory = { push: () => {} }; // mock browserHistory
 // setup
 
 const initialState = {
-    calendars: [],
+    calendar: {},
 };
 
 // duck tests
@@ -86,18 +86,19 @@ describe('Calendar Duck', () => {
 
             const action = calendar.creators.loadCalendarSuccess(cal);
 
-            const newState = calendar.reducer(initialState.calendars, action);
+            const newState = calendar.reducer(initialState.calendar, action);
 
-            expect(newState.length).to.equal(1);
-            expect(newState[0].selectedDate).to.equal('20170101');
+            expect(newState).to.not.be.undefined;
+            expect(newState.selectedDate).to.equal('20170101');
         }); 
 
         it ("should have LOAD_CALENDAR_FAILURE update the status (although it doesn't actually do anything at the moment)", () => {
             const action = calendar.creators.loadCalendarFailure("oops");
             
-            const newState = calendar.reducer(initialState.calendars, action);
+            const newState = calendar.reducer(initialState.calendar, action);
 
-            expect(newState.length).to.equal(0);
+            expect(newState).to.not.be.undefined;
+            expect(newState).to.deep.equal({});
         });
 
         it ('should have LOAD_DATE_RANGE_SUCCESS update the status', () => {
@@ -106,23 +107,24 @@ describe('Calendar Duck', () => {
 
             const action = calendar.creators.loadCalendarSuccess(cal);
 
-            const newState = calendar.reducer(initialState.calendars, action);
+            const newState = calendar.reducer(initialState.calendar, action);
 
             const action2 = calendar.creators.loadDateRangeSuccess(dr, 0);
 
             const newState2 = calendar.reducer(newState, action2);
 
-            expect(newState2.length).to.equal(1);
-            expect(newState2[0].dateInfo.length).to.equal(2);
-            expect(newState2[0].dateInfo[0].events.length).to.equal(2); // TODO this assumes ordering, clean up
+            expect(newState2).to.not.be.undefined;
+            expect(newState2.dateInfo.length).to.equal(2);
+            expect(newState2.dateInfo[0].events.length).to.equal(2); // TODO this assumes ordering, clean up
         });
 
         it ("should have LOAD_DATE_RANGE_FAILURE update the status (although it doesn't actually do anything at the moment)", () => {
             const action = calendar.creators.loadDateRangeFailure("oops");
 
-            const newState = calendar.reducer(initialState.calendars, action);
+            const newState = calendar.reducer(initialState.calendar, action);
 
-            expect(newState.length).to.equal(0);
+            expect(newState).to.not.be.undefined;
+            expect(newState).to.deep.equal({});
         });
     });
 });

@@ -24,28 +24,37 @@ export class MainPage extends React.Component {
 
     render() {
         // need props for calendar
-        return (
-            <div>
-                <Calendar 
-                    currentDate={this.props.currentDate}
-                    width={this.props.width}
-                    height={this.props.height}
-                    calendar={this.props.calendar}
-                />
-            </div>
-        );
+        if (this.props.user.id === undefined) {
+            return (
+                <div>
+                    <span>Should not see...</span>
+                </div>
+            );
+        }
+        else {
+            return (
+                <div>
+                    <Calendar 
+                        currentDate={this.props.currentDate}
+                        width={this.props.width}
+                        height={this.props.height}
+                        calendar={this.props.calendar}
+                        user={this.props.user.id}
+                    />
+                </div>
+            );
+        }
     }
 }
 
 function mapStateToProps(state) {    
     const app = state.app;
-    const cal = state.calendars.find(cal => cal.id == state.app.activeCalId);
+    const cal = state.calendar;
     return { 
         user: {...app.user},
         width: app.width,
         height: app.height,
         currentDate: app.currentDate,
-        calId: app.activeCalId,
         calendar: cal !== undefined ? {...cal} : undefined,
     };
 }
@@ -55,7 +64,6 @@ MainPage.propTypes = {
     width: PropTypes.number.isRequired,
     height: PropTypes.number.isRequired,
     currentDate: PropTypes.string.isRequired,
-    calId: PropTypes.number,
     calendar: PropTypes.object
 };
 

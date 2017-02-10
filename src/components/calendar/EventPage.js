@@ -6,16 +6,15 @@ import moment from 'moment';
 import { bindActionCreators } from 'redux';
 
 import * as cal from '../../ducks/calendarDuck';
+import EventForm from './EventForm';
 
-export class DayPage extends React.Component {
+export class EventPage extends React.Component {
     constructor(props, context) {
         super(props, context);
         
-        this.redirectToMainPage = this.redirectToDayPage.bind(this);
+        this.redirectToDayPage = this.redirectToDayPage.bind(this);
         this.isSubmitValid = this.isSubmitValid.bind(this);
-        this.isDeleteValid = this.isDeleteValid.bind(this);
         this.cancelRequest = this.cancelRequest.bind(this);
-        this.deleteRequest = this.deleteRequest.bind(this);
         this.submitRequest = this.submitRequest.bind(this);
         this.formChange = this.formChange.bind(this);
         
@@ -23,38 +22,21 @@ export class DayPage extends React.Component {
             title: this.props.title,
             startTime: this.props.startTime,
             endTime: this.props.endTime,
-            formattedDate: moment(this.props.date).format("MMM DD, YYYY"),
+            formattedDate: moment(this.props.id).format("MMM DD, YYYY"),
             add: this.props.add,
             error: undefined,
-        };
+        }; // TODO does this all really need to be state?
     }
 
     componentWillReceiveProps(nextProps) {
     }
 
     redirectToDayPage() {
-        browserHistory.push(`/day/${this.props.date}`);
+        browserHistory.push(`/day/${this.props.id}`);
     }
 
     isSubmitValid() {
         return true; // TODO more
-    }
-
-    isDeleteValid() {
-        return true; // TODO more
-    }
-
-    deleteRequest(event) {
-        event.preventDefault();
-
-        if (!this.isDeleteValid()) {
-            this.setState({ error: 'Unable to delete (internal error)'});
-            return;
-        }
-
-        // TODO now generate the appropriate data action (insert/update/delete) based on action
-
-        //this.props.actions.loginRequest(this.state.username, this.state.password);    
     }
 
     submitRequest(event) {
@@ -98,7 +80,6 @@ export class DayPage extends React.Component {
                     <h2>{this.state.formattedDate}</h2>
                     <EventForm 
                         onSubmit={this.submitRequest}
-                        onDelete={this.deleteRequest}
                         onChange={this.formChange}
                         onCancel={this.cancelRequest}
                         title={this.state.title}
@@ -106,7 +87,6 @@ export class DayPage extends React.Component {
                         endTime={this.state.endTime}
                         add={this.state.add}
                         isSubmitValid={this.isSubmitValid}
-                        isDeleteValid={this.isDeleteValid}
                     />
                 </div>
             </div>
@@ -114,16 +94,39 @@ export class DayPage extends React.Component {
     }
 }
 
-DayPage.propTypes = {
+EventPage.propTypes = {
+    user: PropTypes.number.isRequired,
+    id: PropTypes.string.isRequired,
+    eventId: PropTypes.number.isRequired,
     title: PropTypes.string,
     startTime: PropTypes.string,
     endTime: PropTypes.string,
-    date: PropTypes.string.isRequired,
     add: PropTypes.bool.isRequired,
 };
 
 function mapStateToProps(state, ownProps) {
-    // TODO all of this should be coming in as props from the parent...
+    // user, id and eventId come in via the routing as params
+
+    if (ownProps.params.eventId == 'new') {
+        return {
+            user: state.app.user.id,
+            id: ownProps.params.id,
+            add: true,
+        };
+    }
+
+    const event = state.calendar.dateInfo
+        .find(val => val.date == ownProps.params.id).events[Number(ownProps.params.eventId)];
+
+    return {
+        user: state.app.user.id,
+        id: ownProps.params.id,
+        eventId: Number(ownProps.params.eventId),
+        title: event.label,
+        startTime: event.startTime,
+        endTime: event.endTime,
+        add: false,
+    };
 }
 
 function mapDispatchToProps(dispatch) {
@@ -132,4 +135,4 @@ function mapDispatchToProps(dispatch) {
     };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(DayPage);
+export default connect(mapStateToProps, mapDispatchToProps)(EventPage);

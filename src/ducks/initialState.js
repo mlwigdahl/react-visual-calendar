@@ -14,7 +14,35 @@ export default {
         width: 600,
         height: 600,
         currentDate: moment().format("YYYYMMDD"),
-        activeCalId: 0,
     },
-    calendars: [],
+    calendar: {},
 };
+
+/* // example calendar
+const calendar = {
+    selectedDate: '20170101',
+    minDate: '20161211',
+    maxDate: '20170204',
+    dateInfo: [
+        {
+            date: '20170101',
+            events: [
+                {
+                    icon: 'scissors.jpg',
+                    label: 'Haircut',
+                    startTime: '08:15 AM',
+                    endTime: '10:15 AM',
+                    endDate: '20170101',
+                },
+                {
+                    icon: 'food.jpg',
+                    label: 'Lunch! 😁',
+                    startTime: '11:30 AM',
+                    endTime: '12:30 PM',
+                    endDate: '20170101',
+                }
+            ]
+        }
+    ]
+};
+*/

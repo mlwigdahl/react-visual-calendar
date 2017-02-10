@@ -6,7 +6,7 @@ import * as app from './appDuck';
 import { routerReducer } from 'react-router-redux';
 
 const reducer = combineReducers({
-    calendars: calendar.reducer,
+    calendar: calendar.reducer,
     async: async.reducer,
     routing: routerReducer,
     app: app.reducer,

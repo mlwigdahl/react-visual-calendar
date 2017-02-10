@@ -44,7 +44,14 @@ export class Calendar extends React.Component {
             }
 
             const key = startOfWeek.format("wwYYYY");
-            days.push(<Week key={key} week={[...week]} curDate={this.state.currentDate} calendar={this.props.calendar}/>);
+            days.push(
+                <Week 
+                    key={key} 
+                    user={this.props.user} 
+                    week={[...week]} 
+                    curDate={this.state.currentDate} 
+                    calendar={this.props.calendar}
+                />);
         }
 
         return days;
@@ -71,6 +78,7 @@ export class Calendar extends React.Component {
 }
 
 Calendar.propTypes = {
+    user: PropTypes.number.isRequired,
     currentDate: PropTypes.string.isRequired,
     width: PropTypes.number.isRequired,
     height: PropTypes.number.isRequired,

@@ -41,10 +41,10 @@ export const actions = {
 
 // reducer
 
-export function reducer(state = initialState.calendars, action) {
+export function reducer(state = initialState.calendar, action) {
     switch (action.type) {
         case actions.LOAD_CALENDAR_SUCCESS:
-            return [...state, action.calendar];
+            return {...action.calendar};
         
         case actions.LOAD_CALENDAR_FAILURE:
             return state; // TODO more here?  Probably update global message...
@@ -52,11 +52,10 @@ export function reducer(state = initialState.calendars, action) {
         case actions.LOAD_DATE_RANGE_SUCCESS:
         {
             // TODO add new items to existing calendar...
-            const newState = [...state];
-            let cal = newState.find(cal => cal.id == action.calId);
+            const newState = {...state};
 
             const newDates = action.dates.map(item => item.date);
-            cal.dateInfo = [...cal.dateInfo.filter(item => !newDates.includes(item.date)), ...action.dates];
+            newState.dateInfo = [...newState.dateInfo.filter(item => !newDates.includes(item.date)), ...action.dates];
 
             return newState;
         }
@@ -64,42 +63,45 @@ export function reducer(state = initialState.calendars, action) {
             return state; // TODO more here?  Probably update global message...
 
         case actions.INSERT_DATE_SUCCESS:
-            return  {
+/*            return  {
                 ...state,
                 date: [
                     ...(state.date),
                     {...action.date}
                 ]
-            };
+            }; */ // TODO this is wrong
+            return state;
 
         case actions.INSERT_DATE_FAILURE:
-            return {}; // TODO more here?  Probably update global message...
+            return state; // TODO more here?  Probably update global message...
 
         case actions.UPDATE_DATE_SUCCESS:
-            return { 
+/*            return { 
                 ...state,
                 date: [
                     ...(state.date).filter(date => date.id !== action.date.id),
                     {...action.date}
                 ]
-            };
+            }; */ // TODO this is wrong
+            return state;
 
         case actions.UPDATE_DATE_FAILURE:
-            return {}; // TODO more here?  Probably update global message...
+            return state; // TODO more here?  Probably update global message...
 
         case actions.DELETE_DATE_SUCCESS:
-            return {
+/*            return {
                 ...state,
                 date: [
                     ...(state.date).filter(date => date.id !== action.date_id)
                 ]
-            };
+            }; */ // TODO this is wrong
+            return state;
 
         case actions.DELETE_DATE_FAILURE:
-            return {}; // TODO more here?  Probably update global message...
+            return state; // TODO more here?  Probably update global message...
 
         case actions.LOAD_DATEICON_SUCCESS:
-            return { 
+/*            return { 
                 ...state,
                 date: [
                     ...(state.date).filter(date => date.id !== action.date_id),
@@ -108,13 +110,14 @@ export function reducer(state = initialState.calendars, action) {
                         icon: {...action.icon}
                     }
                 ]
-            };
+            }; */ // TODO this is wrong
+            return state;
 
         case actions.LOAD_DATEICON_FAILURE:
-            return {}; // TODO more here?  Probably update global message...
+            return state; // TODO more here?  Probably update global message...
 
         case actions.UPDATE_DATEICON_SUCCESS:
-            return { 
+/*            return { 
                 ...state,
                 date: [
                     ...(state.date).filter(date => date.id !== action.date_id),
@@ -123,10 +126,11 @@ export function reducer(state = initialState.calendars, action) {
                         icon: {...action.icon}
                     }
                 ]
-            };
+            }; */ // TODO this is wrong
+            return state;
 
         case actions.UPDATE_DATEICON_FAILURE:
-            return {}; // TODO more here?  Probably update global message...
+            return state; // TODO more here?  Probably update global message...
 
         default:
             return state;
@@ -166,7 +170,7 @@ export const sagas = {
                 const calendar = yield call(CalendarApi.loadCalendar, action.userId);
                 yield put(creators.loadCalendarSuccess(calendar));
                 const bh = yield call(helpers.getBrowserHistory);
-                yield call(bh.push, '/');
+                yield call(bh.push, `/`);
             }
             catch (e) {
                 yield put(async.creators.asyncError(e));
@@ -175,8 +179,8 @@ export const sagas = {
         loadDateRange: function* (action) {
             try {
                 yield put(async.creators.asyncRequest());
-                const dates = yield call(CalendarApi.loadDateRange, action.startDate, action.endDate, action.calId);
-                yield put(creators.loadDateRangeSuccess(dates, action.calId));
+                const dates = yield call(CalendarApi.loadDateRange, action.startDate, action.endDate, action.userId);
+                yield put(creators.loadDateRangeSuccess(dates, action.userId));
             }
             catch (e) {
                 yield put(async.creators.asyncError(e));
@@ -185,7 +189,7 @@ export const sagas = {
         insertDate: function* (action) {
             try {
                 yield put(async.creators.asyncRequest());
-                const dateRet = yield call(CalendarApi.insertDate, action.date, action.calId);
+                const dateRet = yield call(CalendarApi.insertDate, action.date, action.userId);
                 yield put(creators.insertDateSuccess(dateRet));
             }
             catch (e) {
@@ -195,7 +199,7 @@ export const sagas = {
         updateDate: function* (action) {
             try {
                 yield put(async.creators.asyncRequest());
-                const dateRet = yield call(CalendarApi.updateDate, action.date, action.calId);
+                const dateRet = yield call(CalendarApi.updateDate, action.date, action.userId);
                 yield put(creators.updateDateSuccess(dateRet));
             }
             catch (e) {
@@ -205,7 +209,7 @@ export const sagas = {
         deleteDate: function* (action) {
             try {
                 yield put(async.creators.asyncRequest());
-                const dateIdRet = yield call(CalendarApi.deleteDate, action.dateId, action.calId);
+                const dateIdRet = yield call(CalendarApi.deleteDate, action.dateId, action.userId);
                 yield put(creators.deleteDateSuccess(dateIdRet));
             }
             catch (e) {
@@ -215,7 +219,7 @@ export const sagas = {
         loadDateIcon: function* (action) {
             try {
                 yield put(async.creators.asyncRequest());
-                const icon = yield call(CalendarApi.loadDateIcon, action.dateId, action.calId);
+                const icon = yield call(CalendarApi.loadDateIcon, action.dateId, action.userId);
                 yield put(creators.loadDateIconSuccess(icon, action.dateId));
             }
             catch (e) {
@@ -225,7 +229,7 @@ export const sagas = {
         updateDateIcon: function* (action) {
             try {
                 yield put(async.creators.asyncRequest());
-                const iconRet = yield call(CalendarApi.updateDateIcon, action.icon, action.dateId, action.calId);
+                const iconRet = yield call(CalendarApi.updateDateIcon, action.icon, action.dateId, action.userId);
                 yield put(creators.updateDateIconSuccess(iconRet, action.dateId));
             }
             catch (e) {
@@ -251,16 +255,16 @@ export const creators = {
         return { type: actions.LOAD_CALENDAR_REQUEST, userId };
     },
 
-    loadDateRangeSuccess: (dates, calId) => {
-        return { type: actions.LOAD_DATE_RANGE_SUCCESS, dates, calId };
+    loadDateRangeSuccess: (dates, userId) => {
+        return { type: actions.LOAD_DATE_RANGE_SUCCESS, dates, userId };
     },
 
     loadDateRangeFailure: (error) => {
         return { type: actions.LOAD_DATE_RANGE_FAILURE, error };
     },
 
-    loadDateRangeRequest: (startDate, endDate, calId) => {
-        return { type: actions.LOAD_DATE_RANGE_REQUEST, startDate, endDate, calId };
+    loadDateRangeRequest: (startDate, endDate, userId) => {
+        return { type: actions.LOAD_DATE_RANGE_REQUEST, startDate, endDate, userId };
     },
     
     insertDateSuccess: (date) => {
@@ -271,8 +275,8 @@ export const creators = {
         return { type: actions.INSERT_DATE_FAILURE, error };
     },
 
-    insertDateRequest: (date, calId) => {
-        return { type: actions.INSERT_DATE_REQUEST, date, calId };
+    insertDateRequest: (date, userId) => {
+        return { type: actions.INSERT_DATE_REQUEST, date, userId };
     },
 
     updateDateSuccess: (date) => {
@@ -283,8 +287,8 @@ export const creators = {
         return { type: actions.UPDATE_DATE_FAILURE, error };
     },
 
-    updateDateRequest: (date, calId) => {
-        return { type: actions.UPDATE_DATE_REQUEST, date, calId };
+    updateDateRequest: (date, userId) => {
+        return { type: actions.UPDATE_DATE_REQUEST, date, userId };
     },
 
     deleteDateSuccess: (dateId) => {
@@ -295,8 +299,8 @@ export const creators = {
         return { type: actions.DELETE_DATE_FAILURE, error };
     },
 
-    deleteDateRequest: (dateId, calId) => {
-        return { type: actions.DELETE_DATE_REQUEST, dateId, calId };
+    deleteDateRequest: (dateId, userId) => {
+        return { type: actions.DELETE_DATE_REQUEST, dateId, userId };
     },
 
     loadDateIconSuccess: (icon, dateId) => {
@@ -307,8 +311,8 @@ export const creators = {
         return { type: actions.LOAD_DATE_ICON_FAILURE, error };
     },
 
-    loadDateIconRequest: (dateId, calId) => {
-        return { type: actions.LOAD_DATE_ICON_REQUEST, dateId, calId };
+    loadDateIconRequest: (dateId, userId) => {
+        return { type: actions.LOAD_DATE_ICON_REQUEST, dateId, userId };
     },
 
     updateDateIconSuccess: (icon, dateId) => {
@@ -319,7 +323,7 @@ export const creators = {
         return { type: actions.UPDATE_DATE_ICON_FAILURE, error };
     },
 
-    updateDateIconRequest: (icon, dateId, calId) => {
-        return { type: actions.UPDATE_DATE_ICON_REQUEST, icon, dateId, calId };
+    updateDateIconRequest: (icon, dateId, userId) => {
+        return { type: actions.UPDATE_DATE_ICON_REQUEST, icon, dateId, userId };
     },
 };
