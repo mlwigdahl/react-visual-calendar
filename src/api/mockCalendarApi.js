@@ -10,6 +10,7 @@ const calendar = {
     maxDate: '20170204',
     dateInfo: [
         {
+            id: 1,
             date: '20170101',
             events: [
                 {
@@ -38,14 +39,18 @@ const state = {
 };
 
 const dates = [
-    { date: '20170101', 
+    { 
+        id: 1,
+        date: '20170101', 
         events: 
         [
             { id: 3, startTime: '03:45 PM', endTime: '04:45 PM', endDate: '20170101', icon: "meeting-icon-url", label: "3:45 meeting 😒😒 (Red conference room)" },
             { id: 4, startTime: '11:30 AM', endTime: '12:30 PM', endDate: '20170101', icon: "lunch-icon-url", label: "Lunch! 😁" },
         ]
     },
-    { date: '20161231',
+    { 
+        id: 2,
+        date: '20161231',
         events: [],
     },
 ];
@@ -83,6 +88,54 @@ const CalendarApi = {
             yield 1; // to suppress lint error
             return [...(dates.filter(item => parseInt(item.date, 10) >= parseInt(startDate, 10) 
                     && parseInt(item.date, 10) <= parseInt(endDate, 10)))];
+        } catch(error) {
+            return []; // TODO more here
+        }
+    },
+
+    insertEvent: function* (date, event, userId) {
+        try {
+            /*
+            yield call(fetch,
+                `http://${target}:${port}/${apiPath}/user/${userId}/date/${date.id}/event`,
+                {method: 'POST', mode: cors });
+            const resp = new Response(); // minor differences to the main API since we don't actually call fetch...
+            yield apply(resp, resp.json);
+            */
+            yield 1; // to suppress lint error
+            return {...event};
+        } catch(error) {
+            return []; // TODO more here
+        }
+    },
+
+    updateEvent: function* (date, event, userId) {
+        try {
+            /*
+            yield call(fetch,
+                `http://${target}:${port}/${apiPath}/user/${userId}/date/${date.id}/event/${event.id}`,
+                {method: 'PATCH', mode: cors });
+            const resp = new Response(); // minor differences to the main API since we don't actually call fetch...
+            yield apply(resp, resp.json);
+            */
+            yield 1; // to suppress lint error
+            return {...event};
+        } catch(error) {
+            return []; // TODO more here
+        }
+    },
+
+    deleteEvent: function* (dateId, eventId, userId) {
+        try {
+            /*
+            yield call(fetch,
+                `http://${target}:${port}/${apiPath}/user/${userId}/date/${date.id}/event/${event.id}`,
+                {method: 'DELETE', mode: cors });
+            const resp = new Response(); // minor differences to the main API since we don't actually call fetch...
+            yield apply(resp, resp.json);
+            */
+            yield 1; // to suppress lint error
+            return {dateId, eventId};
         } catch(error) {
             return []; // TODO more here
         }
@@ -128,7 +181,7 @@ const CalendarApi = {
                 resolve(dateId);
             }, delay);
         });
-    }
+    },
 */
 };
 

@@ -3,7 +3,9 @@ import { connect } from 'react-redux';
 import { browserHistory } from 'react-router';
 import moment from 'moment';
 
-// import { bindActionCreators } from 'redux';
+import * as cal from '../../ducks/calendarDuck';
+
+import { bindActionCreators } from 'redux';
 
 export class DayPage extends React.Component {
     constructor(props, context) {
@@ -42,11 +44,12 @@ export class DayPage extends React.Component {
 
     deleteEvent(event) {
         event.preventDefault();
-        // TODO do the deletion here...
+        debugger; // TODO MORE HERE
+        this.props.actions.deleteEventRequest(this.props.date.id, event.target.id, this.props.user.id);
     }
 
-    renderEvents(dates) {
-        return dates.map(date => date.events.map(
+    renderEvents(date) {
+        return date.events.map(
             (event, index) => {
                 return (<div key={index}>
                     <span className="date-label">{`${event.label}`}</span>
@@ -67,14 +70,14 @@ export class DayPage extends React.Component {
                         onClick={this.deleteEvent}/>
                 </div>);
             }
-        ));
+        );
     }
 
     render() {
         return (
             <div>
                 <h1>{this.state.formattedDate}</h1>
-                <div>{this.renderEvents(this.props.dates)}</div>
+                <div>{this.renderEvents(this.props.date)}</div>
                 <input type="submit"
                     value="Go To Main"
                     className="btn btn-primary"
@@ -87,7 +90,8 @@ export class DayPage extends React.Component {
 DayPage.propTypes = {
     user: PropTypes.number.isRequired,
     id: PropTypes.string.isRequired,
-    dates: PropTypes.array.isRequired,
+    date: PropTypes.object.isRequired,
+    actions: PropTypes.object.isRequired,
 };
 
 function mapStateToProps(state, ownProps) {
@@ -96,23 +100,23 @@ function mapStateToProps(state, ownProps) {
         return {
             user: 0,
             id: '',
-            dates: [],
+            date: {},
         };
     }
 
-    const id = ownProps.params.id; // from the path '/course/:id'
-    const dates = state.calendar.dateInfo.filter(info => info.date == id) || [];
+    const id = ownProps.params.id; 
+    const date = state.calendar.dateInfo.filter(info => info.date == id) || [];
 
     return {
         user: state.app.user.id,
         id,
-        dates,
+        date
     };
 }
 
-function mapDispatchToProps(/*dispatch*/) {
+function mapDispatchToProps(dispatch) {
     return {
-//        actions: bindActionCreators(authorActions, dispatch)
+        actions: bindActionCreators(cal.creators, dispatch)
     };
 }
 

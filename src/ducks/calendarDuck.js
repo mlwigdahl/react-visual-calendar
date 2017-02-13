@@ -37,6 +37,18 @@ export const actions = {
     UPDATE_DATEICON_SUCCESS: 'react-visual-calendar/calendar/UPDATE_DATEICON_SUCCESS',
     UPDATE_DATEICON_FAILURE: 'react-visual-calendar/calendar/UPDATE_DATEICON_FAILURE',
     UPDATE_DATEICON_REQUEST: 'react-visual-calendar/calendar/UPDATE_DATEICON_REQUEST',
+
+    INSERT_EVENT_SUCCESS: 'react-visual-calendar/calendar/INSERT_EVENT_SUCCESS',
+    INSERT_EVENT_FAILURE: 'react-visual-calendar/calendar/INSERT_EVENT_FAILURE',
+    INSERT_EVENT_REQUEST: 'react-visual-calendar/calendar/INSERT_EVENT_REQUEST',
+
+    UPDATE_EVENT_SUCCESS: 'react-visual-calendar/calendar/UPDATE_EVENT_SUCCESS',
+    UPDATE_EVENT_FAILURE: 'react-visual-calendar/calendar/UPDATE_EVENT_FAILURE',
+    UPDATE_EVENT_REQUEST: 'react-visual-calendar/calendar/UPDATE_EVENT_REQUEST',
+
+    DELETE_EVENT_SUCCESS: 'react-visual-calendar/calendar/DELETE_EVENT_SUCCESS',
+    DELETE_EVENT_FAILURE: 'react-visual-calendar/calendar/DELETE_EVENT_FAILURE',
+    DELETE_EVENT_REQUEST: 'react-visual-calendar/calendar/DELETE_EVENT_REQUEST',
 };
 
 // reducer
@@ -134,6 +146,50 @@ export function reducer(state = initialState.calendar, action) {
 
         default:
             return state;
+
+        case actions.INSERT_EVENT_SUCCESS:
+/*            return  {
+                ...state,
+                date: [
+                    ...(state.date),
+                    {...action.date}
+                ]
+            }; */ // TODO this is wrong
+            return state;
+
+        case actions.INSERT_EVENT_FAILURE:
+            return state; // TODO more here?  Probably update global message...
+
+        case actions.UPDATE_EVENT_SUCCESS:
+/*            return { 
+                ...state,
+                date: [
+                    ...(state.date).filter(date => date.id !== action.date.id),
+                    {...action.date}
+                ]
+            }; */ // TODO this is wrong
+            return state;
+
+        case actions.UPDATE_EVENT_FAILURE:
+            return state; // TODO more here?  Probably update global message...
+
+        case actions.DELETE_EVENT_SUCCESS:
+        {
+            let deletedDate = {...(state.dateInfo).filter(date => date.id == action.date_id)};
+            debugger;
+            deletedDate.events.splice(deletedDate.events.findIndex(event => event.id == action.event_id), 1);
+
+            return {
+                ...state,
+                dateInfo: [
+                    ...(state.dateInfo).filter(date => date.id !== action.date_id),
+                    deletedDate
+                ]
+            };
+        }
+
+        case actions.DELETE_EVENT_FAILURE:
+            return state; // TODO more here?  Probably update global message...
     }
 }
 
@@ -161,7 +217,16 @@ export const sagas = {
         },
         UPDATE_DATEICON_REQUEST: function* () {
             yield takeEvery(actions.UPDATE_DATEICON_REQUEST, sagas.workers.updateDateIcon);
-        }
+        },
+        INSERT_EVENT_REQUEST: function* () {
+            yield takeEvery(actions.INSERT_EVENT_REQUEST, sagas.workers.insertEvent);
+        },
+        UPDATE_EVENT_REQUEST: function* () {
+            yield takeEvery(actions.UPDATE_EVENT_REQUEST, sagas.workers.updateEvent);
+        },
+        DELETE_EVENT_REQUEST: function* () {
+            yield takeEvery(actions.DELETE_EVENT_REQUEST, sagas.workers.deleteEvent);
+        },
     },
     workers: {
         loadCalendar: function* (action) {
@@ -235,7 +300,37 @@ export const sagas = {
             catch (e) {
                 yield put(async.creators.asyncError(e));
             }
-        }
+        },
+        insertEvent: function* (action) {
+            try {
+                yield put(async.creators.asyncRequest());
+                const eventRet = yield call(CalendarApi.insertEvent, action.date, action.event, action.userId);
+                yield put(creators.insertEventSuccess(eventRet));
+            }
+            catch (e) {
+                yield put(async.creators.asyncError(e));
+            }
+        },
+        updateEvent: function* (action) {
+            try {
+                yield put(async.creators.asyncRequest());
+                const eventRet = yield call(CalendarApi.updateEvent, action.date, action.event, action.userId);
+                yield put(creators.updateEventSuccess(eventRet));
+            }
+            catch (e) {
+                yield put(async.creators.asyncError(e));
+            }
+        },
+        deleteEvent: function* (action) {
+            try {
+                yield put(async.creators.asyncRequest());
+                const { dateId: dateIdRet, eventId: eventIdRet } = yield call(CalendarApi.deleteEvent, action.dateId, action.eventId, action.userId);
+                yield put(creators.deleteEventSuccess(dateIdRet, eventIdRet));
+            }
+            catch (e) {
+                yield put(async.creators.asyncError(e));
+            }
+        },
     }
 };
 
@@ -325,5 +420,41 @@ export const creators = {
 
     updateDateIconRequest: (icon, dateId, userId) => {
         return { type: actions.UPDATE_DATE_ICON_REQUEST, icon, dateId, userId };
+    },
+
+    insertEventSuccess: (event) => {
+        return { type: actions.INSERT_EVENT_SUCCESS, event };
+    },
+
+    insertEventFailure: (error) => {
+        return { type: actions.INSERT_EVENT_FAILURE, error };
+    },
+
+    insertEventRequest: (date, event, userId) => {
+        return { type: actions.INSERT_EVENT_REQUEST, date, event, userId };
+    },
+
+    updateEventSuccess: (event) => {
+        return { type: actions.UPDATE_EVENT_SUCCESS, event };
+    },
+
+    updateEventFailure: (error) => {
+        return { type: actions.UPDATE_EVENT_FAILURE, error };
+    },
+
+    updateEventRequest: (date, event, userId) => {
+        return { type: actions.UPDATE_EVENT_REQUEST, date, event, userId };
+    },
+
+    deleteEventSuccess: (dateId, eventId) => {
+        return { type: actions.DELETE_EVENT_SUCCESS, dateId, eventId };
+    },
+
+    deleteEventFailure: (error) => {
+        return { type: actions.DELETE_EVENT_FAILURE, error };
+    },
+
+    deleteEventRequest: (dateId, eventId, userId) => {
+        return { type: actions.DELETE_EVENT_REQUEST, dateId, eventId, userId };
     },
 };

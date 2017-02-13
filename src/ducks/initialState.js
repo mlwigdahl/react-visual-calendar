@@ -25,9 +25,11 @@ const calendar = {
     maxDate: '20170204',
     dateInfo: [
         {
+            id: 1,
             date: '20170101',
             events: [
                 {
+                    id: 1,
                     icon: 'scissors.jpg',
                     label: 'Haircut',
                     startTime: '08:15 AM',
@@ -35,6 +37,7 @@ const calendar = {
                     endDate: '20170101',
                 },
                 {
+                    id, 2,
                     icon: 'food.jpg',
                     label: 'Lunch! 😁',
                     startTime: '11:30 AM',
