@@ -309,7 +309,7 @@ export const sagas = {
         insertEvent: function* (action) {
             try {
                 yield put(async.creators.asyncRequest());
-                const eventRet = yield call(CalendarApi.insertEvent, action.date, action.event, action.userId);
+                const eventRet = yield call(CalendarApi.insertEvent, action.dateId, action.event, action.userId);
                 yield put(creators.insertEventSuccess(eventRet));
             }
             catch (e) {
@@ -319,7 +319,7 @@ export const sagas = {
         updateEvent: function* (action) {
             try {
                 yield put(async.creators.asyncRequest());
-                const eventRet = yield call(CalendarApi.updateEvent, action.date, action.event, action.userId);
+                const eventRet = yield call(CalendarApi.updateEvent, action.dateId, action.event, action.userId);
                 yield put(creators.updateEventSuccess(eventRet));
             }
             catch (e) {

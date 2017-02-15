@@ -82,16 +82,16 @@ export class EventPage extends React.Component {
 
     formChange(event) {
         const field = event.target.name;
-        // TODO START HERE update state here...
 
-        /*
-        if (field == 'usr') {
-            this.setState({ username: event.target.value });
+        if (field == 'title') {
+            this.setState({ title: event.target.value });
         }
-        else if (field == 'pwd') {
-            this.setState({ password: event.target.value });
+        else if (field == 'start-time') {
+            this.setState({ startTime: event.target.value });
         }
-        */
+        else if (field == 'end-time') {
+            this.setState({ endTime: event.target.value });
+        }
     }
 
     render() {
@@ -125,7 +125,7 @@ EventPage.propTypes = {
     startTime: PropTypes.string,
     endTime: PropTypes.string,
     add: PropTypes.bool.isRequired,
-    actions: PropTypes.array.isRequired,
+    actions: PropTypes.object.isRequired,
 };
 
 function mapStateToProps(state, ownProps) {
@@ -150,6 +150,9 @@ function mapStateToProps(state, ownProps) {
             dateId: date.id,
             eventId: 0, // this will be replaced when submitted
             add: true,
+            title: '',
+            startTime: '',
+            endTime: '',
         };
     }
 

@@ -93,6 +93,8 @@ const CalendarApi = {
         }
     },
 
+    // TODO START HERE -- assign an ID appropriately...
+
     insertEvent: function* (date, event, userId) {
         try {
             /*
