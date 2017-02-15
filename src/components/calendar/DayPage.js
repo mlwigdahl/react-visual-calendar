@@ -14,6 +14,7 @@ export class DayPage extends React.Component {
         this.redirectToMainPage = this.redirectToMainPage.bind(this);
         this.editEvent = this.editEvent.bind(this);
         this.deleteEvent = this.deleteEvent.bind(this);
+        this.addEvent = this.addEvent.bind(this);
         
         this.state = {
             formattedDate: moment(props.id).format("MMM DD")
@@ -44,8 +45,12 @@ export class DayPage extends React.Component {
 
     deleteEvent(event) {
         event.preventDefault();
-        debugger; // TODO MORE HERE
         this.props.actions.deleteEventRequest(this.props.date.id, event.target.id, this.props.user.id);
+    }
+
+    addEvent(event) {
+        event.preventDefault();
+        browserHistory.push(`/day/${this.props.id}/event/new`); // TODO ???
     }
 
     renderEvents(date) {
@@ -60,12 +65,12 @@ export class DayPage extends React.Component {
                     <br/>
                     <input type="submit"
                         value="Edit"
-                        id={index}
+                        id={event.id}
                         className="btn btn-primary"
                         onClick={this.editEvent}/>
                     <input type="submit"
                         value="Delete"
-                        id={index}
+                        id={event.id}
                         className="btn btn-primary"
                         onClick={this.deleteEvent}/>
                 </div>);
@@ -78,6 +83,10 @@ export class DayPage extends React.Component {
             <div>
                 <h1>{this.state.formattedDate}</h1>
                 <div>{this.renderEvents(this.props.date)}</div>
+                <input type="submit"
+                    value="New Event"
+                    className="btn btn-primary"
+                    onClick={this.addEvent}/>
                 <input type="submit"
                     value="Go To Main"
                     className="btn btn-primary"
@@ -105,7 +114,8 @@ function mapStateToProps(state, ownProps) {
     }
 
     const id = ownProps.params.id; 
-    const date = state.calendar.dateInfo.filter(info => info.date == id) || [];
+    const dates = state.calendar.dateInfo.filter(info => info.date == id) || [];
+    const date = dates.length == 1 ? dates[0] : { events: [] };
 
     return {
         user: state.app.user.id,

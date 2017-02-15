@@ -175,17 +175,22 @@ export function reducer(state = initialState.calendar, action) {
 
         case actions.DELETE_EVENT_SUCCESS:
         {
-            let deletedDate = {...(state.dateInfo).filter(date => date.id == action.date_id)};
-            debugger;
-            deletedDate.events.splice(deletedDate.events.findIndex(event => event.id == action.event_id), 1);
+            const deletedDates = state.dateInfo.filter(date => date.id == action.dateId);
+            if (deletedDates.length == 1) {
+                let deletedDate = { ...deletedDates[0] };
+                deletedDate.events.splice(deletedDate.events.findIndex(event => event.id == action.eventId), 1);
 
-            return {
-                ...state,
-                dateInfo: [
-                    ...(state.dateInfo).filter(date => date.id !== action.date_id),
-                    deletedDate
-                ]
-            };
+                return {
+                    ...state,
+                    dateInfo: [
+                        ...state.dateInfo.filter(date => date.id !== action.dateId),
+                        deletedDate,
+                    ]
+                };
+            }
+            else {
+                return state;
+            }
         }
 
         case actions.DELETE_EVENT_FAILURE:
@@ -430,8 +435,8 @@ export const creators = {
         return { type: actions.INSERT_EVENT_FAILURE, error };
     },
 
-    insertEventRequest: (date, event, userId) => {
-        return { type: actions.INSERT_EVENT_REQUEST, date, event, userId };
+    insertEventRequest: (dateId, event, userId) => {
+        return { type: actions.INSERT_EVENT_REQUEST, dateId, event, userId };
     },
 
     updateEventSuccess: (event) => {
@@ -442,8 +447,8 @@ export const creators = {
         return { type: actions.UPDATE_EVENT_FAILURE, error };
     },
 
-    updateEventRequest: (date, event, userId) => {
-        return { type: actions.UPDATE_EVENT_REQUEST, date, event, userId };
+    updateEventRequest: (dateId, event, userId) => {
+        return { type: actions.UPDATE_EVENT_REQUEST, dateId, event, userId };
     },
 
     deleteEventSuccess: (dateId, eventId) => {

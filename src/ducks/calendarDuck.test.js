@@ -10,6 +10,8 @@ import CalendarApi from '../api/mockCalendarApi';
 import * as testhelpers from '../common/TestHelpers';
 import * as helpers from '../common/Helpers';
 
+// TODO: deleteEvent testing
+
 // setup
 
 const mockBrowserHistory = { push: () => {} }; // mock browserHistory

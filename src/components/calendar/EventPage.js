@@ -35,8 +35,8 @@ export class EventPage extends React.Component {
         }
     }
 
-    componentWillReceiveProps(nextProps) {
-    }
+/*    componentWillReceiveProps(nextProps) {
+    } */
 
     redirectToDayPage() {
         browserHistory.push(`/day/${this.props.id}`);
@@ -54,9 +54,24 @@ export class EventPage extends React.Component {
             return;
         }
 
-        // TODO now generate the appropriate data action (insert/update/delete) based on action
+        // TODO add icon and endDate stuff here later
 
-        //this.props.actions.loginRequest(this.state.username, this.state.password);
+        if (this.props.eventId == 0) {
+            this.props.actions.insertEventRequest(this.props.dateId, { 
+                label: this.state.title,
+                startTime: this.state.startTime,
+                endTime: this.state.endTime,
+                id: this.props.eventId,
+            }, this.props.user.id);
+        }
+        else {
+            this.props.actions.updateEventRequest(this.props.dateId, { 
+                label: this.state.title,
+                startTime: this.state.startTime,
+                endTime: this.state.endTime,
+                id: this.props.eventId,
+            }, this.props.user.id);
+        }
     }
 
     cancelRequest(event) {
@@ -67,7 +82,7 @@ export class EventPage extends React.Component {
 
     formChange(event) {
         const field = event.target.name;
-        // TODO update state here...
+        // TODO START HERE update state here...
 
         /*
         if (field == 'usr') {
@@ -104,11 +119,13 @@ export class EventPage extends React.Component {
 EventPage.propTypes = {
     user: PropTypes.number.isRequired,
     id: PropTypes.string.isRequired,
+    dateId: PropTypes.number.isRequired,
     eventId: PropTypes.number.isRequired,
     title: PropTypes.string,
     startTime: PropTypes.string,
     endTime: PropTypes.string,
     add: PropTypes.bool.isRequired,
+    actions: PropTypes.array.isRequired,
 };
 
 function mapStateToProps(state, ownProps) {
@@ -118,15 +135,20 @@ function mapStateToProps(state, ownProps) {
         return {
             user: 0,
             id: '',
+            dateId: 0,
             eventId: 0,
             add: false,
         };
     }
 
+    const date = state.calendar.dateInfo.find(val => val.date == ownProps.params.id);
+
     if (ownProps.params.eventId == 'new') {
         return {
             user: state.app.user.id,
             id: ownProps.params.id,
+            dateId: date.id,
+            eventId: 0, // this will be replaced when submitted
             add: true,
         };
     }
@@ -137,6 +159,7 @@ function mapStateToProps(state, ownProps) {
     return {
         user: state.app.user.id,
         id: ownProps.params.id,
+        dateId: date.id,
         eventId: Number(ownProps.params.eventId),
         title: event.label,
         startTime: event.startTime,

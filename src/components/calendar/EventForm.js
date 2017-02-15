@@ -41,7 +41,7 @@ function EventForm({onSubmit, onChange, onCancel, title, startTime, endTime, add
                 onClick={onSubmit} />
             <input
                 type="submit"
-                value={"Submit"}
+                value={"Cancel"}
                 className="btn btn-primary"
                 onClick={onCancel} />
         </form>
