@@ -148,49 +148,62 @@ export function reducer(state = initialState.calendar, action) {
             return state;
 
         case actions.INSERT_EVENT_SUCCESS:
-/*            return  {
+        {
+            let date = { ...state.dateInfo.find(date => date.id == action.dateId) };
+            const event = date.events.find(event => event.id == action.event.id);
+            if (event !== undefined) {
+                return state; // event already exists
+            }
+
+            date.events.push(event);
+
+            return {
                 ...state,
-                date: [
-                    ...(state.date),
-                    {...action.date}
-                ]
-            }; */ // TODO this is wrong
-            return state;
+                dateInfo: [
+                    ...state.dateInfo.filter(date => date.id != action.dateId),
+                    date,
+                ],
+            };
+        }
 
         case actions.INSERT_EVENT_FAILURE:
             return state; // TODO more here?  Probably update global message...
 
         case actions.UPDATE_EVENT_SUCCESS:
-/*            return { 
+        {
+            let date = { ...state.dateInfo.find(date => date.id == action.dateId) };
+            let event = date.events.find(event => event.id == action.event.id);
+            if (event === undefined) {
+                return state; // event doesn't exist, nothing to do.
+            }
+
+            event = action.event;
+
+            return {
                 ...state,
-                date: [
-                    ...(state.date).filter(date => date.id !== action.date.id),
-                    {...action.date}
-                ]
-            }; */ // TODO this is wrong
-            return state;
+                dateInfo: [
+                    ...state.dateInfo.filter(date => date.id != action.dateId),
+                    date,
+                ],
+            };
+        }
 
         case actions.UPDATE_EVENT_FAILURE:
             return state; // TODO more here?  Probably update global message...
 
+        // TODO START HERE broken due to deep mutation, needs functional composition (dateInfo -> dates, dates helper, date helper, events helper, event helper)
         case actions.DELETE_EVENT_SUCCESS:
         {
-            const deletedDates = state.dateInfo.filter(date => date.id == action.dateId);
-            if (deletedDates.length == 1) {
-                let deletedDate = { ...deletedDates[0] };
-                deletedDate.events.splice(deletedDate.events.findIndex(event => event.id == action.eventId), 1);
+            let deletedDate = state.dateInfo.find(date => date.id == action.dateId);
+            deletedDate.events.splice(deletedDate.events.findIndex(event => event.id == action.eventId), 1);
 
-                return {
-                    ...state,
-                    dateInfo: [
-                        ...state.dateInfo.filter(date => date.id !== action.dateId),
-                        deletedDate,
-                    ]
-                };
-            }
-            else {
-                return state;
-            }
+            return {
+                ...state,
+                dateInfo: [
+                    ...state.dateInfo.filter(date => date.id !== action.dateId),
+                    deletedDate,
+                ]
+            };         
         }
 
         case actions.DELETE_EVENT_FAILURE:
@@ -310,7 +323,7 @@ export const sagas = {
             try {
                 yield put(async.creators.asyncRequest());
                 const eventRet = yield call(CalendarApi.insertEvent, action.dateId, action.event, action.userId);
-                yield put(creators.insertEventSuccess(eventRet));
+                yield put(creators.insertEventSuccess(action.dateId, eventRet));
             }
             catch (e) {
                 yield put(async.creators.asyncError(e));
@@ -320,7 +333,7 @@ export const sagas = {
             try {
                 yield put(async.creators.asyncRequest());
                 const eventRet = yield call(CalendarApi.updateEvent, action.dateId, action.event, action.userId);
-                yield put(creators.updateEventSuccess(eventRet));
+                yield put(creators.updateEventSuccess(action.dateId, eventRet));
             }
             catch (e) {
                 yield put(async.creators.asyncError(e));
@@ -329,8 +342,8 @@ export const sagas = {
         deleteEvent: function* (action) {
             try {
                 yield put(async.creators.asyncRequest());
-                const { dateId: dateIdRet, eventId: eventIdRet } = yield call(CalendarApi.deleteEvent, action.dateId, action.eventId, action.userId);
-                yield put(creators.deleteEventSuccess(dateIdRet, eventIdRet));
+                const eventIdRet = yield call(CalendarApi.deleteEvent, action.dateId, action.eventId, action.userId);
+                yield put(creators.deleteEventSuccess(action.dateId, eventIdRet));
             }
             catch (e) {
                 yield put(async.creators.asyncError(e));
@@ -427,8 +440,8 @@ export const creators = {
         return { type: actions.UPDATE_DATE_ICON_REQUEST, icon, dateId, userId };
     },
 
-    insertEventSuccess: (event) => {
-        return { type: actions.INSERT_EVENT_SUCCESS, event };
+    insertEventSuccess: (dateId, event) => {
+        return { type: actions.INSERT_EVENT_SUCCESS, dateId, event };
     },
 
     insertEventFailure: (error) => {
@@ -439,8 +452,8 @@ export const creators = {
         return { type: actions.INSERT_EVENT_REQUEST, dateId, event, userId };
     },
 
-    updateEventSuccess: (event) => {
-        return { type: actions.UPDATE_EVENT_SUCCESS, event };
+    updateEventSuccess: (dateId, event) => {
+        return { type: actions.UPDATE_EVENT_SUCCESS, dateId, event };
     },
 
     updateEventFailure: (error) => {

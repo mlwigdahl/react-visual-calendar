@@ -55,6 +55,10 @@ const dates = [
     },
 ];
 
+function getMaxEventId(dateId) {
+    return state.calendar.dateInfo.find(date => date.id == dateId).events.reduce((acc, val) => { return val > acc ? val : acc; });
+}
+
 /*let maxDate = 2;
 
 const icon = "test-icon-url";*/
@@ -95,7 +99,7 @@ const CalendarApi = {
 
     // TODO START HERE -- assign an ID appropriately...
 
-    insertEvent: function* (date, event, userId) {
+    insertEvent: function* (dateId, event, userId) {
         try {
             /*
             yield call(fetch,
@@ -104,14 +108,15 @@ const CalendarApi = {
             const resp = new Response(); // minor differences to the main API since we don't actually call fetch...
             yield apply(resp, resp.json);
             */
+            debugger;
             yield 1; // to suppress lint error
-            return {...event};
+            return { ...event, id: getMaxEventId(dateId) + 1 };
         } catch(error) {
             return []; // TODO more here
         }
     },
 
-    updateEvent: function* (date, event, userId) {
+    updateEvent: function* (dateId, event, userId) {
         try {
             /*
             yield call(fetch,
@@ -137,7 +142,7 @@ const CalendarApi = {
             yield apply(resp, resp.json);
             */
             yield 1; // to suppress lint error
-            return {dateId, eventId};
+            return eventId;
         } catch(error) {
             return []; // TODO more here
         }
