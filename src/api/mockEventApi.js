@@ -28,13 +28,12 @@ function getMaxEventId() {
 
 const EventApi = {
     loadEventRange: function* (dates, userId) {
-        const dateEvents = dates
-            .map(date => date.events)
+        const dateEvents = Object.keys(dates)
+            .map(key => dates[key].events)
             .reduce((acc, events) => acc.concat(events), []);
 
         yield 1; // to suppress lint error
-        return { ...eventsNew
-            .keys()
+        return { ...Object.keys(eventsNew)
             .filter(key => dateEvents.includes(key))
             .reduce((acc, key) => { acc[key] = eventsNew[key]; return acc; }, {})
         };

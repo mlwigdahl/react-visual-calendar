@@ -3,10 +3,12 @@ import { expect } from 'chai';
 import { testSaga, expectSaga } from 'redux-saga-test-plan';
 
 import * as async from './asyncDuck';
-import * as date from './calendarDuck';
+import * as date from './dateDuck';
 import * as calendar from './calendarDuck';
+import * as event from './eventDuck';
 import DateApi from '../api/mockDateApi';
 import CalendarApi from '../api/mockCalendarApi';
+import EventApi from '../api/mockEventApi';
 import * as testhelpers from '../common/TestHelpers';
 import * as helpers from '../common/Helpers';
 
@@ -28,7 +30,7 @@ describe('Date Duck', () => {
                 .take(date.actions.LOAD_DATE_RANGE_REQUEST)
                 .take(date.actions.LOAD_DATE_RANGE_REQUEST)
                 .dispatch(date.creators.loadDateRangeRequest('1/1/2017', '2/1/2017', 1))
-                .dispatch(date.creators.loadDateRangeRequest('12/1/2016', '1/1/2016', 2))
+                .dispatch(date.creators.loadDateRangeRequest('12/1/2016', '1/1/2017', 2))
                 .run({ silenceTimeout: true });
         });
     });
@@ -36,6 +38,7 @@ describe('Date Duck', () => {
     describe('saga workers', () => {
         it('should have loadDateRange start an async request and return success', () => {
             const dr = testhelpers.drainGenerator(DateApi.loadDateRange('20161231', '20170101', 0));
+            const er = testhelpers.drainGenerator(EventApi.loadEventRange(dr, 0));
 
             const saga = testSaga(date.sagas.workers.loadDateRange, date.creators.loadDateRangeRequest('20161231', '20170101', 0));
             return saga
@@ -46,6 +49,10 @@ describe('Date Duck', () => {
                 .next(dr)
                 .put(date.creators.loadDateRangeSuccess(dr, 0))
                 .next()
+                .call(EventApi.loadEventRange, dr, 0)
+                .next(er)
+                .put(event.creators.loadEventRangeSuccess(er, 0))
+                .next()
                 .isDone();
         });
     });
@@ -53,19 +60,19 @@ describe('Date Duck', () => {
     describe('reducer', () => {
         it ('should have LOAD_DATE_RANGE_SUCCESS update the status', () => {
             const cal = testhelpers.drainGenerator(CalendarApi.loadCalendar(1));
-            const dr = testhelpers.drainGenerator(DateApi.loadDateRange('20161231', '20170101', 0));
+            const dr = testhelpers.drainGenerator(DateApi.loadDateRange('20161231', '20170102', 0));
 
             const action = calendar.creators.loadCalendarSuccess(cal);
 
-            const newState = calendar.reducer(initialState.calendar, action);
+            const newState = { ...initialState, calendar: { ...calendar.reducer(initialState.calendar, action) } };
 
             const action2 = date.creators.loadDateRangeSuccess(dr, 0);
 
-            const newState2 = date.reducer(newState, action2);
+            const newState2 = { ...newState, dates: { ...date.reducer(newState.dates, action2) } };
 
             expect(newState2).to.not.be.undefined;
-            expect(newState2.dateInfo.length).to.equal(2);
-            expect(newState2.dateInfo[0].events.length).to.equal(2); // TODO this assumes ordering, clean up
+            expect(Object.keys(newState2.dates).length).to.equal(2);
+            expect(newState2.dates[2].events.length).to.equal(2);
         });
 
         it ("should have LOAD_DATE_RANGE_FAILURE update the status (although it doesn't actually do anything at the moment)", () => {

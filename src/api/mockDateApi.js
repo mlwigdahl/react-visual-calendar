@@ -7,11 +7,11 @@ export const dates = {
 };
 
 const datesNew = {
-    1: { 
-        date: '20170101', 
+    2: { 
+        date: '20170102', 
         events: [3, 4]
     },
-    2: { 
+    3: { 
         date: '20161231',
         events: [],
     },
@@ -28,8 +28,7 @@ const DateApi = {
             yield apply(resp, resp.json);
             */
             yield 1; // to suppress lint error
-            const dates = datesNew
-                .keys()
+            const dates = Object.keys(datesNew)
                 .filter(key => parseInt(datesNew[key].date, 10) >= parseInt(startDate, 10) 
                     && parseInt(datesNew[key].date, 10) <= parseInt(endDate, 10))
                 .reduce((acc, key) => { acc[key] = datesNew[key]; return acc; }, {});

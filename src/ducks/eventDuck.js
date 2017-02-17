@@ -31,10 +31,9 @@ export function reducer(state = initialState.events, action) {
     switch (action.type) {
         case actions.LOAD_EVENT_RANGE_SUCCESS:
         {
-            const existing = state.keys();
+            const existing = Object.keys(state);
 
-            const newEvents = action.events
-                .keys()
+            const newEvents = Object.keys(action.events)
                 .filter(key => !existing.includes(key))
                 .reduce((acc, key) => { acc[key] = action.events[key]; return acc; }, {});
 

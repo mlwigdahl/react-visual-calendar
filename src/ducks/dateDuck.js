@@ -34,10 +34,9 @@ export function reducer(state = initialState.dates, action) {
     switch(action.type) {
         case actions.LOAD_DATE_RANGE_SUCCESS:
         {
-            const existing = state.keys();
+            const existing = Object.keys(state);
 
-            const newDates = action.dates
-                .keys()
+            const newDates = Object.keys(action.dates)
                 .filter(key => !existing.includes(key))
                 .reduce((acc, key) => { acc[key] = action.dates[key]; return acc; }, {});
 
@@ -130,7 +129,7 @@ export const sagas = {
                 const dates = yield call(DateApi.loadDateRange, action.startDate, action.endDate, action.userId);
                 yield put(creators.loadDateRangeSuccess(dates, action.userId));
                 const events = yield call(EventApi.loadEventRange, dates, action.userId);
-                yield put(creators.loadEventRangeSuccess(events, action.userId));
+                yield put(event.creators.loadEventRangeSuccess(events, action.userId));
             }
             catch (e) {
                 yield put(async.creators.asyncError(e));
