@@ -23,14 +23,14 @@ const eventsNew = {
 };
 
 function getMaxEventId() {
-    return events.reduce((acc, event) => { return event.id > acc ? event.id : acc; });
+    return events.reduce((acc, event) => { acc = event.id > acc ? event.id : acc; return acc; });
 }
 
 const EventApi = {
     loadEventRange: function* (dates, userId) {
         const dateEvents = dates
             .map(date => date.events)
-            .reduce((acc, events) => { return acc.concat(events); }, []);
+            .reduce((acc, events) => acc.concat(events), []);
 
         yield 1; // to suppress lint error
         return { ...eventsNew

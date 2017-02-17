@@ -39,7 +39,7 @@ export function reducer(state = initialState.dates, action) {
             const newDates = action.dates
                 .keys()
                 .filter(key => !existing.includes(key))
-                .reduce((acc, key) => { acc[key] = action.dates[key]; }, {});
+                .reduce((acc, key) => { acc[key] = action.dates[key]; return acc; }, {});
 
             return { 
                 ...state,
