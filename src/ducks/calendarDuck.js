@@ -28,7 +28,7 @@ export const actions = {
 export function reducer(state = initialState.calendar, action) {
     switch (action.type) {
         case actions.LOAD_CALENDAR_SUCCESS:
-            return { ...action.calendar.calendar };
+            return { ...action.data.calendar };
 
         // TODO also need to push in the dates and events in their respective ducks
         
@@ -129,7 +129,7 @@ export const sagas = {
 export const creators = {
 
     loadCalendarSuccess: (calendar) => {
-        return { type: actions.LOAD_CALENDAR_SUCCESS, calendar };
+        return { type: actions.LOAD_CALENDAR_SUCCESS, data: calendar };
     },
 
     loadCalendarFailure: (error) => {

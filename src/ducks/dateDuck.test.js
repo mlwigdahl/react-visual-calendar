@@ -28,7 +28,7 @@ describe('Date Duck', () => {
                 .take(date.actions.LOAD_DATE_RANGE_REQUEST)
                 .take(date.actions.LOAD_DATE_RANGE_REQUEST)
                 .dispatch(date.creators.loadDateRangeRequest('1/1/2017', '2/1/2017', 1))
-                .dispatch(calendar.creators.loadCalendarRequest('12/1/2016', '1/1/2016', 2))
+                .dispatch(date.creators.loadDateRangeRequest('12/1/2016', '1/1/2016', 2))
                 .run({ silenceTimeout: true });
         });
     });
@@ -77,7 +77,7 @@ describe('Date Duck', () => {
             expect(newState).to.deep.equal({});
         });
 
-        // TODO probably need a test that looks at the event loading also.
+        // TODO probably need a test that looks at the event loading as chained from the date range loading also.
     });
 
 });
