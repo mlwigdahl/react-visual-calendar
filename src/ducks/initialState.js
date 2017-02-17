@@ -16,8 +16,8 @@ export default {
         currentDate: moment().format("YYYYMMDD"),
     },
     calendar: {},
-    dates: [],
-    events: [],
+    dates: {},
+    events: {},
 };
 
 /* // example calendar

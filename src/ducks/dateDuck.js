@@ -1,4 +1,3 @@
-// TODO honestly, this can probably go...
 
 import { put, call, takeEvery } from 'redux-saga/effects';
 
@@ -6,6 +5,7 @@ import initialState from './initialState';
 import DateApi from '../api/mockDateApi';
 import EventApi from '../api/mockEventApi';
 import * as async from './asyncDuck';
+import * as event from './eventDuck';
 import * as helpers from '../common/Helpers';
 
 // actions
@@ -86,6 +86,23 @@ export function reducer(state = initialState.dates, action) {
 
         case actions.DELETE_DATE_FAILURE:
             return state; // TODO more here?  Probably update global message...
+
+        case event.actions.INSERT_EVENT_SUCCESS:
+        {
+            const newState = { ...state };
+            newState[actions.dateId].events.push(actions.event.id);
+            return newState;
+        }
+
+        case event.actions.DELETE_EVENT_SUCCESS:
+        {
+            const newState = { ...state };
+            const index = newState[actions.dateId].events.IndexOf(actions.eventId);
+            if (index > -1) {
+                newState[actions.dateId].events.splice(index, 1);
+            }
+            return newState;
+        }
     }
 }
 

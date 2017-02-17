@@ -35,7 +35,7 @@ const CalendarApi = {
             yield apply(resp, resp.json);
             */
             yield 1; // to suppress lint error
-            return { calendar: { ...state.calendar }, dates: [ ...state.dates ], events: [ ...state.events ] };
+            return { calendar: { ...state.calendar }, dates: { ...state.dates }, events: { ...state.events } };
         } catch(error) {
             return []; // TODO more here
         }

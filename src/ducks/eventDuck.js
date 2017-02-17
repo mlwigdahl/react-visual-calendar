@@ -49,8 +49,6 @@ export function reducer(state = initialState.events, action) {
 
         case actions.INSERT_EVENT_SUCCESS:
         {
-            // TODO need to update date event array (in date reducer)
-
             return {
                 ...state,
                 [action.event.id]: { ...action.event.event }
@@ -73,8 +71,7 @@ export function reducer(state = initialState.events, action) {
 
         case actions.DELETE_EVENT_SUCCESS:
         {
-            // TODO need to update date event array (in date reducer)
-            
+          
             const newState = { ...state };
             delete newState[action.eventId];
 
