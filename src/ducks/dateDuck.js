@@ -102,6 +102,9 @@ export function reducer(state = initialState.dates, action) {
             }
             return newState;
         }
+
+        default:
+            return state;
     }
 }
 

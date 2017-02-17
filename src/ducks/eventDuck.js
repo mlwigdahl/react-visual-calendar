@@ -79,6 +79,9 @@ export function reducer(state = initialState.events, action) {
 
         case actions.DELETE_EVENT_FAILURE:
             return state; // TODO more here?  Probably update global message...
+
+        default:
+            return state;
     }
 }
 

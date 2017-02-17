@@ -53,9 +53,11 @@ export class DayPage extends React.Component {
         browserHistory.push(`/day/${this.props.id}/event/new`); // TODO ???
     }
 
-    renderEvents(date) {
-        return date.events.map(
-            (event, index) => {
+    renderEvents(events) {
+        return Object.keys(events)
+            .map((key, index) => {
+                const event = events[key];
+
                 return (<div key={index}>
                     <span className="date-label">{`${event.label}`}</span>
                     <br/>
@@ -82,7 +84,7 @@ export class DayPage extends React.Component {
         return (
             <div>
                 <h1>{this.state.formattedDate}</h1>
-                <div>{this.renderEvents(this.props.date)}</div>
+                <div>{this.renderEvents(this.props.events)}</div>
                 <input type="submit"
                     value="New Event"
                     className="btn btn-primary"
@@ -100,27 +102,36 @@ DayPage.propTypes = {
     user: PropTypes.number.isRequired,
     id: PropTypes.string.isRequired,
     date: PropTypes.object.isRequired,
+    events: PropTypes.object.isRequired,
     actions: PropTypes.object.isRequired,
 };
 
 function mapStateToProps(state, ownProps) {
+    
+    debugger; // TODO START HERE not working (id not set?)
 
-    if (state.calendar.dateInfo === undefined) {
+    const id = ownProps.params.id; 
+    const dateKey = Object.keys(state.dates)
+        .find(key => state.dates[key].date == id);
+
+    if (dateKey === undefined) {
         return {
             user: 0,
             id: '',
             date: {},
+            events: {},
         };
     }
 
-    const id = ownProps.params.id; 
-    const dates = state.calendar.dateInfo.filter(info => info.date == id) || [];
-    const date = dates.length == 1 ? dates[0] : { events: [] };
+    const date = state.dates[dateKey];
+    const events = date.events
+        .reduce((acc, key) => { acc[key] = state.events[key]; return acc; }, {});
 
     return {
         user: state.app.user.id,
         id,
-        date
+        date,
+        events
     };
 }
 

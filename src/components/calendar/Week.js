@@ -1,11 +1,17 @@
 import React from 'react';
 import Day from './Day';
 
-function findEvents(calendar, date) {
-    return calendar.dateInfo.filter(info => info.date == date);
+function findEvents(dates, events, date) {
+    const targetDate = dates[Object.keys(dates)
+        .find(key => dates[key].date == date)];
+
+    return targetDate !== undefined ? 
+        targetDate.events
+            .reduce((acc, event) => { acc[event] = events[event]; return acc; }, {}) :
+        {};
 }
 
-function Week({user, week, curDate, calendar}) {
+function Week({user, week, curDate, dates, events}) {
     return (
         <div className="week">
             {week.map(obj => {
@@ -16,7 +22,7 @@ function Week({user, week, curDate, calendar}) {
                         user={user}
                         date={{ day: obj.format("MMM DD") }} 
                         curDate={curDate} 
-                        events={findEvents(calendar, key)}
+                        events={findEvents(dates, events, key)}
                     />);
             })}
         </div>
@@ -26,7 +32,8 @@ function Week({user, week, curDate, calendar}) {
 Week.propTypes = {
     user: React.PropTypes.number.isRequired,
     week: React.PropTypes.array.isRequired,
-    calendar: React.PropTypes.object.isRequired,
+    dates: React.PropTypes.object.isRequired,
+    events: React.PropTypes.object.isRequired,
     curDate: React.PropTypes.string.isRequired,
 };
 

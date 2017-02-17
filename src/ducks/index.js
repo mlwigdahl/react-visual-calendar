@@ -9,8 +9,8 @@ import { routerReducer } from 'react-router-redux';
 
 const reducer = combineReducers({
     calendar: calendar.reducer,
-    date: date.reducer,
-    event: event.reducer,
+    dates: date.reducer,
+    events: event.reducer,
     async: async.reducer,
     routing: routerReducer,
     app: app.reducer,

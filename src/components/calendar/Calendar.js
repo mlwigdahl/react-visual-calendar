@@ -50,7 +50,8 @@ export class Calendar extends React.Component {
                     user={this.props.user} 
                     week={[...week]} 
                     curDate={this.state.currentDate} 
-                    calendar={this.props.calendar}
+                    dates={this.props.dates}
+                    events={this.props.events} // TODO probably need some work here to filter this data as it's passed down
                 />);
         }
 
@@ -82,13 +83,18 @@ Calendar.propTypes = {
     currentDate: PropTypes.string.isRequired,
     width: PropTypes.number.isRequired,
     height: PropTypes.number.isRequired,
-    calendar: PropTypes.object,
+    calendar: PropTypes.object.isRequired,
+    dates: PropTypes.object.isRequired,
+    events: PropTypes.object.isRequired,
     actions: PropTypes.object.isRequired,
 };
 
 
-function mapStateToProps(/*state, ownProps*/) {
-    return {};
+function mapStateToProps(state) {
+    return {
+        dates: { ...state.dates },
+        events: { ...state.events }
+    };
 }
 
 

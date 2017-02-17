@@ -131,7 +131,9 @@ EventPage.propTypes = {
 function mapStateToProps(state, ownProps) {
     // user, id and eventId come in via the routing as params
 
-    if (state.calendar.dateInfo === undefined) {
+    const date = state.dates.find(date => date.date == ownProps.params.id);
+
+    if (date === undefined) {
         return {
             user: 0,
             id: '',
@@ -140,8 +142,6 @@ function mapStateToProps(state, ownProps) {
             add: false,
         };
     }
-
-    const date = state.calendar.dateInfo.find(val => val.date == ownProps.params.id);
 
     if (ownProps.params.eventId == 'new') {
         return {
@@ -156,8 +156,7 @@ function mapStateToProps(state, ownProps) {
         };
     }
 
-    const event = state.calendar.dateInfo
-        .find(val => val.date == ownProps.params.id).events[Number(ownProps.params.eventId)];
+    const event = state.events[Number(ownProps.params.eventId)];
 
     return {
         user: state.app.user.id,

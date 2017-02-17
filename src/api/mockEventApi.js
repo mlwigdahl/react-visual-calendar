@@ -54,7 +54,6 @@ const EventApi = {
             const resp = new Response(); // minor differences to the main API since we don't actually call fetch...
             yield apply(resp, resp.json);
             */
-            debugger;
             yield 1; // to suppress lint error
             return { id: getMaxEventId(dateId) + 1, event: { ...event } };
         } catch(error) {

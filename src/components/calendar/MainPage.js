@@ -49,13 +49,12 @@ export class MainPage extends React.Component {
 
 function mapStateToProps(state) {    
     const app = state.app;
-    const cal = state.calendar;
     return { 
-        user: {...app.user},
+        user: { ...app.user },
         width: app.width,
         height: app.height,
         currentDate: app.currentDate,
-        calendar: cal !== undefined ? {...cal} : undefined,
+        calendar: { ...state.calendar }
     };
 }
 

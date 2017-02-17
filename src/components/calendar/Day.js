@@ -11,14 +11,18 @@ function renderMore(length) {
     }
 }
 
-function renderEvents(dates) {
-    if (dates.length > 0 && dates[0].events.length > 0) {
+function renderEvents(events) {
+    const event = events[Object.keys(events)
+        .sort((a, b) => a-b)
+        .find(val => val !== undefined ? true : false)];
+
+    if (event !== undefined) {
         return (<div>
-                <span className="date-label">{`${dates[0].events[0].label}`}</span>
+                <span className="date-label">{`${event.label}`}</span>
                 <br/>
-                <span className="date-start">{`${dates[0].events[0].startTime} - ${dates[0].events[0].endTime}`}</span>
+                <span className="date-start">{`${event.startTime} - ${event.endTime}`}</span>
                 <br/>
-                {renderMore(dates[0].events.length)}
+                {renderMore(events.length)}
             </div>);
     }
 }
@@ -46,6 +50,8 @@ function Day({user, date, curDate, events}) {
         browserHistory.push(`/day/${moment({ year, month: date.month(), day: date.date() }).format('YYYYMMDD')}`);
     }
 
+    // TODO START HERE events not making it in here properly...
+
     return (
         <div className={dayClass(day, curDate)} onClick={onClick}>
             <span className="date-day">{date.day}</span>
@@ -59,7 +65,7 @@ Day.propTypes = {
     user: React.PropTypes.number.isRequired,
     date: React.PropTypes.object.isRequired,
     curDate: React.PropTypes.string.isRequired,
-    events: React.PropTypes.array.isRequired,
+    events: React.PropTypes.object.isRequired,
 };
 
 export default Day;
