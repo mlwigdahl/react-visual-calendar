@@ -23,7 +23,7 @@ export const actions = {
     DELETE_EVENT_SUCCESS: 'react-visual-calendar/calendar/DELETE_EVENT_SUCCESS',
     DELETE_EVENT_FAILURE: 'react-visual-calendar/calendar/DELETE_EVENT_FAILURE',
     DELETE_EVENT_REQUEST: 'react-visual-calendar/calendar/DELETE_EVENT_REQUEST',
-}
+};
 
 // reducer
 
@@ -36,7 +36,7 @@ export function reducer(state = initialState.events, action) {
             const newEvents = action.events
                 .keys()
                 .filter(key => !existing.includes(key))
-                .reduce((acc, key) => { acc[key] = action.events[key]; }, {});
+                .reduce((acc, key) => { acc[key] = action.events[key]; return acc; }, {});
 
             return { 
                 ...state,
@@ -73,6 +73,8 @@ export function reducer(state = initialState.events, action) {
 
         case actions.DELETE_EVENT_SUCCESS:
         {
+            // TODO need to update date event array (in date reducer)
+            
             const newState = { ...state };
             delete newState[action.eventId];
 
