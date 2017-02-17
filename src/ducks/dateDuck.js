@@ -4,6 +4,7 @@ import { put, call, takeEvery } from 'redux-saga/effects';
 
 import initialState from './initialState';
 import DateApi from '../api/mockDateApi';
+import EventApi from '../api/mockEventApi';
 import * as async from './asyncDuck';
 import * as helpers from '../common/Helpers';
 
@@ -33,13 +34,17 @@ export function reducer(state = initialState.dates, action) {
     switch(action.type) {
         case actions.LOAD_DATE_RANGE_SUCCESS:
         {
-            // TODO add new items to existing calendar...
-            const newState = {...state};
+            const existing = state.keys();
 
-            const newDates = action.dates.map(item => item.date);
-            newState.dateInfo = [...newState.dateInfo.filter(item => !newDates.includes(item.date)), ...action.dates];
+            const newDates = action.dates
+                .keys()
+                .filter(key => !existing.includes(key))
+                .reduce((acc, key) => { acc[key] = action.dates[key]; }, {});
 
-            return newState;
+            return { 
+                ...state,
+                ...newDates
+            };
         }
         case actions.LOAD_DATE_RANGE_FAILURE:
             return state; // TODO more here?  Probably update global message...
@@ -107,6 +112,8 @@ export const sagas = {
                 yield put(async.creators.asyncRequest());
                 const dates = yield call(DateApi.loadDateRange, action.startDate, action.endDate, action.userId);
                 yield put(creators.loadDateRangeSuccess(dates, action.userId));
+                const events = yield call(EventApi.loadEventRange, dates, action.userId);
+                yield put(creators.loadEventRangeSuccess(events, action.userId));
             }
             catch (e) {
                 yield put(async.creators.asyncError(e));

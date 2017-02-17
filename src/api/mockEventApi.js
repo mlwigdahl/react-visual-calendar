@@ -1,30 +1,52 @@
 
 
-export const events = [
-    {
-        id: 1,
+export const events = {
+    1: {
         icon: 'scissors.jpg',
         label: 'Haircut',
         startTime: '08:15 AM',
         endTime: '10:15 AM',
         endDate: '20170101',
     },
-    {
-        id: 2,
+    2: {
         icon: 'food.jpg',
         label: 'Lunch! 😁',
         startTime: '11:30 AM',
         endTime: '12:30 PM',
         endDate: '20170101',
-    }
-];
+    },
+};
+
+const eventsNew = {
+    3: { startTime: '03:45 PM', endTime: '04:45 PM', endDate: '20170101', icon: "meeting-icon-url", label: "3:45 meeting 😒😒 (Red conference room)" },
+    4: { startTime: '11:30 AM', endTime: '12:30 PM', endDate: '20170101', icon: "lunch-icon-url", label: "Lunch! 😁" },
+};
 
 function getMaxEventId() {
     return events.reduce((acc, event) => { return event.id > acc ? event.id : acc; });
 }
 
 const EventApi = {
+    loadEventRange: function* (dates, userId) {
+        const dateEvents = dates
+            .map(date => date.events)
+            .reduce((acc, events) => { return acc.concat(events); }, []);
+
+        yield 1; // to suppress lint error
+        return { ...eventsNew
+            .keys()
+            .filter(key => dateEvents.includes(key))
+            .reduce((acc, key) => { acc[key] = eventsNew[key]; return acc; }, {})
+        };
+    },
+
     insertEvent: function* (dateId, event, userId) {
+/*
+                const dateEvents = 
+                
+                events: [ ...eventsNew.filter(event => dateEvents.includes(event.id)) ]
+*/
+
         try {
             /*
             yield call(fetch,
@@ -35,13 +57,13 @@ const EventApi = {
             */
             debugger;
             yield 1; // to suppress lint error
-            return { ...event, id: getMaxEventId(dateId) + 1 };
+            return { id: getMaxEventId(dateId) + 1, event: { ...event } };
         } catch(error) {
             return []; // TODO more here
         }
     },
 
-    updateEvent: function* (dateId, event, userId) {
+    updateEvent: function* (dateId, eventId, event, userId) {
         try {
             /*
             yield call(fetch,
@@ -51,7 +73,7 @@ const EventApi = {
             yield apply(resp, resp.json);
             */
             yield 1; // to suppress lint error
-            return { ...event };
+            return { id: eventId, event: { ...event } };
         } catch(error) {
             return []; // TODO more here
         }

@@ -1,31 +1,21 @@
 
-import { calendar } from './mockCalendarApi';
-
-export const dates = [
-    {
-        id: 1,
+export const dates = {
+    1: {
         date: '20170101',
         events: [1, 2],
     },
-];
+};
 
-const datesNew = [
-    { 
-        id: 1,
+const datesNew = {
+    1: { 
         date: '20170101', 
         events: [3, 4]
     },
-    { 
-        id: 2,
+    2: { 
         date: '20161231',
         events: [],
     },
-];
-
-const eventsNew = [
-    { id: 3, startTime: '03:45 PM', endTime: '04:45 PM', endDate: '20170101', icon: "meeting-icon-url", label: "3:45 meeting 😒😒 (Red conference room)" },
-    { id: 4, startTime: '11:30 AM', endTime: '12:30 PM', endDate: '20170101', icon: "lunch-icon-url", label: "Lunch! 😁" },
-];
+};
 
 const DateApi = {
     loadDateRange: function* (startDate, endDate, userId) {
@@ -38,15 +28,13 @@ const DateApi = {
             yield apply(resp, resp.json);
             */
             yield 1; // to suppress lint error
-            const dates = datesNew.filter(item => parseInt(item.date, 10) >= parseInt(startDate, 10) 
-                && parseInt(item.date, 10) <= parseInt(endDate, 10));
-            const dateEvents = dates
-                .map(date => date.events)
-                .reduce((acc, events) => { return acc.concat(events); }, []);
-            return { 
-                dates: [ ...dates ], 
-                events: [ ...eventsNew.filter(event => dateEvents.includes(event.id)) ]
-            };
+            const dates = datesNew
+                .keys()
+                .filter(key => parseInt(datesNew[key].date, 10) >= parseInt(startDate, 10) 
+                    && parseInt(datesNew[key].date, 10) <= parseInt(endDate, 10))
+                .reduce((acc, key) => { acc[key] = datesNew[key]; return acc; }, {});
+
+            return { ...dates };
         } catch(error) {
             return []; // TODO more here
         }

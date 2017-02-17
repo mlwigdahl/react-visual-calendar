@@ -29,32 +29,29 @@ const calendar = {
 };
 
 // example dates
-const dates = [
-    {
-        id: 1,
+const dates = {
+    1: {
         date: '20170101',
         events: [1, 2],
     },
-];
+};
 
 // example events
-const events = [
-    {
-        id: 1,
+const events = {
+    1: {
         icon: 'scissors.jpg',
         label: 'Haircut',
         startTime: '08:15 AM',
         endTime: '10:15 AM',
         endDate: '20170101',
     },
-    {
-        id, 2,
+    2: {
         icon: 'food.jpg',
         label: 'Lunch! 😁',
         startTime: '11:30 AM',
         endTime: '12:30 PM',
         endDate: '20170101',
     },
-];
+};
 
 */
