@@ -4,6 +4,7 @@ import { browserHistory } from 'react-router';
 import moment from 'moment';
 
 import * as cal from '../../ducks/calendarDuck';
+import * as evt from '../../ducks/eventDuck';
 
 import { bindActionCreators } from 'redux';
 
@@ -45,7 +46,7 @@ export class DayPage extends React.Component {
 
     deleteEvent(event) {
         event.preventDefault();
-        this.props.actions.deleteEventRequest(this.props.date.id, event.target.id, this.props.user.id);
+        this.props.actions.deleteEventRequest(this.props.dateId, event.target.id, this.props.user);
     }
 
     addEvent(event) {
@@ -67,12 +68,12 @@ export class DayPage extends React.Component {
                     <br/>
                     <input type="submit"
                         value="Edit"
-                        id={event.id}
+                        id={key}
                         className="btn btn-primary"
                         onClick={this.editEvent}/>
                     <input type="submit"
                         value="Delete"
-                        id={event.id}
+                        id={key}
                         className="btn btn-primary"
                         onClick={this.deleteEvent}/>
                 </div>);
@@ -107,9 +108,6 @@ DayPage.propTypes = {
 };
 
 function mapStateToProps(state, ownProps) {
-    
-    debugger; // TODO START HERE not working (id not set?)
-
     const id = ownProps.params.id; 
     const dateKey = Object.keys(state.dates)
         .find(key => state.dates[key].date == id);
@@ -119,6 +117,7 @@ function mapStateToProps(state, ownProps) {
             user: 0,
             id: '',
             date: {},
+            dateId: 0,
             events: {},
         };
     }
@@ -131,13 +130,14 @@ function mapStateToProps(state, ownProps) {
         user: state.app.user.id,
         id,
         date,
+        dateId: dateKey,
         events
     };
 }
 
 function mapDispatchToProps(dispatch) {
     return {
-        actions: bindActionCreators(cal.creators, dispatch)
+        actions: bindActionCreators({ ...cal.creators, ...evt.creators }, dispatch)
     };
 }
 

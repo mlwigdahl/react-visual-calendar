@@ -2,33 +2,38 @@ import { put, call, takeEvery } from 'redux-saga/effects';
 
 import initialState from './initialState';
 import EventApi from '../api/mockEventApi';
+import * as calendar from './calendarDuck';
 import * as async from './asyncDuck';
 import * as helpers from '../common/Helpers';
 
 // actions
 
 export const actions = {
-    LOAD_EVENT_RANGE_SUCCESS: 'react-visual-calendar/calendar/LOAD_EVENT_RANGE_SUCCESS',
-    LOAD_EVENT_RANGE_FAILURE: 'react-visual-calendar/calendar/LOAD_EVENT_RANGE_FAILURE',
-    LOAD_EVENT_RANGE_REQUEST: 'react-visual-calendar/calendar/LOAD_EVENT_RANGE_REQUEST',
+    LOAD_EVENT_RANGE_SUCCESS: 'react-visual-calendar/events/LOAD_EVENT_RANGE_SUCCESS',
+    LOAD_EVENT_RANGE_FAILURE: 'react-visual-calendar/events/LOAD_EVENT_RANGE_FAILURE',
+    LOAD_EVENT_RANGE_REQUEST: 'react-visual-calendar/events/LOAD_EVENT_RANGE_REQUEST',
 
-    INSERT_EVENT_SUCCESS: 'react-visual-calendar/calendar/INSERT_EVENT_SUCCESS',
-    INSERT_EVENT_FAILURE: 'react-visual-calendar/calendar/INSERT_EVENT_FAILURE',
-    INSERT_EVENT_REQUEST: 'react-visual-calendar/calendar/INSERT_EVENT_REQUEST',
+    INSERT_EVENT_SUCCESS: 'react-visual-calendar/events/INSERT_EVENT_SUCCESS',
+    INSERT_EVENT_FAILURE: 'react-visual-calendar/events/INSERT_EVENT_FAILURE',
+    INSERT_EVENT_REQUEST: 'react-visual-calendar/events/INSERT_EVENT_REQUEST',
 
-    UPDATE_EVENT_SUCCESS: 'react-visual-calendar/calendar/UPDATE_EVENT_SUCCESS',
-    UPDATE_EVENT_FAILURE: 'react-visual-calendar/calendar/UPDATE_EVENT_FAILURE',
-    UPDATE_EVENT_REQUEST: 'react-visual-calendar/calendar/UPDATE_EVENT_REQUEST',
+    UPDATE_EVENT_SUCCESS: 'react-visual-calendar/events/UPDATE_EVENT_SUCCESS',
+    UPDATE_EVENT_FAILURE: 'react-visual-calendar/events/UPDATE_EVENT_FAILURE',
+    UPDATE_EVENT_REQUEST: 'react-visual-calendar/events/UPDATE_EVENT_REQUEST',
 
-    DELETE_EVENT_SUCCESS: 'react-visual-calendar/calendar/DELETE_EVENT_SUCCESS',
-    DELETE_EVENT_FAILURE: 'react-visual-calendar/calendar/DELETE_EVENT_FAILURE',
-    DELETE_EVENT_REQUEST: 'react-visual-calendar/calendar/DELETE_EVENT_REQUEST',
+    DELETE_EVENT_SUCCESS: 'react-visual-calendar/events/DELETE_EVENT_SUCCESS',
+    DELETE_EVENT_FAILURE: 'react-visual-calendar/events/DELETE_EVENT_FAILURE',
+    DELETE_EVENT_REQUEST: 'react-visual-calendar/events/DELETE_EVENT_REQUEST',
 };
 
 // reducer
 
 export function reducer(state = initialState.events, action) {
     switch (action.type) {
+
+        case calendar.actions.LOAD_CALENDAR_SUCCESS:
+            return { ...action.data.events };
+
         case actions.LOAD_EVENT_RANGE_SUCCESS:
         {
             const existing = Object.keys(state);
@@ -70,7 +75,6 @@ export function reducer(state = initialState.events, action) {
 
         case actions.DELETE_EVENT_SUCCESS:
         {
-          
             const newState = { ...state };
             delete newState[action.eventId];
 

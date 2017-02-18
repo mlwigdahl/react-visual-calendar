@@ -116,6 +116,7 @@ export class EventPage extends React.Component {
     }
 }
 
+// TODO START HERE -- edit not working
 EventPage.propTypes = {
     user: PropTypes.number.isRequired,
     id: PropTypes.string.isRequired,

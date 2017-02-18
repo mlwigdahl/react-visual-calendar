@@ -6,32 +6,37 @@ import DateApi from '../api/mockDateApi';
 import EventApi from '../api/mockEventApi';
 import * as async from './asyncDuck';
 import * as event from './eventDuck';
+import * as calendar from './calendarDuck';
 import * as helpers from '../common/Helpers';
 
 // actions
 
 export const actions = {
-    LOAD_DATE_RANGE_SUCCESS: 'react-visual-calendar/calendar/LOAD_DATE_RANGE_SUCCESS',
-    LOAD_DATE_RANGE_FAILURE: 'react-visual-calendar/calendar/LOAD_DATE_RANGE_FAILURE',
-    LOAD_DATE_RANGE_REQUEST: 'react-visual-calendar/calendar/LOAD_DATE_RANGE_REQUEST',
+    LOAD_DATE_RANGE_SUCCESS: 'react-visual-calendar/dates/LOAD_DATE_RANGE_SUCCESS',
+    LOAD_DATE_RANGE_FAILURE: 'react-visual-calendar/dates/LOAD_DATE_RANGE_FAILURE',
+    LOAD_DATE_RANGE_REQUEST: 'react-visual-calendar/dates/LOAD_DATE_RANGE_REQUEST',
 
-    INSERT_DATE_SUCCESS: 'react-visual-calendar/calendar/INSERT_DATE_SUCCESS',
-    INSERT_DATE_FAILURE: 'react-visual-calendar/calendar/INSERT_DATE_FAILURE',
-    INSERT_DATE_REQUEST: 'react-visual-calendar/calendar/INSERT_DATE_REQUEST',
+    INSERT_DATE_SUCCESS: 'react-visual-calendar/dates/INSERT_DATE_SUCCESS',
+    INSERT_DATE_FAILURE: 'react-visual-calendar/dates/INSERT_DATE_FAILURE',
+    INSERT_DATE_REQUEST: 'react-visual-calendar/dates/INSERT_DATE_REQUEST',
 
-    UPDATE_DATE_SUCCESS: 'react-visual-calendar/calendar/UPDATE_DATE_SUCCESS',
-    UPDATE_DATE_FAILURE: 'react-visual-calendar/calendar/UPDATE_DATE_FAILURE',
-    UPDATE_DATE_REQUEST: 'react-visual-calendar/calendar/UPDATE_DATE_REQUEST',
+    UPDATE_DATE_SUCCESS: 'react-visual-calendar/dates/UPDATE_DATE_SUCCESS',
+    UPDATE_DATE_FAILURE: 'react-visual-calendar/dates/UPDATE_DATE_FAILURE',
+    UPDATE_DATE_REQUEST: 'react-visual-calendar/dates/UPDATE_DATE_REQUEST',
 
-    DELETE_DATE_SUCCESS: 'react-visual-calendar/calendar/DELETE_DATE_SUCCESS',
-    DELETE_DATE_FAILURE: 'react-visual-calendar/calendar/DELETE_DATE_FAILURE',
-    DELETE_DATE_REQUEST: 'react-visual-calendar/calendar/DELETE_DATE_REQUEST',
+    DELETE_DATE_SUCCESS: 'react-visual-calendar/dates/DELETE_DATE_SUCCESS',
+    DELETE_DATE_FAILURE: 'react-visual-calendar/dates/DELETE_DATE_FAILURE',
+    DELETE_DATE_REQUEST: 'react-visual-calendar/dates/DELETE_DATE_REQUEST',
 };
 
 // reducer
 
 export function reducer(state = initialState.dates, action) {
     switch(action.type) {
+
+        case calendar.actions.LOAD_CALENDAR_SUCCESS:
+            return { ...action.data.dates };
+
         case actions.LOAD_DATE_RANGE_SUCCESS:
         {
             const existing = Object.keys(state);
@@ -89,17 +94,18 @@ export function reducer(state = initialState.dates, action) {
         case event.actions.INSERT_EVENT_SUCCESS:
         {
             const newState = { ...state };
-            newState[actions.dateId].events.push(actions.event.id);
+            newState[action.dateId].events.push(action.event.id);
             return newState;
         }
 
         case event.actions.DELETE_EVENT_SUCCESS:
         {
-            const newState = { ...state };
-            const index = newState[actions.dateId].events.IndexOf(actions.eventId);
+            const index = state[action.dateId].events.findIndex(id => id == action.eventId);
+            const newEvents = [ ...state[action.dateId].events ];
             if (index > -1) {
-                newState[actions.dateId].events.splice(index, 1);
+                newEvents.splice(index, 1);
             }
+            const newState = { ...state, [action.dateId]: { ...state[action.dateId], events: newEvents } };
             return newState;
         }
 

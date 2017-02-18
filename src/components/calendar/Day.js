@@ -3,7 +3,6 @@ import { browserHistory } from 'react-router';
 import moment from 'moment';
 
 // TODO -- fix rendering layout
-// TODO -- deal with click now that we've extended the text
 
 function renderMore(length) {
     if (length > 1) {
@@ -22,7 +21,7 @@ function renderEvents(events) {
                 <br/>
                 <span className="date-start">{`${event.startTime} - ${event.endTime}`}</span>
                 <br/>
-                {renderMore(events.length)}
+                {renderMore(Object.keys(events).length)}
             </div>);
     }
 }
@@ -49,8 +48,6 @@ function Day({user, date, curDate, events}) {
         
         browserHistory.push(`/day/${moment({ year, month: date.month(), day: date.date() }).format('YYYYMMDD')}`);
     }
-
-    // TODO START HERE events not making it in here properly...
 
     return (
         <div className={dayClass(day, curDate)} onClick={onClick}>
