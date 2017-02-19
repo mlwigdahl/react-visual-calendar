@@ -93,8 +93,10 @@ export function reducer(state = initialState.dates, action) {
 
         case event.actions.INSERT_EVENT_SUCCESS:
         {
-            const newState = { ...state };
-            newState[action.dateId].events.push(action.event.id);
+            const newEvents = [ ...state[action.dateId].events ];
+            newEvents.push(action.event.id);
+            const newState = { ...state, [action.dateId]: { ...state[action.dateId], events: newEvents } };
+            
             return newState;
         }
 

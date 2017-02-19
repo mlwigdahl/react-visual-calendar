@@ -72,13 +72,13 @@ describe('Date Duck', () => {
 
             expect(newState2).to.not.be.undefined;
             expect(Object.keys(newState2.dates).length).to.equal(2);
-            expect(newState2.dates[2].events.length).to.equal(2);
+            expect(newState2.dates['20170102'].events.length).to.equal(2);
         });
 
         it ("should have LOAD_DATE_RANGE_FAILURE update the status (although it doesn't actually do anything at the moment)", () => {
             const action = date.creators.loadDateRangeFailure("oops");
 
-            const newState = date.reducer(initialState.date, action);
+            const newState = date.reducer(initialState.dates, action);
 
             expect(newState).to.not.be.undefined;
             expect(newState).to.deep.equal({});

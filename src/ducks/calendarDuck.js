@@ -30,12 +30,8 @@ export function reducer(state = initialState.calendar, action) {
         case actions.LOAD_CALENDAR_SUCCESS:
             return { ...action.data.calendar };
 
-        // TODO also need to push in the dates and events in their respective ducks
-        
         case actions.LOAD_CALENDAR_FAILURE:
             return state; // TODO more here?  Probably update global message...
-
-
 
         case actions.LOAD_DATEICON_SUCCESS:
 /*            return { 

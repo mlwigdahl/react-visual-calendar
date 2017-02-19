@@ -5,7 +5,7 @@ import moment from 'moment';
 
 import { bindActionCreators } from 'redux';
 
-import * as cal from '../../ducks/calendarDuck';
+import * as evt from '../../ducks/eventDuck';
 import EventForm from './EventForm';
 
 export class EventPage extends React.Component {
@@ -57,20 +57,18 @@ export class EventPage extends React.Component {
         // TODO add icon and endDate stuff here later
 
         if (this.props.eventId == 0) {
-            this.props.actions.insertEventRequest(this.props.dateId, { 
+            this.props.actions.insertEventRequest(this.props.id, { 
                 label: this.state.title,
                 startTime: this.state.startTime,
-                endTime: this.state.endTime,
-                id: this.props.eventId,
-            }, this.props.user.id);
+                endTime: this.state.endTime
+            }, this.props.user);
         }
         else {
-            this.props.actions.updateEventRequest(this.props.dateId, { 
+            this.props.actions.updateEventRequest(this.props.id, this.props.eventId, { 
                 label: this.state.title,
                 startTime: this.state.startTime,
                 endTime: this.state.endTime,
-                id: this.props.eventId,
-            }, this.props.user.id);
+            }, this.props.user);
         }
     }
 
@@ -116,11 +114,9 @@ export class EventPage extends React.Component {
     }
 }
 
-// TODO START HERE -- edit not working
 EventPage.propTypes = {
     user: PropTypes.number.isRequired,
     id: PropTypes.string.isRequired,
-    dateId: PropTypes.number.isRequired,
     eventId: PropTypes.number.isRequired,
     title: PropTypes.string,
     startTime: PropTypes.string,
@@ -132,13 +128,10 @@ EventPage.propTypes = {
 function mapStateToProps(state, ownProps) {
     // user, id and eventId come in via the routing as params
 
-    const date = state.dates.find(date => date.date == ownProps.params.id);
-
-    if (date === undefined) {
+    if (ownProps.params.id === undefined) {
         return {
             user: 0,
             id: '',
-            dateId: 0,
             eventId: 0,
             add: false,
         };
@@ -148,7 +141,6 @@ function mapStateToProps(state, ownProps) {
         return {
             user: state.app.user.id,
             id: ownProps.params.id,
-            dateId: date.id,
             eventId: 0, // this will be replaced when submitted
             add: true,
             title: '',
@@ -162,7 +154,6 @@ function mapStateToProps(state, ownProps) {
     return {
         user: state.app.user.id,
         id: ownProps.params.id,
-        dateId: date.id,
         eventId: Number(ownProps.params.eventId),
         title: event.label,
         startTime: event.startTime,
@@ -173,7 +164,7 @@ function mapStateToProps(state, ownProps) {
 
 function mapDispatchToProps(dispatch) {
     return {
-        actions: bindActionCreators(cal.creators, dispatch)
+        actions: bindActionCreators(evt.creators, dispatch)
     };
 }
 

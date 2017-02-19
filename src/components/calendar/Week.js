@@ -2,8 +2,7 @@ import React from 'react';
 import Day from './Day';
 
 function findEvents(dates, events, date) {
-    const targetDate = dates[Object.keys(dates)
-        .find(key => dates[key].date == date)];
+    const targetDate = dates[date];
 
     return targetDate !== undefined ? 
         targetDate.events

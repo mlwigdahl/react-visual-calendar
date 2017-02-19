@@ -109,6 +109,8 @@ export const sagas = {
                 yield put(async.creators.asyncRequest());
                 const eventRet = yield call(EventApi.insertEvent, action.dateId, action.event, action.userId);
                 yield put(creators.insertEventSuccess(action.dateId, eventRet));
+                const bh = yield call(helpers.getBrowserHistory);
+                yield call(bh.push, `/day/${action.dateId}`);
             }
             catch (e) {
                 yield put(async.creators.asyncError(e));
@@ -119,6 +121,8 @@ export const sagas = {
                 yield put(async.creators.asyncRequest());
                 const eventRet = yield call(EventApi.updateEvent, action.dateId, action.eventId, action.event, action.userId);
                 yield put(creators.updateEventSuccess(action.dateId, eventRet));
+                const bh = yield call(helpers.getBrowserHistory);
+                yield call(bh.push, `/day/${action.dateId}`);
             }
             catch (e) {
                 yield put(async.creators.asyncError(e));

@@ -30,8 +30,7 @@ const calendar = {
 
 // example dates
 const dates = {
-    1: {
-        date: '20170101',
+    '20170101': {
         events: [1, 2],
     },
 };

@@ -1,5 +1,4 @@
 
-
 export const events = {
     1: {
         icon: 'scissors.jpg',
@@ -22,30 +21,31 @@ const eventsNew = {
     4: { startTime: '11:30 AM', endTime: '12:30 PM', endDate: '20170101', icon: "lunch-icon-url", label: "Lunch! 😁" },
 };
 
+let eventNum = 2;
+
 function getMaxEventId() {
-    return events.reduce((acc, event) => { acc = event.id > acc ? event.id : acc; return acc; });
+    eventNum += 1;
+    return eventNum;
 }
 
 const EventApi = {
     loadEventRange: function* (dates, userId) {
-        const dateEvents = Object.keys(dates)
-            .map(key => dates[key].events)
-            .reduce((acc, events) => acc.concat(events), []);
+        try {
+            const dateEvents = Object.keys(dates)
+                .map(key => dates[key].events)
+                .reduce((acc, events) => acc.concat(events), []);
 
-        yield 1; // to suppress lint error
-        return { ...Object.keys(eventsNew)
-            .filter(key => dateEvents.includes(key))
-            .reduce((acc, key) => { acc[key] = eventsNew[key]; return acc; }, {})
-        };
+            yield 1; // to suppress lint error
+            return { ...Object.keys(eventsNew)
+                .filter(key => dateEvents.includes(key))
+                .reduce((acc, key) => { acc[key] = eventsNew[key]; return acc; }, {}) 
+            };
+        } catch(error) {
+            return []; // TODO more here
+        }
     },
 
     insertEvent: function* (dateId, event, userId) {
-/*
-                const dateEvents = 
-                
-                events: [ ...eventsNew.filter(event => dateEvents.includes(event.id)) ]
-*/
-
         try {
             /*
             yield call(fetch,
@@ -55,7 +55,7 @@ const EventApi = {
             yield apply(resp, resp.json);
             */
             yield 1; // to suppress lint error
-            return { id: getMaxEventId(dateId) + 1, event: { ...event } };
+            return { id: getMaxEventId() + 1, event: { ...event } };
         } catch(error) {
             return []; // TODO more here
         }

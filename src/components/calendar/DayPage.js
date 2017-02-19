@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { browserHistory } from 'react-router';
 import moment from 'moment';
 
-import * as cal from '../../ducks/calendarDuck';
 import * as evt from '../../ducks/eventDuck';
 
 import { bindActionCreators } from 'redux';
@@ -25,7 +24,6 @@ export class DayPage extends React.Component {
     componentDidMount() {
          if (this.props.user == 0) {
             browserHistory.push(`/login`);
-//            return (<LoginPage />); // TODO remove?
         }
     }
 
@@ -46,7 +44,7 @@ export class DayPage extends React.Component {
 
     deleteEvent(event) {
         event.preventDefault();
-        this.props.actions.deleteEventRequest(this.props.dateId, event.target.id, this.props.user);
+        this.props.actions.deleteEventRequest(this.props.id, event.target.id, this.props.user);
     }
 
     addEvent(event) {
@@ -109,20 +107,17 @@ DayPage.propTypes = {
 
 function mapStateToProps(state, ownProps) {
     const id = ownProps.params.id; 
-    const dateKey = Object.keys(state.dates)
-        .find(key => state.dates[key].date == id);
 
-    if (dateKey === undefined) {
+    if (id === undefined) {
         return {
             user: 0,
             id: '',
             date: {},
-            dateId: 0,
             events: {},
         };
     }
 
-    const date = state.dates[dateKey];
+    const date = state.dates[id];
     const events = date.events
         .reduce((acc, key) => { acc[key] = state.events[key]; return acc; }, {});
 
@@ -130,14 +125,13 @@ function mapStateToProps(state, ownProps) {
         user: state.app.user.id,
         id,
         date,
-        dateId: dateKey,
         events
     };
 }
 
 function mapDispatchToProps(dispatch) {
     return {
-        actions: bindActionCreators({ ...cal.creators, ...evt.creators }, dispatch)
+        actions: bindActionCreators(evt.creators, dispatch)
     };
 }
 
