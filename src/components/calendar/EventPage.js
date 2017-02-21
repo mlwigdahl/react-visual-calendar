@@ -31,7 +31,6 @@ export class EventPage extends React.Component {
     componentDidMount() {
          if (this.props.user == 0) {
             browserHistory.push(`/login`);
-//            return (<LoginPage />); // TODO remove?
         }
     }
 
