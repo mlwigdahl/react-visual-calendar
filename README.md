@@ -10,9 +10,13 @@ React Visual Calendar is a responsive, mobile-first visual calendar web applicat
         TODO: 
             X a. Hook up routing, etc. for EventPage
             b. Connect to real add/update/delete events
-    2. Support multiple events in a day.
+    X 2. Support multiple events in a day.
     3. Component/page testing.
     4. Insert/update/delete testing.
+        Insert
+        Update
+        X Delete
+
 
 RVC is powered by Cory House's React Slingshot starter kit (https://github.com/coryhouse/react-slingshot).
 
