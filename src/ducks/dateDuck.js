@@ -41,9 +41,9 @@ export function reducer(state = initialState.dates, action) {
         {
             const existing = Object.keys(state);
 
-            const newDates = Object.keys(action.dates)
+            const newDates = Object.keys(action.data.dates)
                 .filter(key => !existing.includes(key))
-                .reduce((acc, key) => { acc[key] = action.dates[key]; return acc; }, {});
+                .reduce((acc, key) => { acc[key] = action.data.dates[key]; return acc; }, {});
 
             return { 
                 ...state,
@@ -137,10 +137,10 @@ export const sagas = {
         loadDateRange: function* (action) {
             try {
                 yield put(async.creators.asyncRequest());
-                const dates = yield call(DateApi.loadDateRange, action.startDate, action.endDate, action.userId);
-                yield put(creators.loadDateRangeSuccess(dates, action.userId));
-                const events = yield call(EventApi.loadEventRange, dates, action.userId);
-                yield put(event.creators.loadEventRangeSuccess(events, action.userId));
+                const dates = yield call(DateApi.loadDateRange, action.data.startDate, action.data.endDate, action.data.userId);
+                yield put(creators.loadDateRangeSuccess(dates, action.data.userId));
+                const events = yield call(EventApi.loadEventRange, dates, action.data.userId);
+                yield put(event.creators.loadEventRangeSuccess(events, action.data.userId));
             }
             catch (e) {
                 yield put(async.creators.asyncError(e));
@@ -149,7 +149,7 @@ export const sagas = {
         insertDate: function* (action) {
             try {
                 yield put(async.creators.asyncRequest());
-                const dateRet = yield call(DateApi.insertDate, action.date, action.userId);
+                const dateRet = yield call(DateApi.insertDate, action.data.date, action.data.userId);
                 yield put(creators.insertDateSuccess(dateRet));
             }
             catch (e) {
@@ -159,7 +159,7 @@ export const sagas = {
         updateDate: function* (action) {
             try {
                 yield put(async.creators.asyncRequest());
-                const dateRet = yield call(DateApi.updateDate, action.date, action.userId);
+                const dateRet = yield call(DateApi.updateDate, action.data.date, action.data.userId);
                 yield put(creators.updateDateSuccess(dateRet));
             }
             catch (e) {
@@ -169,7 +169,7 @@ export const sagas = {
         deleteDate: function* (action) {
             try {
                 yield put(async.creators.asyncRequest());
-                const dateIdRet = yield call(DateApi.deleteDate, action.dateId, action.userId);
+                const dateIdRet = yield call(DateApi.deleteDate, action.data.dateId, action.data.userId);
                 yield put(creators.deleteDateSuccess(dateIdRet));
             }
             catch (e) {
@@ -183,51 +183,51 @@ export const sagas = {
 
 export const creators = {
     loadDateRangeSuccess: (dates, userId) => {
-        return { type: actions.LOAD_DATE_RANGE_SUCCESS, dates, userId };
+        return { type: actions.LOAD_DATE_RANGE_SUCCESS, data: {dates, userId } };
     },
 
     loadDateRangeFailure: (error) => {
-        return { type: actions.LOAD_DATE_RANGE_FAILURE, error };
+        return { type: actions.LOAD_DATE_RANGE_FAILURE, data: { error } };
     },
 
     loadDateRangeRequest: (startDate, endDate, userId) => {
-        return { type: actions.LOAD_DATE_RANGE_REQUEST, startDate, endDate, userId };
+        return { type: actions.LOAD_DATE_RANGE_REQUEST, data: { startDate, endDate, userId } };
     },
     
     insertDateSuccess: (date) => {
-        return { type: actions.INSERT_DATE_SUCCESS, date };
+        return { type: actions.INSERT_DATE_SUCCESS, data: { date } };
     },
 
     insertDateFailure: (error) => {
-        return { type: actions.INSERT_DATE_FAILURE, error };
+        return { type: actions.INSERT_DATE_FAILURE, data: { error } };
     },
 
     insertDateRequest: (date, userId) => {
-        return { type: actions.INSERT_DATE_REQUEST, date, userId };
+        return { type: actions.INSERT_DATE_REQUEST, data: { date, userId } };
     },
 
     updateDateSuccess: (date) => {
-        return { type: actions.UPDATE_DATE_SUCCESS, date };
+        return { type: actions.UPDATE_DATE_SUCCESS, data: { date } };
     },
 
     updateDateFailure: (error) => {
-        return { type: actions.UPDATE_DATE_FAILURE, error };
+        return { type: actions.UPDATE_DATE_FAILURE, data: { error } };
     },
 
     updateDateRequest: (date, userId) => {
-        return { type: actions.UPDATE_DATE_REQUEST, date, userId };
+        return { type: actions.UPDATE_DATE_REQUEST, data: { date, userId } };
     },
 
     deleteDateSuccess: (dateId) => {
-        return { type: actions.DELETE_DATE_SUCCESS, dateId };
+        return { type: actions.DELETE_DATE_SUCCESS, data: { dateId } };
     },
 
     deleteDateFailure: (error) => {
-        return { type: actions.DELETE_DATE_FAILURE, error };
+        return { type: actions.DELETE_DATE_FAILURE, data: { error } };
     },
 
     deleteDateRequest: (dateId, userId) => {
-        return { type: actions.DELETE_DATE_REQUEST, dateId, userId };
+        return { type: actions.DELETE_DATE_REQUEST, data: { dateId, userId } };
     },
 };
 

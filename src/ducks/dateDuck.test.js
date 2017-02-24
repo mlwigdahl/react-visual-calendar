@@ -24,6 +24,17 @@ const initialState = {
 // duck tests
 
 describe('Date Duck', () => {
+    describe('action creators', () => {
+        it ('should have loadDateRanteRequest() take three parameters and return a valid LOAD_DATE_RANGE_REQUEST object', () => {
+            const action = date.creators.loadDateRangeRequest('1/1/2017', '2/1/2017', 1);
+            expect(action.type).to.equal(date.actions.LOAD_DATE_RANGE_REQUEST);
+            expect(action.data.startDate).to.equal('1/1/2017');
+            expect(action.data.endDate).to.equal('2/1/2017');
+            expect(action.data.userId).to.equal(1);
+            expect(Object.keys(action.data).length).to.equal(3);
+        });
+    });
+
     describe('saga watchers', () => {
         it ('should have LOAD_DATE_RANGE_REQUEST pick up multiple requests', () => {
             return expectSaga(date.sagas.watchers.LOAD_DATE_RANGE_REQUEST)
