@@ -60,6 +60,8 @@ describe('Date Duck', () => {
                 .next(dr)
                 .put(date.creators.loadDateRangeSuccess(dr, 0))
                 .next()
+                .put(async.creators.asyncRequest())
+                .next()
                 .call(EventApi.loadEventRange, dr, 0)
                 .next(er)
                 .put(event.creators.loadEventRangeSuccess(er, 0))

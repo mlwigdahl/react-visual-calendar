@@ -94,8 +94,10 @@ export const sagas = {
                 yield put(async.creators.asyncRequest());
                 const calendar = yield call(CalendarApi.loadCalendar, action.data.userId);
                 yield put(creators.loadCalendarSuccess(calendar));
+                yield put(async.creators.asyncRequest());
                 const dates = yield call(DateApi.loadDateRange, calendar.minDate, calendar.maxDate, action.data.userId);
                 yield put(date.creators.loadDateRangeSuccess(dates, action.data.userId));
+                yield put(async.creators.asyncRequest());
                 const events = yield call(EventApi.loadEventRange, dates, action.data.userId);
                 yield put(event.creators.loadEventRangeSuccess(events, action.data.userId));
                 const bh = yield call(helpers.getBrowserHistory);

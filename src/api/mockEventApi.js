@@ -35,7 +35,7 @@ const eventsNew = {
     4: { startTime: '11:30 AM', endTime: '12:30 PM', endDate: '20170101', icon: "lunch-icon-url", label: "Lunch! 😁" },
 };
 
-let eventNum = 2;
+let eventNum = 3;
 
 function getMaxEventId() {
     eventNum += 1;

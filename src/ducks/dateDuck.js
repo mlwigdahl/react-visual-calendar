@@ -139,6 +139,7 @@ export const sagas = {
                 yield put(async.creators.asyncRequest());
                 const dates = yield call(DateApi.loadDateRange, action.data.startDate, action.data.endDate, action.data.userId);
                 yield put(creators.loadDateRangeSuccess(dates, action.data.userId));
+                yield put(async.creators.asyncRequest());
                 const events = yield call(EventApi.loadEventRange, dates, action.data.userId);
                 yield put(event.creators.loadEventRangeSuccess(events, action.data.userId));
             }
