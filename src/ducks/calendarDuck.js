@@ -4,7 +4,11 @@ import { put, call, takeEvery } from 'redux-saga/effects';
 
 import initialState from './initialState';
 import CalendarApi from '../api/mockCalendarApi';
+import DateApi from '../api/mockDateApi';
+import EventApi from '../api/mockEventApi';
 import * as async from './asyncDuck';
+import * as date from './dateDuck';
+import * as event from './eventDuck';
 import * as helpers from '../common/Helpers';
 
 // actions
@@ -88,8 +92,12 @@ export const sagas = {
         loadCalendar: function* (action) {
             try {
                 yield put(async.creators.asyncRequest());
-                const calendar = yield call(CalendarApi.loadCalendar, action.userId);
+                const calendar = yield call(CalendarApi.loadCalendar, action.data.userId);
                 yield put(creators.loadCalendarSuccess(calendar));
+                const dates = yield call(DateApi.loadDateRange, calendar.minDate, calendar.maxDate, action.data.userId);
+                yield put(date.creators.loadDateRangeSuccess(dates, action.data.userId));
+                const events = yield call(EventApi.loadEventRange, dates, action.data.userId);
+                yield put(event.creators.loadEventRangeSuccess(events, action.data.userId));
                 const bh = yield call(helpers.getBrowserHistory);
                 yield call(bh.push, `/`);
             }
@@ -100,8 +108,8 @@ export const sagas = {
         loadDateIcon: function* (action) {
             try {
                 yield put(async.creators.asyncRequest());
-                const icon = yield call(CalendarApi.loadDateIcon, action.dateId, action.userId);
-                yield put(creators.loadDateIconSuccess(icon, action.dateId));
+                const icon = yield call(CalendarApi.loadDateIcon, action.data.dateId, action.data.userId);
+                yield put(creators.loadDateIconSuccess(icon, action.data.dateId));
             }
             catch (e) {
                 yield put(async.creators.asyncError(e));
@@ -110,8 +118,8 @@ export const sagas = {
         updateDateIcon: function* (action) {
             try {
                 yield put(async.creators.asyncRequest());
-                const iconRet = yield call(CalendarApi.updateDateIcon, action.icon, action.dateId, action.userId);
-                yield put(creators.updateDateIconSuccess(iconRet, action.dateId));
+                const iconRet = yield call(CalendarApi.updateDateIcon, action.data.icon, action.data.dateId, action.data.userId);
+                yield put(creators.updateDateIconSuccess(iconRet, action.data.dateId));
             }
             catch (e) {
                 yield put(async.creators.asyncError(e));
@@ -125,38 +133,38 @@ export const sagas = {
 export const creators = {
 
     loadCalendarSuccess: (calendar) => {
-        return { type: actions.LOAD_CALENDAR_SUCCESS, data: calendar };
+        return { type: actions.LOAD_CALENDAR_SUCCESS, data: { calendar } };
     },
 
     loadCalendarFailure: (error) => {
-        return { type: actions.LOAD_CALENDAR_FAILURE, error };
+        return { type: actions.LOAD_CALENDAR_FAILURE, data: { error } };
     },
 
     loadCalendarRequest: (userId) => {
-        return { type: actions.LOAD_CALENDAR_REQUEST, userId };
+        return { type: actions.LOAD_CALENDAR_REQUEST, data: { userId } };
     },
 
     loadDateIconSuccess: (icon, dateId) => {
-        return { type: actions.LOAD_DATE_ICON_SUCCESS, icon, dateId };
+        return { type: actions.LOAD_DATE_ICON_SUCCESS, data: { icon, dateId } };
     },
 
     loadDateIconFailure: (error) => {
-        return { type: actions.LOAD_DATE_ICON_FAILURE, error };
+        return { type: actions.LOAD_DATE_ICON_FAILURE, data: { error } };
     },
 
     loadDateIconRequest: (dateId, userId) => {
-        return { type: actions.LOAD_DATE_ICON_REQUEST, dateId, userId };
+        return { type: actions.LOAD_DATE_ICON_REQUEST, data: { dateId, userId } };
     },
 
     updateDateIconSuccess: (icon, dateId) => {
-        return { type: actions.UPDATE_DATE_ICON_SUCCESS, icon, dateId };
+        return { type: actions.UPDATE_DATE_ICON_SUCCESS, data: { icon, dateId } };
     },
 
     updateDateIconFailure: (error) => {
-        return { type: actions.UPDATE_DATE_ICON_FAILURE, error };
+        return { type: actions.UPDATE_DATE_ICON_FAILURE, data: { error } };
     },
 
     updateDateIconRequest: (icon, dateId, userId) => {
-        return { type: actions.UPDATE_DATE_ICON_REQUEST, icon, dateId, userId };
+        return { type: actions.UPDATE_DATE_ICON_REQUEST, data: { icon, dateId, userId } };
     },
 };

@@ -25,7 +25,7 @@ const initialState = {
 
 describe('Date Duck', () => {
     describe('action creators', () => {
-        it ('should have loadDateRanteRequest() take three parameters and return a valid LOAD_DATE_RANGE_REQUEST object', () => {
+        it ('should have loadDateRangeRequest() take three parameters and return a valid LOAD_DATE_RANGE_REQUEST object', () => {
             const action = date.creators.loadDateRangeRequest('1/1/2017', '2/1/2017', 1);
             expect(action.type).to.equal(date.actions.LOAD_DATE_RANGE_REQUEST);
             expect(action.data.startDate).to.equal('1/1/2017');

@@ -21,6 +21,8 @@ export class DayPage extends React.Component {
         };
     }
 
+    // TODO START HERE bug when adding event (appears on multiple pages) then deleting from one and trying to render the other day
+
     componentDidMount() {
          if (this.props.user == 0) {
             browserHistory.push(`/login`);
