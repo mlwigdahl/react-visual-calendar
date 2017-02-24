@@ -93,21 +93,21 @@ export function reducer(state = initialState.dates, action) {
 
         case event.actions.INSERT_EVENT_SUCCESS:
         {
-            const newEvents = [ ...state[action.dateId].events ];
-            newEvents.push(action.event.id);
-            const newState = { ...state, [action.dateId]: { ...state[action.dateId], events: newEvents } };
+            const newEvents = [ ...state[action.data.dateId].events ];
+            newEvents.push(action.data.event.id);
+            const newState = { ...state, [action.data.dateId]: { ...state[action.data.dateId], events: newEvents } };
             
             return newState;
         }
 
         case event.actions.DELETE_EVENT_SUCCESS:
         {
-            const index = state[action.dateId].events.findIndex(id => id == action.eventId);
-            const newEvents = [ ...state[action.dateId].events ];
+            const index = state[action.data.dateId].events.findIndex(id => id == action.data.eventId);
+            const newEvents = [ ...state[action.data.dateId].events ];
             if (index > -1) {
                 newEvents.splice(index, 1);
             }
-            const newState = { ...state, [action.dateId]: { ...state[action.dateId], events: newEvents } };
+            const newState = { ...state, [action.data.dateId]: { ...state[action.data.dateId], events: newEvents } };
             return newState;
         }
 

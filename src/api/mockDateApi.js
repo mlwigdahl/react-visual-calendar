@@ -25,12 +25,12 @@ const DateApi = {
             yield apply(resp, resp.json);
             */
             yield 1; // to suppress lint error
-            const dates = Object.keys(datesNew)
+            const datesAdd = Object.keys(datesNew)
                 .filter(key => parseInt(key, 10) >= parseInt(startDate, 10) 
                     && parseInt(key, 10) <= parseInt(endDate, 10))
                 .reduce((acc, key) => { acc[key] = datesNew[key]; return acc; }, {});
 
-            return { ...dates };
+            return { ...dates, ...datesAdd };
         } catch(error) {
             return []; // TODO more here
         }

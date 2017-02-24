@@ -17,6 +17,20 @@ export const events = {
 };
 
 const eventsNew = {
+    1: {
+        icon: 'scissors.jpg',
+        label: 'Haircut',
+        startTime: '08:15 AM',
+        endTime: '10:15 AM',
+        endDate: '20170101',
+    },
+    2: {
+        icon: 'food.jpg',
+        label: 'Lunch! 😁',
+        startTime: '11:30 AM',
+        endTime: '12:30 PM',
+        endDate: '20170101',
+    },
     3: { startTime: '03:45 PM', endTime: '04:45 PM', endDate: '20170101', icon: "meeting-icon-url", label: "3:45 meeting 😒😒 (Red conference room)" },
     4: { startTime: '11:30 AM', endTime: '12:30 PM', endDate: '20170101', icon: "lunch-icon-url", label: "Lunch! 😁" },
 };
@@ -37,9 +51,8 @@ const EventApi = {
 
             yield 1; // to suppress lint error
             return { ...Object.keys(eventsNew)
-                .filter(key => dateEvents.includes(key))
-                .reduce((acc, key) => { acc[key] = eventsNew[key]; return acc; }, {}) 
-            };
+                .filter(key => dateEvents.includes(Number(key)))
+                .reduce((acc, key) => { acc[key] = eventsNew[key]; return acc; }, {}) };
         } catch(error) {
             return []; // TODO more here
         }
@@ -55,7 +68,7 @@ const EventApi = {
             yield apply(resp, resp.json);
             */
             yield 1; // to suppress lint error
-            return { id: getMaxEventId() + 1, event: { ...event } };
+            return { id: getMaxEventId() + 1, data: { ...event } };
         } catch(error) {
             return []; // TODO more here
         }
@@ -71,7 +84,7 @@ const EventApi = {
             yield apply(resp, resp.json);
             */
             yield 1; // to suppress lint error
-            return { id: eventId, event: { ...event } };
+            return { id: eventId, data: { ...event } };
         } catch(error) {
             return []; // TODO more here
         }

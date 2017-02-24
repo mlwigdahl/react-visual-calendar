@@ -6,14 +6,12 @@ import { testSaga, expectSaga } from 'redux-saga-test-plan';
 import * as async from './asyncDuck';
 import * as calendar from './calendarDuck';
 import CalendarApi from '../api/mockCalendarApi';
-import * as testhelpers from '../common/TestHelpers';
+import { drainGenerator, mockBrowserHistory } from '../common/TestHelpers';
 import * as helpers from '../common/Helpers';
 
 // TODO: deleteEvent testing
 
 // setup
-
-const mockBrowserHistory = { push: () => {} }; // mock browserHistory
 
 const initialState = {
     calendar: {},
@@ -38,7 +36,7 @@ describe('Calendar Duck', () => {
 
     describe('saga workers', () => {
         it('should have loadCalendar start an async request, return success, and push URL', () => {
-            const cal = testhelpers.drainGenerator(CalendarApi.loadCalendar(1));
+            const cal = drainGenerator(CalendarApi.loadCalendar(1));
 
             const saga = testSaga(calendar.sagas.workers.loadCalendar, calendar.creators.loadCalendarRequest(1));
             return saga
@@ -59,7 +57,7 @@ describe('Calendar Duck', () => {
 
     describe('reducer', () => {
         it('should have LOAD_CALENDAR_SUCCESS update the state', () => {
-            const cal = testhelpers.drainGenerator(CalendarApi.loadCalendar(1));
+            const cal = drainGenerator(CalendarApi.loadCalendar(1));
 
             const action = calendar.creators.loadCalendarSuccess(cal);
 

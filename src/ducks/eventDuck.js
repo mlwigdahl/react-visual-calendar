@@ -38,9 +38,9 @@ export function reducer(state = initialState.events, action) {
         {
             const existing = Object.keys(state);
 
-            const newEvents = Object.keys(action.events)
+            const newEvents = Object.keys(action.data.events)
                 .filter(key => !existing.includes(key))
-                .reduce((acc, key) => { acc[key] = action.events[key]; return acc; }, {});
+                .reduce((acc, key) => { acc[key] = action.data.events[key]; return acc; }, {});
 
             return { 
                 ...state,
@@ -55,7 +55,7 @@ export function reducer(state = initialState.events, action) {
         {
             return {
                 ...state,
-                [action.event.id]: { ...action.event.event }
+                [action.data.event.id]: { ...action.data.event.data }
             };
         }
 
@@ -66,7 +66,7 @@ export function reducer(state = initialState.events, action) {
         {
             return {
                 ...state,
-                [action.event.id]: { ...action.event.event }
+                [action.data.event.id]: { ...action.data.event.data }
             };
         }
 
@@ -76,7 +76,7 @@ export function reducer(state = initialState.events, action) {
         case actions.DELETE_EVENT_SUCCESS:
         {
             const newState = { ...state };
-            delete newState[action.eventId];
+            delete newState[action.data.eventId];
 
             return newState;
         }
@@ -107,10 +107,10 @@ export const sagas = {
         insertEvent: function* (action) {
             try {
                 yield put(async.creators.asyncRequest());
-                const eventRet = yield call(EventApi.insertEvent, action.dateId, action.event, action.userId);
-                yield put(creators.insertEventSuccess(action.dateId, eventRet));
+                const eventRet = yield call(EventApi.insertEvent, action.data.dateId, action.data.event, action.data.userId);
+                yield put(creators.insertEventSuccess(action.data.dateId, eventRet));
                 const bh = yield call(helpers.getBrowserHistory);
-                yield call(bh.push, `/day/${action.dateId}`);
+                yield call(bh.push, `/day/${action.data.dateId}`);
             }
             catch (e) {
                 yield put(async.creators.asyncError(e));
@@ -119,10 +119,10 @@ export const sagas = {
         updateEvent: function* (action) {
             try {
                 yield put(async.creators.asyncRequest());
-                const eventRet = yield call(EventApi.updateEvent, action.dateId, action.eventId, action.event, action.userId);
-                yield put(creators.updateEventSuccess(action.dateId, eventRet));
+                const eventRet = yield call(EventApi.updateEvent, action.data.dateId, action.data.eventId, action.data.event, action.data.userId);
+                yield put(creators.updateEventSuccess(action.data.dateId, eventRet));
                 const bh = yield call(helpers.getBrowserHistory);
-                yield call(bh.push, `/day/${action.dateId}`);
+                yield call(bh.push, `/day/${action.data.dateId}`);
             }
             catch (e) {
                 yield put(async.creators.asyncError(e));
@@ -131,8 +131,8 @@ export const sagas = {
         deleteEvent: function* (action) {
             try {
                 yield put(async.creators.asyncRequest());
-                const eventIdRet = yield call(EventApi.deleteEvent, action.dateId, action.eventId, action.userId);
-                yield put(creators.deleteEventSuccess(action.dateId, eventIdRet));
+                const eventIdRet = yield call(EventApi.deleteEvent, action.data.dateId, action.data.eventId, action.data.userId);
+                yield put(creators.deleteEventSuccess(action.data.dateId, eventIdRet));
             }
             catch (e) {
                 yield put(async.creators.asyncError(e));
@@ -145,50 +145,50 @@ export const sagas = {
 
 export const creators = {
     loadEventRangeSuccess: (events, userId) => {
-        return { type: actions.LOAD_EVENT_RANGE_SUCCESS, events, userId };
+        return { type: actions.LOAD_EVENT_RANGE_SUCCESS, data: { events, userId } };
     },
 
     loadEventRangeFailure: (error) => {
-        return { type: actions.LOAD_EVENT_RANGE_FAILURE, error };
+        return { type: actions.LOAD_EVENT_RANGE_FAILURE, data: { error } };
     },
 /*
     loadEventRangeRequest: (startDate, endDate, userId) => {
-        return { type: actions.LOAD_EVENT_RANGE_REQUEST, startDate, endDate, userId };
+        return { type: actions.LOAD_EVENT_RANGE_REQUEST, data: { startDate, endDate, userId } };
     },
 */ // never actually called...
     insertEventSuccess: (dateId, event) => {
-        return { type: actions.INSERT_EVENT_SUCCESS, dateId, event };
+        return { type: actions.INSERT_EVENT_SUCCESS, data: { dateId, event } };
     },
 
     insertEventFailure: (error) => {
-        return { type: actions.INSERT_EVENT_FAILURE, error };
+        return { type: actions.INSERT_EVENT_FAILURE, data: { error } };
     },
 
     insertEventRequest: (dateId, event, userId) => {
-        return { type: actions.INSERT_EVENT_REQUEST, dateId, event, userId };
+        return { type: actions.INSERT_EVENT_REQUEST, data: { dateId, event, userId } };
     },
 
     updateEventSuccess: (dateId, event) => {
-        return { type: actions.UPDATE_EVENT_SUCCESS, dateId, event };
+        return { type: actions.UPDATE_EVENT_SUCCESS, data: { dateId, event } };
     },
 
     updateEventFailure: (error) => {
-        return { type: actions.UPDATE_EVENT_FAILURE, error };
+        return { type: actions.UPDATE_EVENT_FAILURE, data: { error } };
     },
 
     updateEventRequest: (dateId, eventId, event, userId) => {
-        return { type: actions.UPDATE_EVENT_REQUEST, dateId, eventId, event, userId };
+        return { type: actions.UPDATE_EVENT_REQUEST, data: { dateId, eventId, event, userId } };
     },
 
     deleteEventSuccess: (dateId, eventId) => {
-        return { type: actions.DELETE_EVENT_SUCCESS, dateId, eventId };
+        return { type: actions.DELETE_EVENT_SUCCESS, data: { dateId, eventId } };
     },
 
     deleteEventFailure: (error) => {
-        return { type: actions.DELETE_EVENT_FAILURE, error };
+        return { type: actions.DELETE_EVENT_FAILURE, data: { error } };
     },
 
     deleteEventRequest: (dateId, eventId, userId) => {
-        return { type: actions.DELETE_EVENT_REQUEST, dateId, eventId, userId };
+        return { type: actions.DELETE_EVENT_REQUEST, data: { dateId, eventId, userId } };
     },
 };

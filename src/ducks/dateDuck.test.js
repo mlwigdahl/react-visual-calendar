@@ -9,7 +9,7 @@ import * as event from './eventDuck';
 import DateApi from '../api/mockDateApi';
 import CalendarApi from '../api/mockCalendarApi';
 import EventApi from '../api/mockEventApi';
-import * as testhelpers from '../common/TestHelpers';
+import { drainGenerator, mockBrowserHistory } from '../common/TestHelpers';
 import * as helpers from '../common/Helpers';
 
 // setup
@@ -37,8 +37,8 @@ describe('Date Duck', () => {
 
     describe('saga workers', () => {
         it('should have loadDateRange start an async request and return success', () => {
-            const dr = testhelpers.drainGenerator(DateApi.loadDateRange('20161231', '20170101', 0));
-            const er = testhelpers.drainGenerator(EventApi.loadEventRange(dr, 0));
+            const dr = drainGenerator(DateApi.loadDateRange('20161231', '20170101', 0));
+            const er = drainGenerator(EventApi.loadEventRange(dr, 0));
 
             const saga = testSaga(date.sagas.workers.loadDateRange, date.creators.loadDateRangeRequest('20161231', '20170101', 0));
             return saga
@@ -59,8 +59,8 @@ describe('Date Duck', () => {
 
     describe('reducer', () => {
         it ('should have LOAD_DATE_RANGE_SUCCESS update the status', () => {
-            const cal = testhelpers.drainGenerator(CalendarApi.loadCalendar(1));
-            const dr = testhelpers.drainGenerator(DateApi.loadDateRange('20161231', '20170102', 0));
+            const cal = drainGenerator(CalendarApi.loadCalendar(1));
+            const dr = drainGenerator(DateApi.loadDateRange('20161231', '20170102', 0));
 
             const action = calendar.creators.loadCalendarSuccess(cal);
 
@@ -71,7 +71,7 @@ describe('Date Duck', () => {
             const newState2 = { ...newState, dates: { ...date.reducer(newState.dates, action2) } };
 
             expect(newState2).to.not.be.undefined;
-            expect(Object.keys(newState2.dates).length).to.equal(2);
+            expect(Object.keys(newState2.dates).length).to.equal(3);
             expect(newState2.dates['20170102'].events.length).to.equal(2);
         });
 
