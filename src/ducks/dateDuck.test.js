@@ -33,6 +33,22 @@ describe('Date Duck', () => {
             expect(action.data.userId).to.equal(1);
             expect(Object.keys(action.data).length).to.equal(3);
         });
+
+        it ('should have loadDateRangeSuccess() take two parameters and return a valid LOAD_DATE_RANGE_SUCCESS object', () => {
+            const dates = { '20170101': { events: [1, 2] } };
+            const action = date.creators.loadDateRangeSuccess(dates, 1);
+            expect(action.type).to.equal(date.actions.LOAD_DATE_RANGE_SUCCESS);
+            expect(action.data.dates).to.deep.equal(dates);
+            expect(action.data.userId).to.equal(1);
+            expect(Object.keys(action.data).length).to.equal(2);
+        });
+
+        it ('should have loadDateRangeFailure() take three parameters and return a valid LOAD_DATE_RANGE_FAILURE object', () => {
+            const action = date.creators.loadDateRangeFailure('oops');
+            expect(action.type).to.equal(date.actions.LOAD_DATE_RANGE_FAILURE);
+            expect(action.data.error).to.equal('oops');
+            expect(Object.keys(action.data).length).to.equal(1);
+        });
     });
 
     describe('saga watchers', () => {

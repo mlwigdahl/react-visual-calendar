@@ -184,7 +184,7 @@ export const sagas = {
 
 export const creators = {
     loadDateRangeSuccess: (dates, userId) => {
-        return { type: actions.LOAD_DATE_RANGE_SUCCESS, data: {dates, userId } };
+        return { type: actions.LOAD_DATE_RANGE_SUCCESS, data: { dates, userId } };
     },
 
     loadDateRangeFailure: (error) => {

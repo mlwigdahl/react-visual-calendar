@@ -23,6 +23,8 @@ const initialState = {
 
 // duck tests
 
+// TODO START HERE need more action creator tests here
+
 describe('Event Duck', () => {
     describe('action creators', () => {
         it ('should have insertEventRequest() take three parameters and return a valid INSERT_EVENT_REQUEST object', () => {
