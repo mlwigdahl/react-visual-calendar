@@ -10,13 +10,14 @@ React Visual Calendar is a responsive, mobile-first visual calendar web applicat
         TODO: 
             X a. Hook up routing, etc. for EventPage
             X b. Connect to real add/update/delete events
+            c. Handle creating a new day when clicking on one w/o events
     X 2. Support multiple events in a day.
     3. Component/page testing.
     4. Insert/update/delete testing.
         X Insert
         X Update
         X Delete
-    5. Full action creator tests
+    X 5. Full action creator tests (everything used at this stage)
     6. Full API tests
     7. Refactor loading worker sagas for better modularity
 
