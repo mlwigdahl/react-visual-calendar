@@ -12,8 +12,11 @@ const state = {
     }
 };
 
+const goodUser = 'asdf';
+const goodPassword = 'asdf';
+
 const AppApi = {
-    loginAttempt: function* (/*username, password*/) {
+    loginAttempt: function* (username, password) {
         try {
             /*
             yield call(fetch, 
@@ -23,7 +26,12 @@ const AppApi = {
             yield apply(resp, resp.json);
             */
             yield 1; // to suppress lint error
-            return {...state.app.user};
+            if (username === goodUser && password === goodPassword) {
+                return { ...state.app.user };
+            }
+            else {
+                return { id: 0, name: '', error: 'bad credentials' };
+            }
         } catch(error) {
             return []; // TODO more here
         }

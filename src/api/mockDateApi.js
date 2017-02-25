@@ -17,6 +17,7 @@ const datesNew = {
 const DateApi = {
     loadDateRange: function* (startDate, endDate, userId) {
         try {
+            const compDates = { ...dates, ...datesNew };
             /*
             yield call(fetch,
                 `http://${target}:${port}/${apiPath}/user/${userId}/dateRange?${startDate}&${endDate}`,
@@ -25,12 +26,12 @@ const DateApi = {
             yield apply(resp, resp.json);
             */
             yield 1; // to suppress lint error
-            const datesAdd = Object.keys(datesNew)
+            const datesAdd = Object.keys(compDates)
                 .filter(key => parseInt(key, 10) >= parseInt(startDate, 10) 
                     && parseInt(key, 10) <= parseInt(endDate, 10))
-                .reduce((acc, key) => { acc[key] = datesNew[key]; return acc; }, {});
+                .reduce((acc, key) => { acc[key] = compDates[key]; return acc; }, {});
 
-            return { ...dates, ...datesAdd };
+            return datesAdd;
         } catch(error) {
             return []; // TODO more here
         }

@@ -26,7 +26,7 @@ const initialState = {
 
 describe('App Duck', () => {
     describe('saga watchers', () => {
-        it('watcher saga should pick up multiple login requests', () => {
+        it('should pick up multiple login requests', () => {
             return expectSaga(app.sagas.watchers.LOGIN_REQUEST)
                 .take(app.actions.LOGIN_REQUEST)
                 .take(app.actions.LOGIN_REQUEST)
@@ -63,8 +63,8 @@ describe('App Duck', () => {
     });
 
     describe('reducer', () => {
-        it('reducer should update the status on login success', () => {
-            const user = testhelpers.drainGenerator(AppApi.loginAttempt());
+        it('should update the status on login success', () => {
+            const user = testhelpers.drainGenerator(AppApi.loginAttempt('asdf', 'asdf'));
 
             const action = app.creators.loginSuccess(user);
 
