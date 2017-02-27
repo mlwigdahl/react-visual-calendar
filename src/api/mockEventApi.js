@@ -17,20 +17,6 @@ export const events = {
 };
 
 const eventsNew = {
-    1: {
-        icon: 'scissors.jpg',
-        label: 'Haircut',
-        startTime: '08:15 AM',
-        endTime: '10:15 AM',
-        endDate: '20170101',
-    },
-    2: {
-        icon: 'food.jpg',
-        label: 'Lunch! 😁',
-        startTime: '11:30 AM',
-        endTime: '12:30 PM',
-        endDate: '20170101',
-    },
     3: { startTime: '03:45 PM', endTime: '04:45 PM', endDate: '20170101', icon: "meeting-icon-url", label: "3:45 meeting 😒😒 (Red conference room)" },
     4: { startTime: '11:30 AM', endTime: '12:30 PM', endDate: '20170101', icon: "lunch-icon-url", label: "Lunch! 😁" },
 };
@@ -45,14 +31,15 @@ function getMaxEventId() {
 const EventApi = {
     loadEventRange: function* (dates, userId) {
         try {
+            const compEvents = { ...events, ...eventsNew };
             const dateEvents = Object.keys(dates)
                 .map(key => dates[key].events)
                 .reduce((acc, events) => acc.concat(events), []);
 
             yield 1; // to suppress lint error
-            return { ...Object.keys(eventsNew)
+            return { ...Object.keys(compEvents)
                 .filter(key => dateEvents.includes(Number(key)))
-                .reduce((acc, key) => { acc[key] = eventsNew[key]; return acc; }, {}) };
+                .reduce((acc, key) => { acc[key] = compEvents[key]; return acc; }, {}) };
         } catch(error) {
             return []; // TODO more here
         }

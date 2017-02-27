@@ -18,7 +18,7 @@ React Visual Calendar is a responsive, mobile-first visual calendar web applicat
         X Update
         X Delete
     X 5. Full action creator tests (everything used at this stage)
-    6. Full API tests
+    X 6. Full API tests
     7. Refactor loading worker sagas for better modularity
 
 
