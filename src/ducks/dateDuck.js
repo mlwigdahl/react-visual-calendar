@@ -3,11 +3,10 @@ import { put, call, takeEvery } from 'redux-saga/effects';
 
 import initialState from './initialState';
 import DateApi from '../api/mockDateApi';
-import EventApi from '../api/mockEventApi';
 import * as async from './asyncDuck';
-import * as event from './eventDuck';
-import * as calendar from './calendarDuck';
-import * as helpers from '../common/Helpers';
+import { actions as eventActions, sagas as eventSagas} from './eventDuck';
+import { actions as calActions } from './calendarDuck';
+//import * as helpers from '../common/Helpers';
 
 // actions
 
@@ -34,7 +33,7 @@ export const actions = {
 export function reducer(state = initialState.dates, action) {
     switch(action.type) {
 
-        case calendar.actions.LOAD_CALENDAR_SUCCESS:
+        case calActions.LOAD_CALENDAR_SUCCESS:
             return { ...action.data.dates };
 
         case actions.LOAD_DATE_RANGE_SUCCESS:
@@ -91,7 +90,7 @@ export function reducer(state = initialState.dates, action) {
         case actions.DELETE_DATE_FAILURE:
             return state; // TODO more here?  Probably update global message...
 
-        case event.actions.INSERT_EVENT_SUCCESS:
+        case eventActions.INSERT_EVENT_SUCCESS:
         {
             const newEvents = [ ...state[action.data.dateId].events ];
             newEvents.push(action.data.event.id);
@@ -100,7 +99,7 @@ export function reducer(state = initialState.dates, action) {
             return newState;
         }
 
-        case event.actions.DELETE_EVENT_SUCCESS:
+        case eventActions.DELETE_EVENT_SUCCESS:
         {
             const index = state[action.data.dateId].events.findIndex(id => id == action.data.eventId);
             const newEvents = [ ...state[action.data.dateId].events ];
@@ -136,12 +135,7 @@ export const sagas = {
     workers: {
         loadDateRange: function* (action) {
             try {
-                yield put(async.creators.asyncRequest());
-                const dates = yield call(DateApi.loadDateRange, action.data.startDate, action.data.endDate, action.data.userId);
-                yield put(creators.loadDateRangeSuccess(dates, action.data.userId));
-                yield put(async.creators.asyncRequest());
-                const events = yield call(EventApi.loadEventRange, dates, action.data.userId);
-                yield put(event.creators.loadEventRangeSuccess(events, action.data.userId));
+                yield* sagas.helpers.loadDateRange(action.data.startDate, action.data.endDate, action.data.userId);
             }
             catch (e) {
                 yield put(async.creators.asyncError(e));
@@ -177,6 +171,15 @@ export const sagas = {
                 yield put(async.creators.asyncError(e));
             }
         },
+    },
+    helpers: {
+        loadDateRange: function* (startDate, endDate, userId) {
+            yield put(async.creators.asyncRequest());
+            const dates = yield call(DateApi.loadDateRange, startDate, endDate, userId);
+            yield put(creators.loadDateRangeSuccess(dates, userId));
+            
+            yield* eventSagas.helpers.loadEventRange(dates, userId);
+        }
     }
 };
 

@@ -25,105 +25,123 @@ const initialState = {
 
 describe('Event Duck', () => {
     describe('action creators', () => {
-        it ('should have insertEventRequest() take three parameters and return a valid INSERT_EVENT_REQUEST object', () => {
-            const evt = {
-                icon: 'scissors.jpg',
-                label: 'Haircut',
-                startTime: '08:15 AM',
-                endTime: '10:15 AM',
-                endDate: '20170101',
-            };
-            const action = event.creators.insertEventRequest(1, evt, 1);
-            expect(action.type).to.equal(event.actions.INSERT_EVENT_REQUEST);
-            expect(action.data.dateId).to.equal(1);
-            expect(action.data.event).to.deep.equal(evt);
-            expect(action.data.userId).to.equal(1);
-            expect(Object.keys(action.data).length).to.equal(3);
+        describe('insertEventRequest()', () => {
+            it ('should take three valid parameters and return a valid INSERT_EVENT_REQUEST object', () => {
+                const evt = {
+                    icon: 'scissors.jpg',
+                    label: 'Haircut',
+                    startTime: '08:15 AM',
+                    endTime: '10:15 AM',
+                    endDate: '20170101',
+                };
+                const action = event.creators.insertEventRequest(1, evt, 1);
+                expect(action.type).to.equal(event.actions.INSERT_EVENT_REQUEST);
+                expect(action.data.dateId).to.equal(1);
+                expect(action.data.event).to.deep.equal(evt);
+                expect(action.data.userId).to.equal(1);
+                expect(Object.keys(action.data).length).to.equal(3);
+            });
         });
 
-        it ('should have insertEventSuccess() take two parameters and return a valid INSERT_EVENT_SUCCESS object', () => {
-            const evt = {
-                icon: 'scissors.jpg',
-                label: 'Haircut',
-                startTime: '08:15 AM',
-                endTime: '10:15 AM',
-                endDate: '20170101',
-            };
-            const action = event.creators.insertEventSuccess(1, evt);
-            expect(action.type).to.equal(event.actions.INSERT_EVENT_SUCCESS);
-            expect(action.data.event).to.deep.equal(evt);
-            expect(action.data.dateId).to.equal(1);
-            expect(Object.keys(action.data).length).to.equal(2);
+        describe('insertEventSuccess()', () => {
+            it ('should take two valid parameters and return a valid INSERT_EVENT_SUCCESS object', () => {
+                const evt = {
+                    icon: 'scissors.jpg',
+                    label: 'Haircut',
+                    startTime: '08:15 AM',
+                    endTime: '10:15 AM',
+                    endDate: '20170101',
+                };
+                const action = event.creators.insertEventSuccess(1, evt);
+                expect(action.type).to.equal(event.actions.INSERT_EVENT_SUCCESS);
+                expect(action.data.event).to.deep.equal(evt);
+                expect(action.data.dateId).to.equal(1);
+                expect(Object.keys(action.data).length).to.equal(2);
+            });
         });
 
-        it ('should have insertEventFailure() take one parameter and return a valid INSERT_EVENT_FAILURE object', () => {
-            const action = event.creators.insertEventFailure('oops');
-            expect(action.type).to.equal(event.actions.INSERT_EVENT_FAILURE);
-            expect(action.data.error).to.equal('oops');
-            expect(Object.keys(action.data).length).to.equal(1);
+        describe('insertEventFailure()', () => {
+            it ('should take one parameter and return a valid INSERT_EVENT_FAILURE object', () => {
+                const action = event.creators.insertEventFailure('oops');
+                expect(action.type).to.equal(event.actions.INSERT_EVENT_FAILURE);
+                expect(action.data.error).to.equal('oops');
+                expect(Object.keys(action.data).length).to.equal(1);
+            });
         });
 
-        it ('should have updateEventRequest() take four parameters and return a valid UPDATE_EVENT_REQUEST object', () => {
-            const evt = {
-                icon: 'scissors.jpg',
-                label: 'Haircut',
-                startTime: '08:15 AM',
-                endTime: '10:15 AM',
-                endDate: '20170101',
-            };
-            const action = event.creators.updateEventRequest(1, 1, evt, 1);
-            expect(action.type).to.equal(event.actions.UPDATE_EVENT_REQUEST);
-            expect(action.data.dateId).to.equal(1);
-            expect(action.data.eventId).to.equal(1);
-            expect(action.data.event).to.deep.equal(evt);
-            expect(action.data.userId).to.equal(1);
-            expect(Object.keys(action.data).length).to.equal(4);
+        describe('updateEventRequest()', () => {
+            it ('should take four parameters and return a valid UPDATE_EVENT_REQUEST object', () => {
+                const evt = {
+                    icon: 'scissors.jpg',
+                    label: 'Haircut',
+                    startTime: '08:15 AM',
+                    endTime: '10:15 AM',
+                    endDate: '20170101',
+                };
+                const action = event.creators.updateEventRequest(1, 1, evt, 1);
+                expect(action.type).to.equal(event.actions.UPDATE_EVENT_REQUEST);
+                expect(action.data.dateId).to.equal(1);
+                expect(action.data.eventId).to.equal(1);
+                expect(action.data.event).to.deep.equal(evt);
+                expect(action.data.userId).to.equal(1);
+                expect(Object.keys(action.data).length).to.equal(4);
+            });
         });
 
-        it ('should have updateEventSuccess() take two parameters and return a valid UPDATE_EVENT_SUCCESS object', () => {
-            const evt = {
-                icon: 'scissors.jpg',
-                label: 'Haircut',
-                startTime: '08:15 AM',
-                endTime: '10:15 AM',
-                endDate: '20170101',
-            };
-            const action = event.creators.updateEventSuccess(1, evt);
-            expect(action.type).to.equal(event.actions.UPDATE_EVENT_SUCCESS);
-            expect(action.data.dateId).to.equal(1);
-            expect(action.data.event).to.deep.equal(evt);
-            expect(Object.keys(action.data).length).to.equal(2);
+        describe('updateEventSuccess()', () => {
+            it ('should take two parameters and return a valid UPDATE_EVENT_SUCCESS object', () => {
+                const evt = {
+                    icon: 'scissors.jpg',
+                    label: 'Haircut',
+                    startTime: '08:15 AM',
+                    endTime: '10:15 AM',
+                    endDate: '20170101',
+                };
+                const action = event.creators.updateEventSuccess(1, evt);
+                expect(action.type).to.equal(event.actions.UPDATE_EVENT_SUCCESS);
+                expect(action.data.dateId).to.equal(1);
+                expect(action.data.event).to.deep.equal(evt);
+                expect(Object.keys(action.data).length).to.equal(2);
+            });
         });
 
-        it ('should have updateEventFailure() take one parameter and return a valid UPDATE_EVENT_FAILURE object', () => {
-            const action = event.creators.updateEventFailure('oops');
-            expect(action.type).to.equal(event.actions.UPDATE_EVENT_FAILURE);
-            expect(action.data.error).to.equal('oops');
-            expect(Object.keys(action.data).length).to.equal(1);
+        describe('updateEventFailure()', () => {
+            it ('should take one parameter and return a valid UPDATE_EVENT_FAILURE object', () => {
+                const action = event.creators.updateEventFailure('oops');
+                expect(action.type).to.equal(event.actions.UPDATE_EVENT_FAILURE);
+                expect(action.data.error).to.equal('oops');
+                expect(Object.keys(action.data).length).to.equal(1);
+            });
         });
 
-        it ('should have deleteEventRequest() take three parameters and return a valid DELETE_EVENT_REQUEST object', () => {
-            const action = event.creators.deleteEventRequest(1, 1, 1);
-            expect(action.type).to.equal(event.actions.DELETE_EVENT_REQUEST);
-            expect(action.data.dateId).to.equal(1);
-            expect(action.data.eventId).to.equal(1);
-            expect(action.data.userId).to.equal(1);
-            expect(Object.keys(action.data).length).to.equal(3);
+        describe('deleteEventRequest()', () => {
+            it ('should take three parameters and return a valid DELETE_EVENT_REQUEST object', () => {
+                const action = event.creators.deleteEventRequest(1, 1, 1);
+                expect(action.type).to.equal(event.actions.DELETE_EVENT_REQUEST);
+                expect(action.data.dateId).to.equal(1);
+                expect(action.data.eventId).to.equal(1);
+                expect(action.data.userId).to.equal(1);
+                expect(Object.keys(action.data).length).to.equal(3);
+            });
         });
 
-        it ('should have deleteEventSuccess() take two parameters and return a valid DELETE_EVENT_SUCCESS object', () => {
-            const action = event.creators.deleteEventSuccess(1, 1);
-            expect(action.type).to.equal(event.actions.DELETE_EVENT_SUCCESS);
-            expect(action.data.dateId).to.equal(1);
-            expect(action.data.eventId).to.equal(1);
-            expect(Object.keys(action.data).length).to.equal(2);
+        describe('deleteEventSuccess()', () => {
+            it ('should take two parameters and return a valid DELETE_EVENT_SUCCESS object', () => {
+                const action = event.creators.deleteEventSuccess(1, 1);
+                expect(action.type).to.equal(event.actions.DELETE_EVENT_SUCCESS);
+                expect(action.data.dateId).to.equal(1);
+                expect(action.data.eventId).to.equal(1);
+                expect(Object.keys(action.data).length).to.equal(2);
+            });
         });
 
-        it ('should have deleteEventFailure() take one parameter and return a valid DELETE_EVENT_FAILURE object', () => {
-            const action = event.creators.deleteEventFailure('oops');
-            expect(action.type).to.equal(event.actions.DELETE_EVENT_FAILURE);
-            expect(action.data.error).to.equal('oops');
-            expect(Object.keys(action.data).length).to.equal(1);
+        describe('deleteEventFailure()', () => {
+            it ('should take one parameter and return a valid DELETE_EVENT_FAILURE object', () => {
+                const action = event.creators.deleteEventFailure('oops');
+                expect(action.type).to.equal(event.actions.DELETE_EVENT_FAILURE);
+                expect(action.data.error).to.equal('oops');
+                expect(Object.keys(action.data).length).to.equal(1);
+            });
         });
     });
     describe('saga watchers', () => {

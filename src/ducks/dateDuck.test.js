@@ -25,29 +25,35 @@ const initialState = {
 
 describe('Date Duck', () => {
     describe('action creators', () => {
-        it ('should have loadDateRangeRequest() take three parameters and return a valid LOAD_DATE_RANGE_REQUEST object', () => {
-            const action = date.creators.loadDateRangeRequest('1/1/2017', '2/1/2017', 1);
-            expect(action.type).to.equal(date.actions.LOAD_DATE_RANGE_REQUEST);
-            expect(action.data.startDate).to.equal('1/1/2017');
-            expect(action.data.endDate).to.equal('2/1/2017');
-            expect(action.data.userId).to.equal(1);
-            expect(Object.keys(action.data).length).to.equal(3);
+        describe('loadDateRangeRequest()', () => {
+            it ('should take three parameters and return a valid LOAD_DATE_RANGE_REQUEST object', () => {
+                const action = date.creators.loadDateRangeRequest('1/1/2017', '2/1/2017', 1);
+                expect(action.type).to.equal(date.actions.LOAD_DATE_RANGE_REQUEST);
+                expect(action.data.startDate).to.equal('1/1/2017');
+                expect(action.data.endDate).to.equal('2/1/2017');
+                expect(action.data.userId).to.equal(1);
+                expect(Object.keys(action.data).length).to.equal(3);
+            });
         });
 
-        it ('should have loadDateRangeSuccess() take two parameters and return a valid LOAD_DATE_RANGE_SUCCESS object', () => {
-            const dates = { '20170101': { events: [1, 2] } };
-            const action = date.creators.loadDateRangeSuccess(dates, 1);
-            expect(action.type).to.equal(date.actions.LOAD_DATE_RANGE_SUCCESS);
-            expect(action.data.dates).to.deep.equal(dates);
-            expect(action.data.userId).to.equal(1);
-            expect(Object.keys(action.data).length).to.equal(2);
+        describe('loadDateRangeSuccess()', () => {
+            it ('should take two parameters and return a valid LOAD_DATE_RANGE_SUCCESS object', () => {
+                const dates = { '20170101': { events: [1, 2] } };
+                const action = date.creators.loadDateRangeSuccess(dates, 1);
+                expect(action.type).to.equal(date.actions.LOAD_DATE_RANGE_SUCCESS);
+                expect(action.data.dates).to.deep.equal(dates);
+                expect(action.data.userId).to.equal(1);
+                expect(Object.keys(action.data).length).to.equal(2);
+            });
         });
 
-        it ('should have loadDateRangeFailure() take three parameters and return a valid LOAD_DATE_RANGE_FAILURE object', () => {
-            const action = date.creators.loadDateRangeFailure('oops');
-            expect(action.type).to.equal(date.actions.LOAD_DATE_RANGE_FAILURE);
-            expect(action.data.error).to.equal('oops');
-            expect(Object.keys(action.data).length).to.equal(1);
+        describe('loadDateRangeFailure()', () => {
+            it ('should take three parameters and return a valid LOAD_DATE_RANGE_FAILURE object', () => {
+                const action = date.creators.loadDateRangeFailure('oops');
+                expect(action.type).to.equal(date.actions.LOAD_DATE_RANGE_FAILURE);
+                expect(action.data.error).to.equal('oops');
+                expect(Object.keys(action.data).length).to.equal(1);
+            });            
         });
     });
 

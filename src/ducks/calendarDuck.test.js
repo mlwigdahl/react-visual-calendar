@@ -26,28 +26,33 @@ const initialState = {
 // duck tests
 
 describe('Calendar Duck', () => {
-
     describe('action creators', () => {
-        it ('should have loadCalendarRequest() take one parameter and return a valid LOAD_CALENDAR_REQUEST object', () => {
-            const action = calendar.creators.loadCalendarRequest(1);
-            expect(action.type).to.equal(calendar.actions.LOAD_CALENDAR_REQUEST);
-            expect(action.data.userId).to.equal(1);
-            expect(Object.keys(action.data).length).to.equal(1);
+        describe('loadCalendarRequest()', () => {
+            it ('should take one parameter and return a valid LOAD_CALENDAR_REQUEST object', () => {
+                const action = calendar.creators.loadCalendarRequest(1);
+                expect(action.type).to.equal(calendar.actions.LOAD_CALENDAR_REQUEST);
+                expect(action.data.userId).to.equal(1);
+                expect(Object.keys(action.data).length).to.equal(1);
+            });
         });
 
-        it ('should have loadCalendarSuccess() take one parameter and return a valid LOAD_CALENDAR_SUCCESS object', () => {
-            const cal = { cal: 'cal' };
-            const action = calendar.creators.loadCalendarSuccess(cal);
-            expect(action.type).to.equal(calendar.actions.LOAD_CALENDAR_SUCCESS);
-            expect(action.data.calendar).to.equal(cal);
-            expect(Object.keys(action.data).length).to.equal(1);
+        describe('loadCalendarSuccess()', () => {
+            it ('should take one parameter and return a valid LOAD_CALENDAR_SUCCESS object', () => {
+                const cal = { cal: 'cal' };
+                const action = calendar.creators.loadCalendarSuccess(cal);
+                expect(action.type).to.equal(calendar.actions.LOAD_CALENDAR_SUCCESS);
+                expect(action.data.calendar).to.equal(cal);
+                expect(Object.keys(action.data).length).to.equal(1);
+            });
         });
 
-        it ('should have loadCalendarFailure() take one parameter and return a valid LOAD_CALENDAR_FAILURE object', () => {
-            const action = calendar.creators.loadCalendarFailure('oops');
-            expect(action.type).to.equal(calendar.actions.LOAD_CALENDAR_FAILURE);
-            expect(action.data.error).to.equal('oops');
-            expect(Object.keys(action.data).length).to.equal(1);
+        describe('loadCalendarFailure()', () => {
+            it ('should take one parameter and return a valid LOAD_CALENDAR_FAILURE object', () => {
+                const action = calendar.creators.loadCalendarFailure('oops');
+                expect(action.type).to.equal(calendar.actions.LOAD_CALENDAR_FAILURE);
+                expect(action.data.error).to.equal('oops');
+                expect(Object.keys(action.data).length).to.equal(1);
+            });
         });
     });
 

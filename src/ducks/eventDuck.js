@@ -2,7 +2,7 @@ import { put, call, takeEvery } from 'redux-saga/effects';
 
 import initialState from './initialState';
 import EventApi from '../api/mockEventApi';
-import * as calendar from './calendarDuck';
+import { actions as calActions } from './calendarDuck';
 import * as async from './asyncDuck';
 import * as helpers from '../common/Helpers';
 
@@ -31,7 +31,7 @@ export const actions = {
 export function reducer(state = initialState.events, action) {
     switch (action.type) {
 
-        case calendar.actions.LOAD_CALENDAR_SUCCESS:
+        case calActions.LOAD_CALENDAR_SUCCESS:
             return { ...action.data.events };
 
         case actions.LOAD_EVENT_RANGE_SUCCESS:
@@ -138,6 +138,13 @@ export const sagas = {
                 yield put(async.creators.asyncError(e));
             }
         },
+    },
+    helpers: {
+        loadEventRange: function* (dates, userId) {
+            yield put(async.creators.asyncRequest());
+            const events = yield call(EventApi.loadEventRange, dates, userId);
+            yield put(creators.loadEventRangeSuccess(events, userId));            
+        }
     }
 };
 

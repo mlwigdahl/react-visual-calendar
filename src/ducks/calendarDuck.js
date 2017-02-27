@@ -4,11 +4,8 @@ import { put, call, takeEvery } from 'redux-saga/effects';
 
 import initialState from './initialState';
 import CalendarApi from '../api/mockCalendarApi';
-import DateApi from '../api/mockDateApi';
-import EventApi from '../api/mockEventApi';
 import * as async from './asyncDuck';
-import * as date from './dateDuck';
-import * as event from './eventDuck';
+import { sagas as dateSagas } from './dateDuck';
 import * as helpers from '../common/Helpers';
 
 // actions
@@ -94,12 +91,9 @@ export const sagas = {
                 yield put(async.creators.asyncRequest());
                 const calendar = yield call(CalendarApi.loadCalendar, action.data.userId);
                 yield put(creators.loadCalendarSuccess(calendar));
-                yield put(async.creators.asyncRequest());
-                const dates = yield call(DateApi.loadDateRange, calendar.minDate, calendar.maxDate, action.data.userId);
-                yield put(date.creators.loadDateRangeSuccess(dates, action.data.userId));
-                yield put(async.creators.asyncRequest());
-                const events = yield call(EventApi.loadEventRange, dates, action.data.userId);
-                yield put(event.creators.loadEventRangeSuccess(events, action.data.userId));
+                
+                yield* dateSagas.helpers.loadDateRange(calendar.minDate, calendar.maxDate, action.data.userId);
+
                 const bh = yield call(helpers.getBrowserHistory);
                 yield call(bh.push, `/`);
             }
