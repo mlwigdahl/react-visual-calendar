@@ -27,6 +27,13 @@ const icon = "test-icon-url";*/
 const CalendarApi = {
     loadCalendar: function* (userId) {
         try {
+            if (Number.isInteger(userId) === false) {
+                throw 'loadCalendar(): parameter not an integer';
+            }
+
+            if (userId !== 1) { // this is the arbitrary "good ID"...
+                throw 'loadCalendar(): user ID not found';
+            }
             /*
             yield call(fetch, 
                 `http://${target}:${port}/${apiPath}/user/${userId}/calendar`,
@@ -37,7 +44,7 @@ const CalendarApi = {
             yield 1; // to suppress lint error
             return { ...state.calendar };
         } catch(error) {
-            return []; // TODO more here
+            return {};
         }
     },
 

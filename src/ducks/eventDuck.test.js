@@ -225,14 +225,14 @@ describe('Event Duck', () => {
     describe('reducer', () => {
         it ('should have LOAD_EVENT_RANGE_SUCCESS update the status', () => {
             const cal = drainGenerator(CalendarApi.loadCalendar(1));
-            const dr = drainGenerator(DateApi.loadDateRange('20161231', '20170102', 0));
+            const dr = drainGenerator(DateApi.loadDateRange('20161231', '20170102', 1));
             const er = drainGenerator(EventApi.loadEventRange(dr, 1));
 
             const action = calendar.creators.loadCalendarSuccess(cal);
 
             const newState = { ...initialState, calendar: { ...calendar.reducer(initialState.calendar, action) } };
 
-            const action2 = date.creators.loadDateRangeSuccess(dr, 0);
+            const action2 = date.creators.loadDateRangeSuccess(dr, 1);
 
             const newState2 = { ...newState, dates: { ...date.reducer(newState.dates, action2) } };
 

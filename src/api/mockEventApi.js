@@ -31,6 +31,10 @@ function getMaxEventId() {
 const EventApi = {
     loadEventRange: function* (dates, userId) {
         try {
+            if (userId !== 1) { // the arbitrary "good ID"
+                throw('loadEventRange(): user ID not found');
+            }
+
             const compEvents = { ...events, ...eventsNew };
             const dateEvents = Object.keys(dates)
                 .map(key => dates[key].events)
@@ -41,12 +45,24 @@ const EventApi = {
                 .filter(key => dateEvents.includes(Number(key)))
                 .reduce((acc, key) => { acc[key] = compEvents[key]; return acc; }, {}) };
         } catch(error) {
-            return []; // TODO more here
+            return {}; // TODO more here
         }
     },
 
     insertEvent: function* (dateId, event, userId) {
         try {
+            if (Object.keys(event).length !== 5 ||
+                event.label === undefined ||
+                event.icon === undefined ||
+                event.startTime === undefined ||
+                event.endTime === undefined ||
+                event.endDate === undefined) {
+                    throw('insertEvent(): invalid event object');
+            }
+
+            if (userId !== 1) { // the arbitrary "good ID"
+                throw('insertEvent(): user ID not found');
+            }
             /*
             yield call(fetch,
                 `http://${target}:${port}/${apiPath}/user/${userId}/date/${date.id}/event`,
@@ -57,12 +73,24 @@ const EventApi = {
             yield 1; // to suppress lint error
             return { id: getMaxEventId() + 1, data: { ...event } };
         } catch(error) {
-            return []; // TODO more here
+            return {}; // TODO more here
         }
     },
 
     updateEvent: function* (dateId, eventId, event, userId) {
         try {
+            if (Object.keys(event).length !== 5 ||
+                event.label === undefined ||
+                event.icon === undefined ||
+                event.startTime === undefined ||
+                event.endTime === undefined ||
+                event.endDate === undefined) {
+                    throw('updateEvent(): invalid event object');
+            }
+
+            if (userId !== 1) { // the arbitrary "good ID"
+                throw('updateEvent(): user ID not found');
+            }
             /*
             yield call(fetch,
                 `http://${target}:${port}/${apiPath}/user/${userId}/date/${date.id}/event/${event.id}`,
@@ -73,12 +101,15 @@ const EventApi = {
             yield 1; // to suppress lint error
             return { id: eventId, data: { ...event } };
         } catch(error) {
-            return []; // TODO more here
+            return {}; // TODO more here
         }
     },
 
     deleteEvent: function* (dateId, eventId, userId) {
         try {
+            if (userId !== 1) { // the arbitrary "good ID"
+                throw('updateEvent(): user ID not found');
+            }
             /*
             yield call(fetch,
                 `http://${target}:${port}/${apiPath}/user/${userId}/date/${date.id}/event/${event.id}`,
@@ -89,7 +120,7 @@ const EventApi = {
             yield 1; // to suppress lint error
             return eventId;
         } catch(error) {
-            return []; // TODO more here
+            return -1; // TODO more here
         }
     },    
 };

@@ -1,3 +1,4 @@
+import moment from 'moment';
 
 export const dates = {
     '20170101': {
@@ -17,6 +18,23 @@ const datesNew = {
 const DateApi = {
     loadDateRange: function* (startDate, endDate, userId) {
         try {
+            if (moment(startDate, "YYYYMMDD").format("YYYYMMDD") !== startDate) {
+                throw('loadDateRange(): startDate in incorrect format');
+            }
+
+            if (moment(endDate, "YYYYMMDD").format("YYYYMMDD") !== endDate) {
+                throw('loadDateRange(): endDate in incorrect format');
+            }
+
+            if (userId !== 1) { // the arbitrary "good ID"
+                throw('loadDateRange(): user ID not found');
+            }
+
+            if (parseInt(startDate, 10) >= parseInt(endDate, 10)) {
+                throw('loadDateRange(): End date must be after start date');
+            }
+
+
             const compDates = { ...dates, ...datesNew };
             /*
             yield call(fetch,
@@ -33,7 +51,7 @@ const DateApi = {
 
             return datesAdd;
         } catch(error) {
-            return []; // TODO more here
+            return {}; // TODO more here
         }
     },
 
