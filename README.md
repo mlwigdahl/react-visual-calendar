@@ -13,7 +13,7 @@ React Visual Calendar is a responsive, mobile-first visual calendar web applicat
             c. Handle creating a new day when clicking on one w/o events
     X 2. Support multiple events in a day.
     3. Component/page testing.
-    4. Insert/update/delete testing.
+    X 4. Insert/update/delete testing.
         X Insert
         X Update
         X Delete
