@@ -3,7 +3,8 @@ import { connect } from 'react-redux';
 import { browserHistory } from 'react-router';
 import moment from 'moment';
 
-import * as evt from '../../ducks/eventDuck';
+import { creators as dateCreators } from '../../ducks/dateDuck';
+import { creators as evtCreators } from '../../ducks/eventDuck';
 
 import { bindActionCreators } from 'redux';
 
@@ -22,9 +23,10 @@ export class DayPage extends React.Component {
     }
 
     componentDidMount() {
-         if (this.props.user == 0) {
+        if (this.props.user == 0) {
             browserHistory.push(`/login`);
         }
+        // TODO START HERE use new prop to inject a creation action here.
     }
 
     componentWillReceiveProps(nextProps) {
@@ -44,7 +46,7 @@ export class DayPage extends React.Component {
 
     deleteEvent(event) {
         event.preventDefault();
-        this.props.actions.deleteEventRequest(this.props.id, event.target.id, this.props.user);
+        this.props.actions.event.deleteEventRequest(this.props.id, event.target.id, this.props.user);
     }
 
     addEvent(event) {
@@ -114,6 +116,19 @@ function mapStateToProps(state, ownProps) {
             id: '',
             date: {},
             events: {},
+            insertNew: false,
+        };
+    }
+
+    if (date === undefined) {
+        return {
+            user: state.app.user.id,
+            id,
+            date: {
+                events: []
+            },
+            events: {},
+            insertNew: true,
         };
     }
 
@@ -125,13 +140,14 @@ function mapStateToProps(state, ownProps) {
         user: state.app.user.id,
         id,
         date,
-        events
+        events,
+        insertNew: false,
     };
 }
 
 function mapDispatchToProps(dispatch) {
     return {
-        actions: bindActionCreators(evt.creators, dispatch)
+        actions: bindActionCreators({ event: evtCreators, date: dateCreators }, dispatch)
     };
 }
 
