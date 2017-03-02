@@ -9,8 +9,8 @@ import { events } from './mockEventApi';
 
 export const calendar = {
     selectedDate: '20170101',
-    minDate: '20161211',
-    maxDate: '20170204',
+    minDate: '20161002',
+    maxDate: '20170301',
     dates: [1],
 };
 

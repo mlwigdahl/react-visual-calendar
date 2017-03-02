@@ -36,7 +36,7 @@ export class Calendar extends React.Component {
 
         while (!first.isAfter(last)) {
             week.length = 0;
-            startOfWeek = first.clone();
+            startOfWeek = first.clone().startOf('week');
 
             while (first.clone().startOf('week').isSame(startOfWeek)) {
                 week.push(first.clone());

@@ -12,7 +12,7 @@ export default {
             error: undefined,
         },
         width: 600,
-        height: 600,
+        height: 542,
         currentDate: moment().format("YYYYMMDD"),
     },
     calendar: {},
