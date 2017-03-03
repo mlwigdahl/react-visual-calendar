@@ -29,7 +29,7 @@ export class EventPage extends React.Component {
     }
 
     componentDidMount() {
-         if (this.props.user == 0) {
+         if (this.props.user === 0) {
             browserHistory.push(`/login`);
         }
     }
@@ -54,7 +54,7 @@ export class EventPage extends React.Component {
         }
 
         // TODO add icon and endDate stuff here later
-        if (this.props.eventId == 0) {
+        if (this.props.eventId === 0) {
             this.props.actions.insertEventRequest(this.props.id, { 
                 label: this.state.title,
                 startTime: this.state.startTime,
@@ -79,13 +79,13 @@ export class EventPage extends React.Component {
     formChange(event) {
         const field = event.target.name;
 
-        if (field == 'title') {
+        if (field === 'title') {
             this.setState({ title: event.target.value });
         }
-        else if (field == 'start-time') {
+        else if (field === 'start-time') {
             this.setState({ startTime: event.target.value });
         }
-        else if (field == 'end-time') {
+        else if (field === 'end-time') {
             this.setState({ endTime: event.target.value });
         }
     }
@@ -135,7 +135,7 @@ function mapStateToProps(state, ownProps) {
         };
     }
 
-    if (ownProps.params.eventId == 'new') {
+    if (ownProps.params.eventId === 'new') {
         return {
             user: state.app.user.id,
             id: ownProps.params.id,

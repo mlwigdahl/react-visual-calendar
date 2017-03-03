@@ -30,7 +30,7 @@ function dayClass(day, curDate) {
     const date = moment(day, 'MMM DD').format("MMDD");
     const now = moment(curDate, 'YYYYMMDD').format("MMDD");
 
-    if (date == now) {
+    if (date === now) {
         return "day cur-day";
     }
 

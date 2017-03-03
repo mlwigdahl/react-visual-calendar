@@ -36,10 +36,10 @@ export class LoginPage extends React.Component {
 
     loginFormChanged(event) {
         const field = event.target.name;
-        if (field == 'usr') {
+        if (field === 'usr') {
             this.setState({ username: event.target.value });
         }
-        else if (field == 'pwd') {
+        else if (field === 'pwd') {
             this.setState({ password: event.target.value });
         }
     }
