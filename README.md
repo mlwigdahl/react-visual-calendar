@@ -6,20 +6,6 @@ React Visual Calendar is a responsive, mobile-first visual calendar web applicat
 
 ## Goals for 0.0.3 -- Full data manipulation + API/Redux testing
 
-    1. Implement event insert/update/delete operations.
-        TODO: 
-            X a. Hook up routing, etc. for EventPage
-            X b. Connect to real add/update/delete events
-            X c. Handle creating a new day when clicking on one w/o events
-    X 2. Support multiple events in a day.
-    X 3. Insert/update/delete testing.
-        X Insert
-        X Update
-        X Delete
-    X 4. Full action creator tests (everything used at this stage)
-    X 5. Full API tests
-    X 6. Refactor loading worker sagas for better modularity
-
 ## Goals for 0.0.4 -- Full API support + UI testing
 
     1. Infinite scrolling support
