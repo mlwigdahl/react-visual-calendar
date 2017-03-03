@@ -2,10 +2,10 @@ import { expect } from 'chai';
 
 import { testSaga, expectSaga } from 'redux-saga-test-plan';
 
-import * as async from './asyncDuck';
+import { creators as asyncCreators } from './asyncDuck';
 import * as date from './dateDuck';
-import * as calendar from './calendarDuck';
-import * as event from './eventDuck';
+import { creators as calendarCreators, reducer as calendarReducer } from './calendarDuck';
+import { creators as eventCreators } from './eventDuck';
 import DateApi from '../api/mockDateApi';
 import CalendarApi from '../api/mockCalendarApi';
 import EventApi from '../api/mockEventApi';
@@ -55,6 +55,16 @@ describe('Date Duck', () => {
                 expect(Object.keys(action.data).length).to.equal(1);
             });            
         });
+
+        describe('insertDate()', () => {
+            it ('should take two parameters and return a valid INSERT_DATE_REQUEST object', () => {
+                const action = date.creators.insertDateRequest('20170201', 1);
+                expect(action.type).to.equal(date.actions.INSERT_DATE_REQUEST);
+                expect(action.data.dateId).to.equal('20170201');
+                expect(action.data.userId).to.equal(1);
+                expect(Object.keys(action.data).length).to.equal(2);
+            });
+        });
     });
 
     describe('saga watchers', () => {
@@ -64,6 +74,15 @@ describe('Date Duck', () => {
                 .take(date.actions.LOAD_DATE_RANGE_REQUEST)
                 .dispatch(date.creators.loadDateRangeRequest('1/1/2017', '2/1/2017', 1))
                 .dispatch(date.creators.loadDateRangeRequest('12/1/2016', '1/1/2017', 2))
+                .run({ silenceTimeout: true });
+        });
+
+        it ('should have INSERT_DATE_REQUEST pick up multiple requests', () => {
+            return expectSaga(date.sagas.watchers.INSERT_DATE_REQUEST)
+                .take(date.actions.INSERT_DATE_REQUEST)
+                .take(date.actions.INSERT_DATE_REQUEST)
+                .dispatch(date.creators.insertDateRequest('20170201', 1))
+                .dispatch(date.creators.insertDateRequest('20170202', 2))
                 .run({ silenceTimeout: true });
         });
     });
@@ -76,17 +95,32 @@ describe('Date Duck', () => {
             const saga = testSaga(date.sagas.workers.loadDateRange, date.creators.loadDateRangeRequest('20161231', '20170101', 0));
             return saga
                 .next()
-                .put(async.creators.asyncRequest()) // starts AJAX
+                .put(asyncCreators.asyncRequest()) // starts AJAX
                 .next()
                 .call(DateApi.loadDateRange, '20161231', '20170101', 0)
                 .next(dr)
                 .put(date.creators.loadDateRangeSuccess(dr, 0))
                 .next()
-                .put(async.creators.asyncRequest())
+                .put(asyncCreators.asyncRequest())
                 .next()
                 .call(EventApi.loadEventRange, dr, 0)
                 .next(er)
-                .put(event.creators.loadEventRangeSuccess(er, 0))
+                .put(eventCreators.loadEventRangeSuccess(er, 0))
+                .next()
+                .isDone();
+        });
+
+        it('should have insertDate start an async request and return success', () => {
+            const dt = { events: [] };
+
+            const saga = testSaga(date.sagas.workers.insertDate, date.creators.insertDateRequest('20170201', 1));
+            return saga
+                .next()
+                .put(asyncCreators.asyncRequest()) // starts AJAX
+                .next()
+                .call(DateApi.insertDate, '20170201', 1)
+                .next(dt)
+                .put(date.creators.insertDateSuccess(dt))
                 .next()
                 .isDone();
         });
@@ -97,9 +131,9 @@ describe('Date Duck', () => {
             const cal = drainGenerator(CalendarApi.loadCalendar(1));
             const dr = drainGenerator(DateApi.loadDateRange('20161231', '20170102', 1));
 
-            const action = calendar.creators.loadCalendarSuccess(cal);
+            const action = calendarCreators.loadCalendarSuccess(cal);
 
-            const newState = { ...initialState, calendar: { ...calendar.reducer(initialState.calendar, action) } };
+            const newState = { ...initialState, calendar: { ...calendarReducer(initialState.calendar, action) } };
 
             const action2 = date.creators.loadDateRangeSuccess(dr, 1);
 
@@ -112,6 +146,29 @@ describe('Date Duck', () => {
 
         it ("should have LOAD_DATE_RANGE_FAILURE update the status (although it doesn't actually do anything at the moment)", () => {
             const action = date.creators.loadDateRangeFailure("oops");
+
+            const newState = date.reducer(initialState.dates, action);
+
+            expect(newState).to.not.be.undefined;
+            expect(newState).to.deep.equal({});
+        });
+
+        it ("should have INSERT_DATE_SUCCESS update the status", () => {
+            const dt = {
+                events: [],
+            };
+            const action = date.creators.insertDateSuccess({ id: '20170201', data: dt });
+
+            const newState = date.reducer(initialState.dates, action);
+
+            expect(newState).to.not.be.undefined;
+            expect(Object.keys(newState).length).to.equal(1);
+            expect(Object.keys(newState)[0]).to.equal('20170201');
+            expect(newState['20170201'].events.length).to.equal(0);
+        });
+
+        it ("should have INSERT_DATE_FAILURE update the status (although it doesn't actually do anything at the moment", () => {
+            const action = date.creators.insertDateFailure("oops");
 
             const newState = date.reducer(initialState.dates, action);
 

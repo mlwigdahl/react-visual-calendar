@@ -2,9 +2,9 @@ import { expect } from 'chai';
 
 import { testSaga, expectSaga } from 'redux-saga-test-plan';
 
-import * as async from './asyncDuck';
-import * as date from './dateDuck';
-import * as calendar from './calendarDuck';
+import { creators as asyncCreators } from './asyncDuck';
+import { creators as dateCreators, reducer as dateReducer } from './dateDuck';
+import { creators as calendarCreators, reducer as calendarReducer } from './calendarDuck';
 import * as event from './eventDuck';
 import DateApi from '../api/mockDateApi';
 import CalendarApi from '../api/mockCalendarApi';
@@ -191,7 +191,7 @@ describe('Event Duck', () => {
             const saga = testSaga(event.sagas.workers.insertEvent, event.creators.insertEventRequest(1, evt, 1));
             return saga
                 .next()
-                .put(async.creators.asyncRequest()) // starts AJAX
+                .put(asyncCreators.asyncRequest()) // starts AJAX
                 .next()
                 .call(EventApi.insertEvent, 1, evt, 1)
                 .next(evt)
@@ -214,7 +214,7 @@ describe('Event Duck', () => {
             const saga = testSaga(event.sagas.workers.updateEvent, event.creators.updateEventRequest(1, 1, evt, 1));
             return saga
                 .next()
-                .put(async.creators.asyncRequest()) // starts AJAX
+                .put(asyncCreators.asyncRequest()) // starts AJAX
                 .next()
                 .call(EventApi.updateEvent, 1, 1, evt, 1)
                 .next(evt)
@@ -230,7 +230,7 @@ describe('Event Duck', () => {
             const saga = testSaga(event.sagas.workers.deleteEvent, event.creators.deleteEventRequest(1, 1, 1));
             return saga
                 .next()
-                .put(async.creators.asyncRequest()) // starts AJAX
+                .put(asyncCreators.asyncRequest()) // starts AJAX
                 .next()
                 .call(EventApi.deleteEvent, 1, 1, 1)
                 .next(1)
@@ -246,13 +246,13 @@ describe('Event Duck', () => {
             const dr = drainGenerator(DateApi.loadDateRange('20161231', '20170102', 1));
             const er = drainGenerator(EventApi.loadEventRange(dr, 1));
 
-            const action = calendar.creators.loadCalendarSuccess(cal);
+            const action = calendarCreators.loadCalendarSuccess(cal);
 
-            const newState = { ...initialState, calendar: { ...calendar.reducer(initialState.calendar, action) } };
+            const newState = { ...initialState, calendar: { ...calendarReducer(initialState.calendar, action) } };
 
-            const action2 = date.creators.loadDateRangeSuccess(dr, 1);
+            const action2 = dateCreators.loadDateRangeSuccess(dr, 1);
 
-            const newState2 = { ...newState, dates: { ...date.reducer(newState.dates, action2) } };
+            const newState2 = { ...newState, dates: { ...dateReducer(newState.dates, action2) } };
 
             const action3 = event.creators.loadEventRangeSuccess(er, 1);
 

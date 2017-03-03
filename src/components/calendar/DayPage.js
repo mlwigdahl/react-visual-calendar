@@ -23,10 +23,10 @@ export class DayPage extends React.Component {
     }
 
     componentDidMount() {
-        if (this.props.user == 0) {
+        if (this.props.user === 0) {
             browserHistory.push(`/login`);
-        }
-        // TODO START HERE use new prop to inject a creation action here.
+            return;
+        }        
     }
 
     componentWillReceiveProps(nextProps) {
@@ -46,10 +46,12 @@ export class DayPage extends React.Component {
 
     deleteEvent(event) {
         event.preventDefault();
-        this.props.actions.event.deleteEventRequest(this.props.id, event.target.id, this.props.user);
+        this.props.actions.deleteEventRequest(this.props.id, event.target.id, this.props.user);
     }
 
     addEvent(event) {
+        // at this point, if the date has just been added, need to save it first.
+        this.props.actions.insertDateRequest(this.props.id, this.props.user);
         event.preventDefault();
         browserHistory.push(`/day/${this.props.id}/event/new`); // TODO ???
     }
@@ -104,7 +106,7 @@ DayPage.propTypes = {
     id: PropTypes.string.isRequired,
     date: PropTypes.object.isRequired,
     events: PropTypes.object.isRequired,
-    actions: PropTypes.object.isRequired,
+    actions: PropTypes.object.isRequired
 };
 
 function mapStateToProps(state, ownProps) {
@@ -116,9 +118,10 @@ function mapStateToProps(state, ownProps) {
             id: '',
             date: {},
             events: {},
-            insertNew: false,
         };
     }
+
+    let date = state.dates[id];
 
     if (date === undefined) {
         return {
@@ -127,12 +130,10 @@ function mapStateToProps(state, ownProps) {
             date: {
                 events: []
             },
-            events: {},
-            insertNew: true,
+            events: {}
         };
     }
 
-    const date = state.dates[id];
     const events = date.events
         .reduce((acc, key) => { acc[key] = state.events[key]; return acc; }, {});
 
@@ -141,13 +142,12 @@ function mapStateToProps(state, ownProps) {
         id,
         date,
         events,
-        insertNew: false,
     };
 }
 
 function mapDispatchToProps(dispatch) {
     return {
-        actions: bindActionCreators({ event: evtCreators, date: dateCreators }, dispatch)
+        actions: bindActionCreators({ ...evtCreators, ...dateCreators }, dispatch)
     };
 }
 

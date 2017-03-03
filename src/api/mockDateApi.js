@@ -55,15 +55,29 @@ const DateApi = {
         }
     },
 
-/* // TODO these are wrong -- no "date" property any more.
-    insertDate: function* (date, userId) {
-        return new Promise((resolve) => {
-            setTimeout(() => {
-                resolve({...date, id: maxDate++});
-            }, delay);
-        });
-    },
+    insertDate: function* (dateId, userId) {
+        try {
+            if (moment(dateId, "YYYYMMDD").format("YYYYMMDD") !== dateId) {
+                throw('insertDate(): dateId in incorrect format');
+            }
 
+            if (userId !== 1) { // the arbitrary "good ID"
+                throw('insertDate(): user ID not found');
+            }
+            /*
+            yield call(fetch,
+                `http://${target}:${port}/${apiPath}/user/${userId}/date/${date.id}`,
+                {method: 'POST', mode: cors });
+            const resp = new Response(); // minor differences to the main API since we don't actually call fetch...
+            yield apply(resp, resp.json);
+            */
+            yield 1; // to suppress lint error
+            return { id: dateId, data: { events: [] } };
+        } catch(error) {
+            return {}; // TODO more here
+        }
+    },
+/*
     updateDate: function* (date, userId) {
         return new Promise((resolve) => {
             setTimeout(() => {

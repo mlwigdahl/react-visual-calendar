@@ -54,7 +54,7 @@ export class EventPage extends React.Component {
         }
 
         // TODO add icon and endDate stuff here later
-
+debugger;
         if (this.props.eventId == 0) {
             this.props.actions.insertEventRequest(this.props.id, { 
                 label: this.state.title,

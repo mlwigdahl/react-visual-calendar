@@ -51,13 +51,14 @@ const EventApi = {
 
     insertEvent: function* (dateId, event, userId) {
         try {
-            if (Object.keys(event).length !== 5 ||
+            if (Object.keys(event).length < 3 ||
                 event.label === undefined ||
-                event.icon === undefined ||
+//                event.icon === undefined ||
                 event.startTime === undefined ||
-                event.endTime === undefined ||
-                event.endDate === undefined) {
-                    throw('insertEvent(): invalid event object');
+                event.endTime === undefined //||
+//                event.endDate === undefined
+            ) {
+                throw('insertEvent(): invalid event object');
             }
 
             if (userId !== 1) { // the arbitrary "good ID"

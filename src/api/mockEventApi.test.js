@@ -5,9 +5,6 @@ import { drainGenerator } from '../common/TestHelpers';
 
 import EventApi from './mockEventApi';
 
-
-// TODO START HERE more tests needed
-
 describe('Event Api', () => {
     describe('loadEventRange()', () => {
         it('should retrieve correctly-formatted data', () => {

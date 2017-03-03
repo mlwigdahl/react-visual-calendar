@@ -53,39 +53,30 @@ export function reducer(state = initialState.dates, action) {
             return state; // TODO more here?  Probably update global message...
 
         case actions.INSERT_DATE_SUCCESS:
-/*            return  {
+            return {
                 ...state,
-                date: [
-                    ...(state.date),
-                    {...action.date}
-                ]
-            }; */ // TODO this is wrong
-            return state;
+                [action.data.date.id]: { ...action.data.date.data }
+            };
 
         case actions.INSERT_DATE_FAILURE:
             return state; // TODO more here?  Probably update global message...
 
         case actions.UPDATE_DATE_SUCCESS:
-/*            return { 
+            return {
                 ...state,
-                date: [
-                    ...(state.date).filter(date => date.id !== action.date.id),
-                    {...action.date}
-                ]
-            }; */ // TODO this is wrong
-            return state;
+                [action.data.date.id]: { ...action.data.date.data }
+            };
 
         case actions.UPDATE_DATE_FAILURE:
             return state; // TODO more here?  Probably update global message...
 
         case actions.DELETE_DATE_SUCCESS:
-/*            return {
-                ...state,
-                date: [
-                    ...(state.date).filter(date => date.id !== action.date_id)
-                ]
-            }; */ // TODO this is wrong
-            return state;
+        {
+            const newState = { ...state };
+            delete newState[action.data.eventId];
+
+            return newState;
+        }
 
         case actions.DELETE_DATE_FAILURE:
             return state; // TODO more here?  Probably update global message...
@@ -144,7 +135,7 @@ export const sagas = {
         insertDate: function* (action) {
             try {
                 yield put(async.creators.asyncRequest());
-                const dateRet = yield call(DateApi.insertDate, action.data.date, action.data.userId);
+                const dateRet = yield call(DateApi.insertDate, action.data.dateId, action.data.userId);
                 yield put(creators.insertDateSuccess(dateRet));
             }
             catch (e) {
@@ -206,8 +197,8 @@ export const creators = {
         return { type: actions.INSERT_DATE_FAILURE, data: { error } };
     },
 
-    insertDateRequest: (date, userId) => {
-        return { type: actions.INSERT_DATE_REQUEST, data: { date, userId } };
+    insertDateRequest: (dateId, userId) => {
+        return { type: actions.INSERT_DATE_REQUEST, data: { dateId, userId } };
     },
 
     updateDateSuccess: (date) => {

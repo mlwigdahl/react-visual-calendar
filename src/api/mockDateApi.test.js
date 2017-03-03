@@ -53,4 +53,22 @@ describe('Date Api', () => {
             expect(dates).to.deep.equal({});
         });
     });
+
+    describe("insertDate()", () => {
+        it('should insert a date given correct data', () => {
+            const dr = drainGenerator(DateApi.insertDate('20170201', 1));
+            expect(dr.id).to.equal('20170201');
+            expect(dr.data).to.deep.equal({ events: [] });
+        });
+
+        it ('should fail to insert given an invalid date index', () => {
+            const dr = drainGenerator(DateApi.insertDate('ABCDEFG', 1));
+            expect(dr).to.deep.equal({});
+        });
+
+        it ('should fail to insert given an invalid userId parameter', () => {
+            const dr = drainGenerator(DateApi.insertDate('20170202', 0));
+            expect(dr).to.deep.equal({});
+        });
+    });
 });
