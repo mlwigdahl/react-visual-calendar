@@ -91,7 +91,6 @@ export function reducer(state = initialState.dates, action) {
 
         case eventActions.DELETE_EVENT_SUCCESS:
         {
-            debugger;
             const index = state[action.data.dateId].events.findIndex(id => id === action.data.eventId);
             const newEvents = [ ...state[action.data.dateId].events ];
             if (index > -1) {

@@ -1,12 +1,14 @@
 import React, {PropTypes} from 'react';
+import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { browserHistory } from 'react-router';
 import moment from 'moment';
 
 import { creators as dateCreators } from '../../ducks/dateDuck';
 import { creators as evtCreators } from '../../ducks/eventDuck';
+import EventItem from './EventItem';
 
-import { bindActionCreators } from 'redux';
+
 
 export class DayPage extends React.Component {
     constructor(props, context) {
@@ -46,7 +48,6 @@ export class DayPage extends React.Component {
 
     deleteEvent(event) {
         event.preventDefault();
-        debugger;
         this.props.actions.deleteEventRequest(this.props.id, Number(event.target.id), this.props.user);
     }
 
@@ -60,26 +61,14 @@ export class DayPage extends React.Component {
     renderEvents(events) {
         return Object.keys(events)
             .map((key, index) => {
-                const event = events[key];
-
-                return (<div key={index}>
-                    <span className="date-label">{`${event.label}`}</span>
-                    <br/>
-                    <span className="date-start">{`${event.startTime}`}</span>
-                    <br/>
-                    <span className="date-end">{`${event.endTime}`}</span>
-                    <br/>
-                    <input type="submit"
-                        value="Edit"
-                        id={key}
-                        className="btn btn-primary"
-                        onClick={this.editEvent}/>
-                    <input type="submit"
-                        value="Delete"
-                        id={key}
-                        className="btn btn-primary"
-                        onClick={this.deleteEvent}/>
-                </div>);
+                return (<EventItem 
+                    key={key}
+                    id={key}
+                    index={index}
+                    event={events[key]}
+                    editEvent={this.editEvent}
+                    deleteEvent={this.deleteEvent}
+                />);
             }
         );
     }
