@@ -164,3 +164,9 @@ export const creators = {
         return { type: actions.UPDATE_DATE_ICON_REQUEST, data: { icon, dateId, userId } };
     },
 };
+
+export const selectors = {
+    getRange: state => {
+        return { minDate: state.calendar.minDate, maxDate: state.calendar.maxDate };
+    }
+};

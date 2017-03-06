@@ -46,7 +46,8 @@ export class DayPage extends React.Component {
 
     deleteEvent(event) {
         event.preventDefault();
-        this.props.actions.deleteEventRequest(this.props.id, event.target.id, this.props.user);
+        debugger;
+        this.props.actions.deleteEventRequest(this.props.id, Number(event.target.id), this.props.user);
     }
 
     addEvent(event) {
@@ -106,7 +107,7 @@ DayPage.propTypes = {
     id: PropTypes.string.isRequired,
     date: PropTypes.object.isRequired,
     events: PropTypes.object.isRequired,
-    actions: PropTypes.object.isRequired
+    actions: PropTypes.object.isRequired,
 };
 
 function mapStateToProps(state, ownProps) {

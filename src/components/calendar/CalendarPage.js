@@ -2,6 +2,7 @@ import React, {PropTypes} from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { withRouter } from 'react-router';
+import moment from 'moment';
 
 import CalendarBody from './CalendarBody';
 
@@ -28,9 +29,10 @@ export class CalendarPage extends React.Component {
                     onScroll={this.onScroll}
                     height={this.props.height}
                     user={this.props.user}
-                    calendar={this.props.calendar}
                     dates={this.props.dates}
                     events={this.props.events}
+                    weeks={this.props.weeks}
+                    currentDate={this.props.currentDate}
                 />
             </div>
         );
@@ -42,18 +44,32 @@ CalendarPage.propTypes = {
     currentDate: PropTypes.string.isRequired,
     width: PropTypes.number.isRequired,
     height: PropTypes.number.isRequired,
-    calendar: PropTypes.object.isRequired,
     dates: PropTypes.object.isRequired,
     events: PropTypes.object.isRequired,
     actions: PropTypes.object.isRequired,
+    weeks: PropTypes.array.isRequired
 };
 
+function makeWeeks({minDate, maxDate}) {
+    const weeks = [];
+
+    let first = moment(minDate).startOf('week');
+    let last  = moment(maxDate).endOf('week');
+
+    while (first.isBefore(last)) {
+        weeks.push(first.clone());
+        first.add(7, "days");
+    }
+
+    return weeks;
+}
 
 function mapStateToProps(state) {
     return {
-        calendar: { ...state.calendar },
+        currentDate: state.app.currentDate,
         dates: { ...state.dates },
-        events: { ...state.events }
+        events: { ...state.events },
+        weeks: makeWeeks(calendar.selectors.getRange(state)),
     };
 }
 

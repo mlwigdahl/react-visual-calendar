@@ -1,5 +1,27 @@
 import React from 'react';
+
 import Day from './Day';
+
+function renderDays(user, curDate, dates, events, weekStart) {
+    const days = [];
+
+    for(let i = 0; i < 7; i++) {
+        const key = weekStart.format('YYYYMMDD');
+
+        days.push(
+            <Day 
+                key={key}
+                user={user}
+                date={{ day: weekStart.format('MMM DD') }}
+                curDate={curDate}
+                events={findEvents(dates, events, key)}
+            />
+        );
+        weekStart.add(1, 'day');
+    }
+
+    return days;
+}
 
 function findEvents(dates, events, date) {
     const targetDate = dates[date];
@@ -10,30 +32,20 @@ function findEvents(dates, events, date) {
         {};
 }
 
-function Week({user, week, curDate, dates, events}) {
+function Week({user, curDate, dates, events, weekStart}) {
     return (
         <div className="week">
-            {week.map(obj => {
-                const key = obj.format('YYYYMMDD');
-                return (
-                    <Day 
-                        key={key} 
-                        user={user}
-                        date={{ day: obj.format("MMM DD") }} 
-                        curDate={curDate} 
-                        events={findEvents(dates, events, key)}
-                    />);
-            })}
+            {renderDays(user, curDate, dates, events, weekStart)}
         </div>
     );
 }
 
 Week.propTypes = {
     user: React.PropTypes.number.isRequired,
-    week: React.PropTypes.array.isRequired,
     dates: React.PropTypes.object.isRequired,
     events: React.PropTypes.object.isRequired,
     curDate: React.PropTypes.string.isRequired,
+    weekStart: React.PropTypes.object.isRequired,
 };
 
 export default Week;
