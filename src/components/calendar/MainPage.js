@@ -2,11 +2,8 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { browserHistory, withRouter } from 'react-router';
 
-import Calendar from './Calendar';
+import CalendarPage from './CalendarPage';
 import LoginPage from '../login/LoginPage';
-
-//import InfiniteCalendar from 'react-infinite-calendar';
-//import 'react-infinite-calendar/styles.css'; // Make sure to import the default stylesheet
 
 // import { bindActionCreators } from 'redux';
 
@@ -34,11 +31,10 @@ export class MainPage extends React.Component {
         else {
             return (
                 <div>
-                    <Calendar 
+                    <CalendarPage 
                         currentDate={this.props.currentDate}
                         width={this.props.width}
                         height={this.props.height}
-                        calendar={this.props.calendar}
                         user={this.props.user.id}
                     />
                 </div>

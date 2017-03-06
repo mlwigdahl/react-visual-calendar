@@ -225,9 +225,3 @@ export const creators = {
         return { type: actions.DELETE_DATE_REQUEST, data: { dateId, userId } };
     },
 };
-
-// selector
-
-export const selectors = {
-    dates: state => state.dates
-};
