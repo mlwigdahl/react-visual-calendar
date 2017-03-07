@@ -89,6 +89,8 @@ describe('Calendar Duck', () => {
                 .next(dr)
                 .put(date.creators.loadDateRangeSuccess(dr, 1))
                 .next()
+                .put(calendar.creators.pushDates(cal.minDate, cal.maxDate))
+                .next()
                 .put(async.creators.asyncRequest())
                 .next()
                 .call(EventApi.loadEventRange, dr, 1)

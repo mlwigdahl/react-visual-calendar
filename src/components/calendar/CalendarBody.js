@@ -9,7 +9,7 @@ function renderWeeks(dates, events, weeks, currentDate) {
     for (const week of weeks) {
         weekRet.push(
             <Week
-                key={week.format("wwYYYY")}
+                key={week.format("YYYYMMDD")}
                 weekStart={week}
                 curDate={currentDate}
                 dates={dates}

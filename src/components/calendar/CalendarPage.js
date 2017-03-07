@@ -6,7 +6,8 @@ import moment from 'moment';
 
 import CalendarBody from './CalendarBody';
 
-import * as calendar from '../../ducks/calendarDuck';
+import { selectors as calSelectors } from '../../ducks/calendarDuck';
+import { creators as dateCreators } from '../../ducks/dateDuck';
 
 export class CalendarPage extends React.Component {
     constructor(props, context) {
@@ -15,8 +16,24 @@ export class CalendarPage extends React.Component {
         this.onScroll = this.onScroll.bind(this);
     }
 
+/*
+    componentDidMount() {
+        debugger;
+        this.refs.messages.scrollTop = this.refs.messages.scrollHeight / 2;
+    }
+*/ // TODO START HERE probably need to make CalendarBody a class and use a ref here.
+
     onScroll(event) {
-        // TODO if we're at the end of our loaded data, we'll need to pull some more in.
+   
+        if (event.target.scrollTop < event.target.scrollHeight / 6) {
+            let min = moment(this.props.minDate).add(-4, 'weeks');
+            this.props.actions.loadDateRangeRequest(min.format('YYYYMMDD'), this.props.minDate);
+        }
+        else if (event.target.scrollTop > event.target.scrollHeight * 5 / 6) {
+            let max = moment(this.props.maxDate).add(4, 'weeks');
+            this.props.actions.loadDateRangeRequest(this.props.maxDate, max.format('YYYYMMDD'));
+        }
+
         return;
     }
 
@@ -40,6 +57,8 @@ export class CalendarPage extends React.Component {
 
 CalendarPage.propTypes = {
     currentDate: PropTypes.string.isRequired,
+    minDate: PropTypes.string.isRequired,
+    maxDate: PropTypes.string.isRequired,
     width: PropTypes.number.isRequired,
     height: PropTypes.number.isRequired,
     dates: PropTypes.object.isRequired,
@@ -65,9 +84,11 @@ function makeWeeks({minDate, maxDate}) {
 function mapStateToProps(state) {
     return {
         currentDate: state.app.currentDate,
+        minDate: state.calendar.minDate,
+        maxDate: state.calendar.maxDate,
         dates: { ...state.dates },
         events: { ...state.events },
-        weeks: makeWeeks(calendar.selectors.getRange(state)),
+        weeks: makeWeeks(calSelectors.getRange(state)),
     };
 }
 
@@ -75,7 +96,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
     return {
         actions: bindActionCreators({
-            clickDay: calendar.creators.clickDay
+            loadDateRangeRequest: dateCreators.loadDateRangeRequest,
         }, dispatch)
     };
 }

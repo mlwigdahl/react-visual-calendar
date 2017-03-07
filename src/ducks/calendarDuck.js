@@ -22,6 +22,8 @@ export const actions = {
     UPDATE_DATEICON_SUCCESS: 'react-visual-calendar/calendar/UPDATE_DATEICON_SUCCESS',
     UPDATE_DATEICON_FAILURE: 'react-visual-calendar/calendar/UPDATE_DATEICON_FAILURE',
     UPDATE_DATEICON_REQUEST: 'react-visual-calendar/calendar/UPDATE_DATEICON_REQUEST',
+
+    PUSH_DATES: 'react-visual-calendar/calendar/PUSH_DATES',
 };
 
 // reducer
@@ -65,6 +67,25 @@ export function reducer(state = initialState.calendar, action) {
 
         case actions.UPDATE_DATEICON_FAILURE:
             return state; // TODO more here?  Probably update global message...
+
+        case actions.PUSH_DATES:
+        {
+            const pushMax = state.maxDate >= action.data.maxDate ? false : true;
+            const pushMin = state.minDate <= action.data.minDate ? false : true;
+
+            if (!pushMax && !pushMin) {
+                return state;
+            }
+            else if (pushMax && pushMin) {
+                return { ...state, minDate: action.data.minDate, maxDate: action.data.maxDate };
+            }
+            else if (pushMax) {
+                return { ...state, maxDate: action.data.maxDate };
+            }
+            else {
+                return { ...state, minDate: action.data.minDate };
+            }
+        }
 
         default:
             return state;
@@ -162,6 +183,10 @@ export const creators = {
 
     updateDateIconRequest: (icon, dateId, userId) => {
         return { type: actions.UPDATE_DATE_ICON_REQUEST, data: { icon, dateId, userId } };
+    },
+
+    pushDates: (minDate, maxDate) => {
+        return { type: actions.PUSH_DATES, data: { minDate, maxDate } };
     },
 };
 

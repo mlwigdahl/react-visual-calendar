@@ -5,7 +5,7 @@ import initialState from './initialState';
 import DateApi from '../api/mockDateApi';
 import * as async from './asyncDuck';
 import { actions as eventActions, sagas as eventSagas} from './eventDuck';
-import { actions as calActions } from './calendarDuck';
+import { actions as calActions, creators as calCreators } from './calendarDuck';
 //import * as helpers from '../common/Helpers';
 
 // actions
@@ -167,6 +167,7 @@ export const sagas = {
             yield put(async.creators.asyncRequest());
             const dates = yield call(DateApi.loadDateRange, startDate, endDate, userId);
             yield put(creators.loadDateRangeSuccess(dates, userId));
+            yield put(calCreators.pushDates(startDate, endDate));
             
             yield* eventSagas.helpers.loadEventRange(dates, userId);
         }
