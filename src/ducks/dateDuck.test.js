@@ -4,7 +4,6 @@ import { testSaga, expectSaga } from 'redux-saga-test-plan';
 
 import { creators as asyncCreators } from './asyncDuck';
 import * as date from './dateDuck';
-import * as calendar from './calendarDuck';
 import { creators as calendarCreators, reducer as calendarReducer } from './calendarDuck';
 import { creators as eventCreators } from './eventDuck';
 import DateApi from '../api/mockDateApi';
@@ -102,7 +101,7 @@ describe('Date Duck', () => {
                 .next(dr)
                 .put(date.creators.loadDateRangeSuccess(dr, 0))
                 .next()
-                .put(calendar.creators.pushDates('20161231', '20170101'))
+                .put(calendarCreators.pushDates('20161231', '20170101'))
                 .next()
                 .put(asyncCreators.asyncRequest())
                 .next()

@@ -1,5 +1,6 @@
 import React from 'react';
 
+import CalendarScroll from './CalendarScroll';
 import Week from './Week';
 
 function renderWeeks(dates, events, weeks, currentDate) {
@@ -20,14 +21,16 @@ function renderWeeks(dates, events, weeks, currentDate) {
     return weekRet;
 }
 
-// TODO interpose an autoscroll component here?
 function CalendarBody({onScroll, height, dates, events, weeks, currentDate}) {
     return (
-        <div style={{overflowY: 'scroll', maxHeight: height}} onScroll={onScroll}>
+        <CalendarScroll
+            height={height}
+            onScroll={onScroll}
+        >
             <div className="calendar-class">
                 {renderWeeks(dates, events, weeks, currentDate)}
             </div>
-        </div>
+        </CalendarScroll>
     );
 }
 
