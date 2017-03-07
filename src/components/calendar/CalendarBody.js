@@ -1,6 +1,6 @@
 import React from 'react';
 
-import CalendarScroll from './CalendarScroll';
+import InitialScroll from '../common/InitialScroll';
 import Week from './Week';
 
 function renderWeeks(dates, events, weeks, currentDate) {
@@ -23,14 +23,15 @@ function renderWeeks(dates, events, weeks, currentDate) {
 
 function CalendarBody({onScroll, height, dates, events, weeks, currentDate}) {
     return (
-        <CalendarScroll
+        <InitialScroll
             height={height}
             onScroll={onScroll}
+            frac={0.35}
         >
             <div className="calendar-class">
                 {renderWeeks(dates, events, weeks, currentDate)}
             </div>
-        </CalendarScroll>
+        </InitialScroll>
     );
 }
 

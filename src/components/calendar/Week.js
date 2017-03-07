@@ -2,6 +2,10 @@ import React from 'react';
 
 import Day from './Day';
 
+function monthStyle(date) {
+    return ({ className: `month-${date.format('MMM')}`.toLowerCase() });
+}
+
 function renderDays(curDate, dates, events, weekStart) {
     const days = [];
 
@@ -10,6 +14,7 @@ function renderDays(curDate, dates, events, weekStart) {
 
         days.push(
             <Day 
+                styleObj={monthStyle(weekStart)}
                 key={key}
                 date={{ day: weekStart.format('MMM DD') }}
                 curDate={curDate}

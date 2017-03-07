@@ -26,18 +26,18 @@ function renderEvents(events) {
     }
 }
 
-function dayClass(day, curDate) {
+function dayClass(day, curDate, styleObj) {
     const date = moment(day, 'MMM DD').format("MMDD");
     const now = moment(curDate, 'YYYYMMDD').format("MMDD");
 
     if (date === now) {
-        return "day cur-day";
+        return `day cur-day ${styleObj.className}`;
     }
 
-    return "day";
+    return `day ${styleObj.className}`;
 }
 
-function Day({date, curDate, events}) {
+function Day({date, curDate, events, styleObj}) {
 
     const day = date.day;
 
@@ -50,7 +50,7 @@ function Day({date, curDate, events}) {
     }
 
     return (
-        <div className={dayClass(day, curDate)} onClick={onClick}>
+        <div className={dayClass(day, curDate, styleObj)} onClick={onClick}>
             <span className="date-day">{date.day}</span>
             <br/>
             {renderEvents(events)}
@@ -62,6 +62,7 @@ Day.propTypes = {
     date: React.PropTypes.object.isRequired,
     curDate: React.PropTypes.string.isRequired,
     events: React.PropTypes.object.isRequired,
+    styleObj: React.PropTypes.object.isRequired,
 };
 
 export default Day;

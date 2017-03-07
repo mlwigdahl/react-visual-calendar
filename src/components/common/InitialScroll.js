@@ -1,6 +1,6 @@
 import React, {PropTypes} from 'react';
 
-class CalendarScroll extends React.Component {
+class InitialScroll extends React.Component {
     constructor(props, context) {
         super(props, context);
 
@@ -8,7 +8,12 @@ class CalendarScroll extends React.Component {
     }
 
     componentDidMount() {
-        this.node.scrollTop = this.node.scrollHeight / 3;
+        if (this.props.abs !== undefined) {
+            this.node.scrollTop = this.props.abs;
+        }
+        else if (this.props.frac !== undefined) {
+            this.node.scrollTop = this.node.scrollHeight * this.props.frac;
+        }        
     }
 
     setNodeRef(node) {
@@ -28,10 +33,12 @@ class CalendarScroll extends React.Component {
     }
 }
 
-CalendarScroll.propTypes = {
+InitialScroll.propTypes = {
     height: PropTypes.number.isRequired,
     onScroll: PropTypes.func.isRequired,
     children: PropTypes.node.isRequired,
+    abs: PropTypes.number,
+    frac: PropTypes.number,
 };
 
-export default CalendarScroll; // add more (and add the named export to the class) if we ever want Redux state support here.
+export default InitialScroll; // add more (and add the named export to the class) if we ever want Redux state support here.

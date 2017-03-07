@@ -1,19 +1,36 @@
 /* Variables */
-$app-gray: #4d4d4d;
-$active: orange;
-$color-date: maroon;
+$color-tundora: #4d4d4d;
+$color-midnightblue: midnightblue;
+
+$color-lightgrey: lightgrey;
+$color-palegoldenrod: palegoldenrod;
+
+// month colors
+$color-red: red;
+$color-orangered: orangered;
+$color-orange: orange;
+$color-yellow: yellow;
+$color-yellowgreen: yellowgreen;
+$color-palegreen: palegreen;
+$color-lightseagreen: lightseagreen;
+$color-skyblue: skyblue;
+$color-deepskyblue: deepskyblue;
+$color-blue: blue;
+$color-indigo: indigo;
+$color-purple: purple;
+
 
 /* Styles */
 #app {
     font: 14px 'Helvetica Neue', Helvetica, Arial, sans-serif;
-    color: $app-gray;
+    color: $color-tundora;
     min-width: 550px;
     max-width: 850px;
     margin: 0 auto;
 }
 
 a.active {
-    color: $active;
+    color: $color-orange;
 }
 
 nav {
@@ -27,39 +44,84 @@ div.week {
 }
 
 div.day {
-    border: 1px solid blue;
+    border: 1px solid $color-blue;
     width: 14.28%;
     min-height: 90px;
-    background-color: lightgrey;
+    background-color: $color-lightgrey;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 div.cur-day {
-    background-color: palegoldenrod;
+    background-color: $color-palegoldenrod;
 }
 
 div.calendar-class {
-    border: 1px solid blue;
+    border: 1px solid $color-blue;
 }
 
 span.date-day {
     font-weight: 600;
-    color: $color-date;
+    color: $color-midnightblue;
 }
 
 span.date-label {
     font-weight: 600;
-    white-space: nowrap;
-    text-overflow: ellipsis;
 }
 
 span.date-start  {
     margin-left: 10px;
-    white-space: nowrap;
-    text-overflow: ellipsis;
 }
 
 span.date-end  {
     margin-left: 10px;
-    white-space: nowrap;
-    text-overflow: ellipsis;
+}
+
+div.month-jan {
+    background-color: transparentize($color-red, .8);
+}
+
+div.month-feb {
+    background-color: transparentize($color-orangered, .8);
+}
+
+div.month-mar {
+    background-color: transparentize($color-orange, .8);
+}
+
+div.month-apr {
+    background-color: transparentize($color-yellow, .8);
+}
+
+div.month-may {
+    background-color: transparentize($color-yellowgreen, .8);
+}
+
+div.month-jun {
+    background-color: transparentize($color-palegreen, .8);
+}
+
+div.month-jul {
+    background-color: transparentize($color-lightseagreen, .8);
+}
+
+div.month-aug {
+    background-color: transparentize($color-skyblue, .8);
+}
+
+div.month-sep {
+    background-color: transparentize($color-deepskyblue, .8);
+}
+
+div.month-oct {
+    background-color: transparentize($color-blue, .8);
+}
+
+div.month-nov {
+    background-color: transparentize($color-indigo, .8);
+}
+
+div.month-dec {
+    background-color: transparentize($color-purple, .8);
 }
