@@ -28,7 +28,6 @@ export class CalendarPage extends React.Component {
                 <CalendarBody
                     onScroll={this.onScroll}
                     height={this.props.height}
-                    user={this.props.user}
                     dates={this.props.dates}
                     events={this.props.events}
                     weeks={this.props.weeks}
@@ -40,7 +39,6 @@ export class CalendarPage extends React.Component {
 }
 
 CalendarPage.propTypes = {
-    user: PropTypes.number.isRequired,
     currentDate: PropTypes.string.isRequired,
     width: PropTypes.number.isRequired,
     height: PropTypes.number.isRequired,

@@ -2,7 +2,7 @@ import React from 'react';
 
 import Day from './Day';
 
-function renderDays(user, curDate, dates, events, weekStart) {
+function renderDays(curDate, dates, events, weekStart) {
     const days = [];
 
     for(let i = 0; i < 7; i++) {
@@ -11,7 +11,6 @@ function renderDays(user, curDate, dates, events, weekStart) {
         days.push(
             <Day 
                 key={key}
-                user={user}
                 date={{ day: weekStart.format('MMM DD') }}
                 curDate={curDate}
                 events={findEvents(dates, events, key)}
@@ -32,16 +31,15 @@ function findEvents(dates, events, date) {
         {};
 }
 
-function Week({user, curDate, dates, events, weekStart}) {
+function Week({curDate, dates, events, weekStart}) {
     return (
         <div className="week">
-            {renderDays(user, curDate, dates, events, weekStart)}
+            {renderDays(curDate, dates, events, weekStart)}
         </div>
     );
 }
 
 Week.propTypes = {
-    user: React.PropTypes.number.isRequired,
     dates: React.PropTypes.object.isRequired,
     events: React.PropTypes.object.isRequired,
     curDate: React.PropTypes.string.isRequired,

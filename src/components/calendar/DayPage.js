@@ -55,7 +55,7 @@ export class DayPage extends React.Component {
         // at this point, if the date has just been added, need to save it first.
         this.props.actions.insertDateRequest(this.props.id, this.props.user);
         event.preventDefault();
-        browserHistory.push(`/day/${this.props.id}/event/new`); // TODO ???
+        browserHistory.push(`/day/${this.props.id}/event/new`);
     }
 
     renderEvents(events) {

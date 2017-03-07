@@ -35,7 +35,6 @@ export class MainPage extends React.Component {
                         currentDate={this.props.currentDate}
                         width={this.props.width}
                         height={this.props.height}
-                        user={this.props.user.id}
                     />
                 </div>
             );
