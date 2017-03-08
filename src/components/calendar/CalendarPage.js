@@ -137,6 +137,7 @@ function mapStateToProps(state) {
 //      to load the dates corresponding to the overlap
 //  5. update app.scrollPos according to the window shift
 //  X 6. update scroll bar position back to center (or whatever is needed to keep the window stable) (?)
+//  7. implement shouldComponentUpdate on this and the InitialScroll wrapper to prevent scroll bounce
 
 function mapDispatchToProps(dispatch) {
     return {
