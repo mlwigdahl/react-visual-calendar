@@ -45,11 +45,10 @@ export class MainPage extends React.Component {
 function mapStateToProps(state) {    
     const app = state.app;
     return { 
-        user: { ...app.user },
+        user: app.user,
         width: app.width,
         height: app.height,
         currentDate: app.currentDate,
-        calendar: { ...state.calendar }
     };
 }
 
@@ -58,7 +57,6 @@ MainPage.propTypes = {
     width: PropTypes.number.isRequired,
     height: PropTypes.number.isRequired,
     currentDate: PropTypes.string.isRequired,
-    calendar: PropTypes.object
 };
 
 export default withRouter(connect(mapStateToProps)(MainPage));

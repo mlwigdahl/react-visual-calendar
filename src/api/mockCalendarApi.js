@@ -1,5 +1,5 @@
 // import delay from './delay';
-// import moment from 'moment'; // TODO no need for this at the moment...
+// import moment from 'moment';
 
 //import { call, apply/*, put*/ } from 'redux-saga/effects';
 //import { target, apiPath, port, cors } from '../api/AppApi';
@@ -8,7 +8,6 @@ import { dates } from './mockDateApi';
 import { events } from './mockEventApi';
 
 export const calendar = {
-    selectedDate: '20170101',
     minDate: '20161002',
     maxDate: '20170301',
     dates: [1],

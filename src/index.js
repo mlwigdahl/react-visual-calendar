@@ -9,7 +9,6 @@ import configureStore, { sagaMiddleware } from './store/configureStore';
 import { syncHistoryWithStore } from 'react-router-redux';
 
 /**/
-//import { setMinimumDate, setSelectedDate } from './actions/dateActions';
 require('./favicon.ico');
 import './styles/styles.scss';
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';

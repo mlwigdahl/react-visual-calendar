@@ -25,6 +25,7 @@ export function reducer(state = initialState.app, action) {
             tempState.user.error = action.data.error;
             return tempState;
         }
+
         default: 
             return state;
     }
@@ -64,5 +65,5 @@ export const creators = {
     },
     loginFailure: (error) => {
         return { type: actions.LOGIN_FAILURE, data: { error } };
-    }
+    },
 };

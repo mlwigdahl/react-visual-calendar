@@ -12,7 +12,7 @@ function renderMore(length) {
 
 function renderEvents(events) {
     const event = events[Object.keys(events)
-        .sort((a, b) => a-b)
+        .sort((a, b) => a - b)
         .find(val => val !== undefined ? true : false)];
 
     if (event !== undefined) {
@@ -31,7 +31,7 @@ function dayClass(day, curDate, styleObj) {
     const now = moment(curDate, 'YYYYMMDD').format("MMDD");
 
     if (date === now) {
-        return `day cur-day ${styleObj.className}`;
+        return `day cur-day`;
     }
 
     return `day ${styleObj.className}`;

@@ -22,7 +22,6 @@ export default {
 
 /* // example calendar
 const calendar = {
-    selectedDate: '20170101',
     minDate: '20161211',
     maxDate: '20170204',
     dates: [1, 2],

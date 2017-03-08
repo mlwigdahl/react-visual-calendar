@@ -6,32 +6,51 @@ import moment from 'moment';
 
 import CalendarBody from './CalendarBody';
 
-import { selectors as calSelectors } from '../../ducks/calendarDuck';
 import { creators as dateCreators } from '../../ducks/dateDuck';
+import { creators as appCreators } from '../../ducks/appDuck';
 
 export class CalendarPage extends React.Component {
     constructor(props, context) {
         super(props, context);
 
         this.onScroll = this.onScroll.bind(this);
-    }
 
-/*
-    componentDidMount() {
-        debugger;
-        this.refs.messages.scrollTop = this.refs.messages.scrollHeight / 2;
+        const curDate = this.props.currentDate;
+        const top = calcWindow(curDate, 'top');
+        const bottom = calcWindow(curDate, 'bottom');
+
+        this.state = {
+            selectedDate: curDate,
+            windowTop: top,
+            windowBottom: bottom,
+            weeks: updateWeeks(top, bottom, []),
+        };
     }
-*/ // TODO START HERE probably need to make CalendarBody a class and use a ref here.
 
     onScroll(event) {
    
-        if (event.target.scrollTop < event.target.scrollHeight / 6) {
-            let min = moment(this.props.minDate).add(-4, 'weeks');
-            this.props.actions.loadDateRangeRequest(min.format('YYYYMMDD'), this.props.minDate);
+        if (event.target.scrollTop === 0) {
+            const newTop = this.state.windowTop.clone().add(-5, 'weeks');
+            const newBottom = this.state.windowBottom.clone().add(-5, 'weeks');
+
+            if (newTop.isBefore(this.props.minDate)) {
+                this.props.actions.loadDateRangeRequest(newTop.format('YYYYMMDD'), this.props.minDate);    
+            }
+
+            const weeks = updateWeeks(newTop, newBottom, this.state.weeks);
+            this.setState({ windowTop: newTop, windowBottom: newBottom, weeks });
+            event.target.scrollTop = event.target.scrollTop + 1; // just a tweak to avoid getting stuck at the top
         }
-        else if (event.target.scrollTop > event.target.scrollHeight * 5 / 6) {
-            let max = moment(this.props.maxDate).add(4, 'weeks');
-            this.props.actions.loadDateRangeRequest(this.props.maxDate, max.format('YYYYMMDD'));
+        else if (event.target.scrollTop + event.target.clientHeight >= event.target.scrollHeight) {
+            const newTop = this.state.windowTop.clone().add(5, 'weeks');
+            const newBottom = this.state.windowBottom.clone().add(5, 'weeks');
+
+            if (newBottom.isAfter(this.props.maxDate)) {
+                this.props.actions.loadDateRangeRequest(this.props.maxDate, newBottom.format('YYYYMMDD'));
+            }
+
+            const weeks = updateWeeks(newTop, newBottom, this.state.weeks);
+            this.setState({ windowTop: newTop, windowBottom: newBottom, weeks });
         }
 
         return;
@@ -47,7 +66,7 @@ export class CalendarPage extends React.Component {
                     height={this.props.height}
                     dates={this.props.dates}
                     events={this.props.events}
-                    weeks={this.props.weeks}
+                    weeks={this.state.weeks}
                     currentDate={this.props.currentDate}
                 />
             </div>
@@ -64,21 +83,39 @@ CalendarPage.propTypes = {
     dates: PropTypes.object.isRequired,
     events: PropTypes.object.isRequired,
     actions: PropTypes.object.isRequired,
-    weeks: PropTypes.array.isRequired
 };
 
-function makeWeeks({minDate, maxDate}) {
-    const weeks = [];
+function updateWeeks(top, bottom, weeks) {
 
-    let first = moment(minDate).startOf('week');
-    let last  = moment(maxDate).endOf('week');
+    let first = top.clone();
+    const last = bottom;
+    const weeksNew = [];
 
     while (first.isBefore(last)) {
-        weeks.push(first.clone());
+        const present = weeks.find(val => val.isSame(first, 'day'));
+        if (present !== undefined) {
+            weeksNew.push(present);
+        }
+        else {
+            weeksNew.push(first.clone());
+        }
         first.add(7, "days");
     }
 
-    return weeks;
+    return weeksNew;
+}
+
+function calcWindow(date, dir) {
+    let ret = undefined;
+
+    if (dir === 'top') {
+        ret = moment(date, "YYYYMMDD").startOf('month').add(-1, 'month').startOf('week');
+    }
+    else if (dir === 'bottom') {
+        ret = moment(date, "YYYYMMDD").endOf('month').add(1, 'month').endOf('week');
+    }
+
+    return ret;
 }
 
 function mapStateToProps(state) {
@@ -86,12 +123,20 @@ function mapStateToProps(state) {
         currentDate: state.app.currentDate,
         minDate: state.calendar.minDate,
         maxDate: state.calendar.maxDate,
-        dates: { ...state.dates },
-        events: { ...state.events },
-        weeks: makeWeeks(calSelectors.getRange(state)),
+        dates: state.dates,
+        events: state.events,
     };
 }
 
+// TODO START HERE -- 
+//  X 1. start with selectedDate (which should be app.currentDate to start with), 
+//      set window state to -1 month and +1 month (full months + rest of week)
+//  X 2. when scrolled to top or bottom, set window another month in the appropriate direction (+ rest of week)
+//  X 3. also shift the other side of the window, preserving a fixed width
+//  X 4. if doing so leads to a window that's out of range, fire off an async update 
+//      to load the dates corresponding to the overlap
+//  5. update app.scrollPos according to the window shift
+//  X 6. update scroll bar position back to center (or whatever is needed to keep the window stable) (?)
 
 function mapDispatchToProps(dispatch) {
     return {

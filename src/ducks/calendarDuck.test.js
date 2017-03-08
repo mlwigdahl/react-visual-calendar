@@ -114,7 +114,7 @@ describe('Calendar Duck', () => {
             const newState = calendar.reducer(initialState.calendar, action);
 
             expect(newState).to.not.be.undefined;
-            expect(newState.selectedDate).to.equal('20170101');
+            expect(newState.minDate).to.equal('20161002');
         }); 
 
         it ("should have LOAD_CALENDAR_FAILURE update the state (although it doesn't actually do anything at the moment)", () => {

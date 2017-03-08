@@ -8,7 +8,8 @@ React Visual Calendar is a responsive, mobile-first visual calendar web applicat
 
     1. Infinite scrolling support
         X a. Crude initial implementation
-        b. Something a little more smooth and friendly
+        X b. Something a little more smooth and friendly
+        c. Smoother, with persistent positioning and viewport alignment
     2. Express backend
     3. Real API
     4. Component/page testing.

@@ -1,7 +1,7 @@
 
 import { expect } from 'chai';
 
-import { drainGenerator, mockBrowserHistory } from '../common/TestHelpers';
+import { drainGenerator } from '../common/TestHelpers';
 
 import AppApi from './mockAppApi';
 
