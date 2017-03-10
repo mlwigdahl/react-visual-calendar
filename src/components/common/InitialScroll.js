@@ -16,6 +16,10 @@ class InitialScroll extends React.PureComponent {
         }        
     }
 
+    componentWillUnmount() {
+        this.props.saveScroll(this.node.scrollTop);
+    }
+
     setNodeRef(node) {
         this.node = node;
     }
@@ -39,6 +43,7 @@ InitialScroll.propTypes = {
     children: PropTypes.node.isRequired,
     abs: PropTypes.number,
     frac: PropTypes.number,
+    saveScroll: PropTypes.func.isRequired,
 };
 
 export default InitialScroll; // add more (and add the named export to the class) if we ever want Redux state support here.

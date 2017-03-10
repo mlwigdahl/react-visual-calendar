@@ -1,5 +1,4 @@
-import React from 'react';
-
+import React, { PropTypes } from 'react';
 
 function EventItem({id, index, event, editEvent, deleteEvent}) {
 
@@ -25,11 +24,16 @@ function EventItem({id, index, event, editEvent, deleteEvent}) {
 }
 
 EventItem.propTypes = {
-    id: React.PropTypes.string.isRequired,
-    index: React.PropTypes.number.isRequired,
-    event: React.PropTypes.object.isRequired,
-    editEvent: React.PropTypes.func.isRequired,
-    deleteEvent: React.PropTypes.func.isRequired,
+    id: PropTypes.string.isRequired,
+    index: PropTypes.number.isRequired,
+    event: PropTypes.shape({
+        icon: PropTypes.string,
+        label: PropTypes.string,
+        startTime: PropTypes.string,
+        endDate: PropTypes.string,
+    }),
+    editEvent: PropTypes.func.isRequired,
+    deleteEvent: PropTypes.func.isRequired,
 };
 
 export default EventItem;

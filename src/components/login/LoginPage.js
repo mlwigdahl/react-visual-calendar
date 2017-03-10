@@ -65,7 +65,7 @@ export class LoginPage extends React.PureComponent {
 }
 
 LoginPage.propTypes = {
-    actions: PropTypes.objectOf(React.PropTypes.func).isRequired,
+    actions: PropTypes.objectOf(PropTypes.func).isRequired,
     name: PropTypes.string.isRequired,
     error: PropTypes.string.isRequired,
 };

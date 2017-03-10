@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import { browserHistory } from 'react-router';
 import moment from 'moment';
 
@@ -59,10 +59,19 @@ function Day({date, curDate, events, styleObj}) {
 }
 
 Day.propTypes = {
-    date: React.PropTypes.object.isRequired,
-    curDate: React.PropTypes.string.isRequired,
-    events: React.PropTypes.object.isRequired,
-    styleObj: React.PropTypes.object.isRequired,
+    curDate: PropTypes.string.isRequired,
+    styleObj: PropTypes.object.isRequired,
+    date: PropTypes.shape({
+        events: PropTypes.arrayOf(PropTypes.number)
+    }).isRequired,
+    events: PropTypes.objectOf(
+        PropTypes.shape({
+            icon: PropTypes.string,
+            label: PropTypes.string,
+            startTime: PropTypes.string,
+            endDate: PropTypes.string,
+        })
+    ).isRequired,
 };
 
 export default Day;

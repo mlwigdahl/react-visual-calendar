@@ -11,6 +11,9 @@ export const actions = {
     LOGIN_REQUEST: 'react-visual-calendar/app/LOGIN_REQUEST',
     LOGIN_SUCCESS: 'react-visual-calendar/app/LOGIN_SUCCESS',
     LOGIN_FAILURE: 'react-visual-calendar/app/LOGIN_FAILURE',
+
+    SAVE_SCROLL: 'react-visual-calendar/app/SAVE_SCROLL',
+    SAVE_WINDOW_RANGE: 'react-visual-calendar/app/SAVE_WINDOW_RANGE'
 };
 
 // reducer
@@ -24,6 +27,27 @@ export function reducer(state = initialState.app, action) {
             const tempState = { ...state };
             tempState.user.error = action.data.error;
             return tempState;
+        }
+
+        case actions.SAVE_SCROLL:
+        {
+            if (action.data.scrollPos !== state.scrollPos) {
+                return { ...state, scrollPos: action.data.scrollPos };
+            }
+            else {
+                return state;
+            }
+        }
+
+        case actions.SAVE_WINDOW_RANGE:
+        {
+            if (action.data.top !== state.windowRange.top ||
+                action.data.bottom !== state.windowRange.bottom) {
+                    return { ...state, windowRange: { top: action.data.top, bottom: action.data.bottom } };
+            }
+            else {
+                return state;
+            }
         }
 
         default: 
@@ -65,5 +89,11 @@ export const creators = {
     },
     loginFailure: (error) => {
         return { type: actions.LOGIN_FAILURE, data: { error } };
+    },
+    saveScroll: (scrollPos) => {
+        return { type: actions.SAVE_SCROLL, data: { scrollPos } };
+    },
+    saveWindowRange: (top, bottom) => {
+        return { type: actions.SAVE_WINDOW_RANGE, data: { top, bottom } };
     },
 };

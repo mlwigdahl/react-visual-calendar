@@ -9,8 +9,7 @@ import { creators as eventCreators } from './eventDuck';
 import DateApi from '../api/mockDateApi';
 import CalendarApi from '../api/mockCalendarApi';
 import EventApi from '../api/mockEventApi';
-import { drainGenerator, mockBrowserHistory } from '../common/TestHelpers';
-import * as helpers from '../common/Helpers';
+import { drainGenerator } from '../common/TestHelpers';
 
 // setup
 

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 
 import Day from './Day';
 
@@ -45,10 +45,21 @@ function Week({curDate, dates, events, weekStart}) {
 }
 
 Week.propTypes = {
-    dates: React.PropTypes.object.isRequired,
-    events: React.PropTypes.object.isRequired,
-    curDate: React.PropTypes.string.isRequired,
-    weekStart: React.PropTypes.object.isRequired,
+    dates: PropTypes.objectOf(
+        PropTypes.shape({
+            events: PropTypes.arrayOf(PropTypes.number)
+        })
+    ).isRequired,
+    events: PropTypes.objectOf(
+        PropTypes.shape({
+            icon: PropTypes.string,
+            label: PropTypes.string,
+            startTime: PropTypes.string,
+            endDate: PropTypes.string,
+        })
+    ).isRequired,
+    curDate: PropTypes.string.isRequired,
+    weekStart: PropTypes.object.isRequired,
 };
 
 export default Week;

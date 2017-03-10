@@ -7,23 +7,43 @@ import moment from 'moment';
 import CalendarBody from './CalendarBody';
 
 import { creators as dateCreators } from '../../ducks/dateDuck';
+import { creators as appCreators } from '../../ducks/appDuck';
 
 export class CalendarPage extends React.PureComponent {
     constructor(props, context) {
         super(props, context);
 
         this.onScroll = this.onScroll.bind(this);
+        this.saveScroll = this.saveScroll.bind(this);
 
         const curDate = this.props.currentDate;
-        const top = calcWindow(curDate, 'top');
-        const bottom = calcWindow(curDate, 'bottom');
+        let top = undefined;
+        let bottom = undefined;
 
+        if (this.props.windowRange.top !== undefined &&
+            this.props.windowRange.bottom !== undefined) {
+            top = this.props.windowRange.top;
+            bottom = this.props.windowRange.bottom;
+        }
+        else {
+            top = calcWindow(curDate, 'top');
+            bottom = calcWindow(curDate, 'bottom');
+        }
+ 
         this.state = {
             selectedDate: curDate,
             windowTop: top,
             windowBottom: bottom,
             weeks: updateWeeks(top, bottom, []),
         };
+    }
+
+    componentWillUnmount() {
+        this.props.actions.saveWindowRange(this.state.windowTop, this.state.windowBottom);
+    }
+
+    saveScroll(scrollPos) {
+        this.props.actions.saveScroll(scrollPos);
     }
 
     onScroll(event) {
@@ -67,6 +87,8 @@ export class CalendarPage extends React.PureComponent {
                     events={this.props.events}
                     weeks={this.state.weeks}
                     currentDate={this.props.currentDate}
+                    scrollPos={this.props.scrollPos}
+                    saveScroll={this.saveScroll}
                 />
             </div>
         );
@@ -75,10 +97,12 @@ export class CalendarPage extends React.PureComponent {
 
 CalendarPage.propTypes = {
     currentDate: PropTypes.string.isRequired,
+    windowRange: PropTypes.object.isRequired,
     minDate: PropTypes.string.isRequired,
     maxDate: PropTypes.string.isRequired,
     width: PropTypes.number.isRequired,
     height: PropTypes.number.isRequired,
+    scrollPos: PropTypes.number,
     dates: PropTypes.objectOf(
         PropTypes.shape({
             events: PropTypes.arrayOf(PropTypes.number)
@@ -133,10 +157,12 @@ function calcWindow(date, dir) {
 function mapStateToProps(state) {
     return {
         currentDate: state.app.currentDate,
+        windowRange: state.app.windowRange,
         minDate: state.calendar.minDate,
         maxDate: state.calendar.maxDate,
         dates: state.dates,
         events: state.events,
+        scrollPos: state.app.scrollPos,
     };
 }
 
@@ -155,6 +181,8 @@ function mapDispatchToProps(dispatch) {
     return {
         actions: bindActionCreators({
             loadDateRangeRequest: dateCreators.loadDateRangeRequest,
+            saveScroll: appCreators.saveScroll,
+            saveWindowRange: appCreators.saveWindowRange,
         }, dispatch)
     };
 }

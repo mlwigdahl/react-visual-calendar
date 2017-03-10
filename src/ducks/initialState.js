@@ -14,6 +14,8 @@ export default {
         width: 600,
         height: 542,
         currentDate: moment().format("YYYYMMDD"),
+        scrollPos: undefined,
+        windowRange: {}
     },
     calendar: {},
     dates: {},
