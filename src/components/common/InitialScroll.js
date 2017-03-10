@@ -1,6 +1,6 @@
 import React, {PropTypes} from 'react';
 
-class InitialScroll extends React.Component {
+class InitialScroll extends React.PureComponent {
     constructor(props, context) {
         super(props, context);
 

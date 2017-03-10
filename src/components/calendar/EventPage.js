@@ -8,7 +8,7 @@ import { bindActionCreators } from 'redux';
 import * as evt from '../../ducks/eventDuck';
 import EventForm from './EventForm';
 
-export class EventPage extends React.Component {
+export class EventPage extends React.PureComponent {
     constructor(props, context) {
         super(props, context);
         
@@ -120,7 +120,7 @@ EventPage.propTypes = {
     startTime: PropTypes.string,
     endTime: PropTypes.string,
     add: PropTypes.bool.isRequired,
-    actions: PropTypes.object.isRequired,
+    actions: PropTypes.objectOf(PropTypes.func).isRequired,
 };
 
 function mapStateToProps(state, ownProps) {

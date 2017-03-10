@@ -10,7 +10,7 @@ import EventItem from './EventItem';
 
 
 
-export class DayPage extends React.Component {
+export class DayPage extends React.PureComponent {
     constructor(props, context) {
         super(props, context);
         
@@ -94,9 +94,18 @@ export class DayPage extends React.Component {
 DayPage.propTypes = {
     user: PropTypes.number.isRequired,
     id: PropTypes.string.isRequired,
-    date: PropTypes.object.isRequired,
-    events: PropTypes.object.isRequired,
-    actions: PropTypes.object.isRequired,
+    date: PropTypes.shape({
+        events: PropTypes.arrayOf(PropTypes.number)
+    }).isRequired,
+    events: PropTypes.objectOf(
+        PropTypes.shape({
+            icon: PropTypes.string,
+            label: PropTypes.string,
+            startTime: PropTypes.string,
+            endDate: PropTypes.string,
+        })
+    ).isRequired,
+    actions: PropTypes.objectOf(PropTypes.func).isRequired,
 };
 
 function mapStateToProps(state, ownProps) {
@@ -111,7 +120,7 @@ function mapStateToProps(state, ownProps) {
         };
     }
 
-    let date = state.dates[id];
+    const date = state.dates[id];
 
     if (date === undefined) {
         return {
@@ -123,6 +132,8 @@ function mapStateToProps(state, ownProps) {
             events: {}
         };
     }
+
+    // TODO seems like this will register as state change every time.  Need better upfront comparison?
 
     const events = date.events
         .reduce((acc, key) => { acc[key] = state.events[key]; return acc; }, {});

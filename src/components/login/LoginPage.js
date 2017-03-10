@@ -8,7 +8,7 @@ import LoginForm from './LoginForm';
 
 // TODO name state/props is messed up
 
-export class LoginPage extends React.Component {
+export class LoginPage extends React.PureComponent {
     constructor(props, context) {
         super(props, context);
 
@@ -65,7 +65,7 @@ export class LoginPage extends React.Component {
 }
 
 LoginPage.propTypes = {
-    actions: PropTypes.object.isRequired,
+    actions: PropTypes.objectOf(React.PropTypes.func).isRequired,
     name: PropTypes.string.isRequired,
     error: PropTypes.string.isRequired,
 };

@@ -7,7 +7,7 @@ import LoginPage from '../login/LoginPage';
 
 // import { bindActionCreators } from 'redux';
 
-export class MainPage extends React.Component {
+export class MainPage extends React.PureComponent {
     constructor(props, context) {
         super(props, context);
     }
@@ -53,7 +53,11 @@ function mapStateToProps(state) {
 }
 
 MainPage.propTypes = {
-    user: PropTypes.object,
+    user: PropTypes.shape({
+        id: PropTypes.number,
+        name: PropTypes.string,
+        error: PropTypes.string,
+    }),
     width: PropTypes.number.isRequired,
     height: PropTypes.number.isRequired,
     currentDate: PropTypes.string.isRequired,

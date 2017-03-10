@@ -4,7 +4,7 @@ import React, {PropTypes} from 'react';
 import Header from './common/Header';
 import {connect} from 'react-redux';
 
-class App extends React.Component {
+class App extends React.PureComponent {
     render() {
         return (
             <div className="container-fluid">
@@ -16,7 +16,10 @@ class App extends React.Component {
 }
 
 App.propTypes = {
-    children: PropTypes.object.isRequired
+    children: PropTypes.oneOfType([
+      PropTypes.arrayOf(PropTypes.node),
+      PropTypes.node
+    ])
 };
 
 function mapStateToProps(/*state, ownProps*/) {

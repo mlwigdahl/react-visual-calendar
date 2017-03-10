@@ -7,9 +7,8 @@ import moment from 'moment';
 import CalendarBody from './CalendarBody';
 
 import { creators as dateCreators } from '../../ducks/dateDuck';
-import { creators as appCreators } from '../../ducks/appDuck';
 
-export class CalendarPage extends React.Component {
+export class CalendarPage extends React.PureComponent {
     constructor(props, context) {
         super(props, context);
 
@@ -80,9 +79,20 @@ CalendarPage.propTypes = {
     maxDate: PropTypes.string.isRequired,
     width: PropTypes.number.isRequired,
     height: PropTypes.number.isRequired,
-    dates: PropTypes.object.isRequired,
-    events: PropTypes.object.isRequired,
-    actions: PropTypes.object.isRequired,
+    dates: PropTypes.objectOf(
+        PropTypes.shape({
+            events: PropTypes.arrayOf(PropTypes.number)
+        })
+    ).isRequired,
+    events: PropTypes.objectOf(
+        PropTypes.shape({
+            icon: PropTypes.string,
+            label: PropTypes.string,
+            startTime: PropTypes.string,
+            endDate: PropTypes.string,
+        })
+    ).isRequired,
+    actions: PropTypes.objectOf(PropTypes.func).isRequired,
 };
 
 function updateWeeks(top, bottom, weeks) {
@@ -117,6 +127,8 @@ function calcWindow(date, dir) {
 
     return ret;
 }
+
+
 
 function mapStateToProps(state) {
     return {
