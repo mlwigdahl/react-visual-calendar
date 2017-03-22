@@ -1,6 +1,4 @@
 
-import { expect } from 'chai';
-
 import { testSaga, expectSaga } from 'redux-saga-test-plan';
 
 import * as async from './asyncDuck';

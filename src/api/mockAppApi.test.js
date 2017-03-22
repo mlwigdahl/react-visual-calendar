@@ -1,6 +1,4 @@
 
-import { expect } from 'chai';
-
 import { drainGenerator } from '../common/TestHelpers';
 
 import AppApi from './mockAppApi';
