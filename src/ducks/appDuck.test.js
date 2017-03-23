@@ -1,6 +1,4 @@
 
-import { expect } from 'chai';
-
 import { testSaga, expectSaga } from 'redux-saga-test-plan';
 
 import * as app from './appDuck';
@@ -40,8 +38,7 @@ describe('App Duck', () => {
         it('should start an async request and return proper data on login', () => {
             const user = testhelpers.drainGenerator(AppApi.loginAttempt());
 
-            const saga = testSaga(app.sagas.workers.loginRequest, app.creators.loginRequest('test', 'pwd'));
-            return saga
+            testSaga(app.sagas.workers.loginRequest, app.creators.loginRequest('test', 'pwd'))
                 .next()
                 .put(async.creators.asyncRequest()) // starts AJAX
                 .next()
@@ -70,8 +67,8 @@ describe('App Duck', () => {
 
             const newState = app.reducer(initialState.app, action);
 
-            expect(newState.user.id).to.equal(1);
-            expect(newState.user.name).to.equal('Test User');
+            expect(newState.user.id).toBe(1);
+            expect(newState.user.name).toBe('Test User');
         }); 
 
         it ('reducer should update the status on login failure', () => {
@@ -79,9 +76,9 @@ describe('App Duck', () => {
 
             const newState = app.reducer(initialState.app, action);
 
-            expect(newState.user.id).to.be.undefined;
-            expect(newState.user.name).to.be.undefined;
-            expect(newState.user.error).to.equal('nasty API error');
+            expect(newState.user.id).toBeUndefined;
+            expect(newState.user.name).toBeUndefined;
+            expect(newState.user.error).toBe('nasty API error');
         });
     });
 });

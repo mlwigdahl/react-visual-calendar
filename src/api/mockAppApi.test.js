@@ -11,7 +11,7 @@ describe('App Api', () => {
             error: undefined,
         };
         const ret = drainGenerator(AppApi.loginAttempt('asdf', 'asdf'));
-        expect(ret).to.deep.equal(state);
+        expect(ret).toEqual(state);
     });
 
     it('should retrieve failure indicator on failed loginAttempt', () => {
@@ -21,6 +21,6 @@ describe('App Api', () => {
             error: 'bad credentials',
         };
         const ret = drainGenerator(AppApi.loginAttempt('sdfa', 'asdf'));
-        expect(ret).to.deep.equal(state);
+        expect(ret).toEqual(state);
     });
 });

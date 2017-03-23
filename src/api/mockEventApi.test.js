@@ -1,6 +1,4 @@
 
-import { expect } from 'chai';
-
 import { drainGenerator } from '../common/TestHelpers';
 
 import EventApi from './mockEventApi';
@@ -30,7 +28,7 @@ describe('Event Api', () => {
                         events: [1, 2],
                     }
                 }, 1));
-            expect(events).to.deep.equal(eventsNew);            
+            expect(events).toEqual(eventsNew);            
         });
 
         it('should retrieve nothing given an invalid event parameter', () => {
@@ -40,7 +38,7 @@ describe('Event Api', () => {
                         events: [10, 11],
                     }
                 }, 1));
-            expect(events).to.deep.equal({});
+            expect(events).toEqual({});
         });
 
         it ('should retrieve nothing given an invalid userId parameter', () => {
@@ -49,7 +47,7 @@ describe('Event Api', () => {
                         events: [1, 2],
                     }
                 }, 0));
-            expect(events).to.deep.equal({});
+            expect(events).toEqual({});
         });
     });
 
@@ -63,8 +61,8 @@ describe('Event Api', () => {
                 endDate: '20170101',
             };
             const er = drainGenerator(EventApi.insertEvent(1, event, 1));
-            expect(er.id).to.equal(5);
-            expect(er.data).to.deep.equal(event);
+            expect(er.id).toBe(5);
+            expect(er.data).toEqual(event);
         });
 
         it ('should fail to insert given invalid data', () => {
@@ -74,7 +72,7 @@ describe('Event Api', () => {
                 startTime: '08:15 AM',
             };
             const er = drainGenerator(EventApi.insertEvent(1, event, 1));
-            expect(er).to.deep.equal({});
+            expect(er).toEqual({});
         });
 
         it ('should fail to insert given an invalid userId parameter', () => {
@@ -86,7 +84,7 @@ describe('Event Api', () => {
                 endDate: '20170101',
             };
             const er = drainGenerator(EventApi.insertEvent(1, event, 0));
-            expect(er).to.deep.equal({});
+            expect(er).toEqual({});
         });
     });
 
@@ -100,8 +98,8 @@ describe('Event Api', () => {
                 endDate: '20170101',
             };
             const er = drainGenerator(EventApi.updateEvent(1, 1, event, 1));
-            expect(er.id).to.equal(1);
-            expect(er.data).to.deep.equal(event);        
+            expect(er.id).toBe(1);
+            expect(er.data).toEqual(event);        
         });
 
         it ('should fail to update given invalid data', () => {
@@ -111,7 +109,7 @@ describe('Event Api', () => {
                 startTime: '08:15 AM',
             };
             const er = drainGenerator(EventApi.updateEvent(1, event, 1));
-            expect(er).to.deep.equal({});
+            expect(er).toEqual({});
         });
 
         it ('should fail to update given an invalid userId parameter', () => {
@@ -123,19 +121,19 @@ describe('Event Api', () => {
                 endDate: '20170101',
             };
             const er = drainGenerator(EventApi.updateEvent(1, event, 2));
-            expect(er).to.deep.equal({});
+            expect(er).toEqual({});
         });
     });
 
     describe('deleteEvent()', () => {
         it ('should delete an event given correct data', () => {
             const er = drainGenerator(EventApi.deleteEvent(1, 1, 1));
-            expect(er).to.equal(1);
+            expect(er).toBe(1);
         });
 
         it ('should fail to delete given an invalid userId parameter', () => {
             const er = drainGenerator(EventApi.deleteEvent(1, 1, 3));
-            expect(er).to.equal(-1);
+            expect(er).toBe(-1);
         });
     });
 });

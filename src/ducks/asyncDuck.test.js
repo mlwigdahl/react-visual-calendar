@@ -1,6 +1,4 @@
 
-import { expect } from 'chai';
-
 import * as async from './asyncDuck';
 
 // setup
@@ -24,7 +22,7 @@ describe('Async Duck', () => {
 
             const newState = async.reducer(initialState.async, action);
 
-            expect(newState.callsActive).to.equal(1);
+            expect(newState.callsActive).toBe(1);
         }); 
 
         it('should support stacking multiple invocations', () => {
@@ -35,7 +33,7 @@ describe('Async Duck', () => {
             const newState2 = async.reducer(newState, action);
             const newState3 = async.reducer(newState2, action);
 
-            expect(newState3.callsActive).to.equal(3);
+            expect(newState3.callsActive).toBe(3);
         }); 
 
         it('should update the status on async completion (success)', () => {
@@ -48,8 +46,8 @@ describe('Async Duck', () => {
 
             const newState2 = async.reducer(newState, action2);
 
-            expect(newState2.callsActive).to.equal(0);
-            expect(newState2.lastError).to.be.undefined;
+            expect(newState2.callsActive).toBe(0);
+            expect(newState2.lastError).toBeUndefined;
         });
 
         it ('should update the status on async completion (failure)', () => {
@@ -61,8 +59,8 @@ describe('Async Duck', () => {
 
             const newState2 = async.reducer(newState, action2);
 
-            expect(newState2.callsActive).to.equal(0);
-            expect(newState2.lastError).to.be.undefined;
+            expect(newState2.callsActive).toBe(0);
+            expect(newState2.lastError).toBeUndefined;
         });
 
         it ('should update the error on outright async call failure', () => {
@@ -74,8 +72,8 @@ describe('Async Duck', () => {
 
             const newState2 = async.reducer(newState, action2);
 
-            expect(newState2.callsActive).to.equal(1);
-            expect(newState2.lastError).to.equal('oopsie');
+            expect(newState2.callsActive).toBe(1);
+            expect(newState2.lastError).toBe('oopsie');
         });
     });
 });
