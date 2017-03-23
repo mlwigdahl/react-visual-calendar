@@ -24,19 +24,17 @@ class InitialScroll extends React.PureComponent {
         this.node = node;
     }
 
-    // TODO START HERE add autohide scrollbar logic here (http://stackoverflow.com/questions/16670931/hide-scroll-bar-but-still-being-able-to-scroll)
-
-    //#inner_container { width: 102%; overflow: auto; }
-    //#outer_container { overflow: hidden }
-
     render() {
         return (
-            <div 
-                style={{overflowY: 'scroll', maxHeight: this.props.height}} 
-                onScroll={this.props.onScroll}
-                ref={this.setNodeRef}
-            >
-                {this.props.children}
+            <div
+                style={{overflow: 'hidden' }}>
+                <div 
+                    style={{overflowY: 'scroll', width: '102%', maxHeight: this.props.height}} 
+                    onScroll={this.props.onScroll}
+                    ref={this.setNodeRef}
+                >
+                    {this.props.children}
+                </div>
             </div>
         );
     }
