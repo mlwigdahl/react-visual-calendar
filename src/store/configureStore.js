@@ -21,7 +21,8 @@ function configureStoreDev(initialState) {
     sagaMiddleware
   ];
 
-  const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose; // add support for Redux dev tools
+  //const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose; // add support for Redux dev tools
+  const composeEnhancers = compose;
   const store = createStore(root.reducer, initialState, composeEnhancers(
     applyMiddleware(...middlewares)
     )

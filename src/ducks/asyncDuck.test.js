@@ -1,4 +1,3 @@
-
 import * as async from './asyncDuck';
 
 // setup
