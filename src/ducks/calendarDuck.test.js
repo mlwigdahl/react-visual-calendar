@@ -151,6 +151,7 @@ describe('Calendar Duck', () => {
                 .dispatch(calendar.creators.updateDateIconRequest(2))
                 .run({ silenceTimeout: true });
         });
+
     });
 
 

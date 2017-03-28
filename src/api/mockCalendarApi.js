@@ -48,24 +48,56 @@ const CalendarApi = {
     },
 
 // TODO more here
-/*
-
     loadDateIcon: function* (dateId, userId) {
-        return new Promise((resolve) => {
-            setTimeout(() => {
-                resolve(icon);
-            }, delay);
-        });
+        try {
+            if (Number.isInteger(userId) === false) {
+                throw 'loadCalendar(): user ID not an integer';
+            }
+
+            if (userId !== 1) { // this is the arbitrary "good ID"...
+                throw 'loadCalendar(): user ID not found';
+            }
+
+            if (Number.isInteger(dateId) === false) {
+                throw 'loadDateIcon(): dateId not an integer';
+            }
+
+            yield 1;
+
+            return { icon: 'icon' };
+        }
+        catch (error) {
+            return {};
+        }
     },
     
     updateDateIcon: function* (icon, dateId, userId) {
-        return new Promise((resolve) => {
-            setTimeout(() => {
-                resolve(dateId);
-            }, delay);
-        });
+        try {
+            if (Number.isInteger(userId) === false) {
+                throw 'loadCalendar(): user ID not an integer';
+            }
+
+            if (userId !== 1) { // this is the arbitrary "good ID"...
+                throw 'loadCalendar(): user ID not found';
+            }
+
+            if (Number.isInteger(dateId) === false) {
+                throw 'loadDateIcon(): dateId not an integer';
+            }
+
+            if (icon === undefined) {
+                throw 'loadDateIcon(): icon not defined';
+            }
+
+            yield 1;
+
+            return { icon: 'icon' };
+        }
+        catch (error) {
+            return {};
+        }
     },
-*/
+
 };
 
 export default CalendarApi;
