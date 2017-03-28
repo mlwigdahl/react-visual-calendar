@@ -22,3 +22,8 @@ React Visual Calendar is a responsive, mobile-first visual calendar web applicat
 
 RVC is powered by Cory House's React Slingshot starter kit (https://github.com/coryhouse/react-slingshot).
 
+# react-visual-calendar-server
+
+React Visual Calendar Server is the backend for React Visual Calendar
+
+## Version: 0.0.1 -- Initial skeleton
