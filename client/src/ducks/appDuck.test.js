@@ -18,6 +18,11 @@ const initialState = {
             id: undefined,
             name: undefined,
             error: undefined,
+        },
+        scrollPos: undefined,
+        windowRange: {
+            top: '1/10/2017',
+            bottom: '3/31/2017',
         }
     }
 };
@@ -73,7 +78,7 @@ describe('App Duck', () => {
             expect(newState.user.name).toBe('Test User');
         }); 
 
-        it ('reducer should update the status on login failure', () => {
+        it ('should update the status on login failure', () => {
             const action = app.creators.loginFailure('nasty API error');
 
             const newState = app.reducer(initialState.app, action);
@@ -81,6 +86,56 @@ describe('App Duck', () => {
             expect(newState.user.id).toBeUndefined;
             expect(newState.user.name).toBeUndefined;
             expect(newState.user.error).toBe('nasty API error');
+        });
+
+        it ('should update the status on scroll save', () => {
+            const action = app.creators.saveScroll(100);
+
+            const newState = app.reducer(initialState.app, action);
+
+            expect(newState.scrollPos).toBe(100);
+        });
+
+        it ('should update the status on save window range', () => {
+            const action = app.creators.saveWindowRange('1/1/2017', '10/1/2016');
+
+            const newState = app.reducer(initialState.app, action);
+
+            expect(newState.windowRange.top).toBe('1/1/2017');
+            expect(newState.windowRange.bottom).toBe('10/1/2016');
+        });
+
+        it ('should leave the status alone if save window range matches existing state', () => {
+            const action = app.creators.saveWindowRange(initialState.app.windowRange.top, initialState.app.windowRange.bottom);
+
+            const newState = app.reducer(initialState.app, action);
+
+            expect(newState).toBe(initialState.app);
+        });
+
+        it ('should leave the status alone if save scroll value matches existing state', () => {
+            const action = app.creators.saveScroll(initialState.app.scrollPos);
+
+            const newState = app.reducer(initialState.app, action);
+
+            expect(newState).toBe(initialState.app);
+        });
+
+        it ('should leave the status alone if we get an unrecognized action', () => {
+            const action = { type: 'WHATEVER', data: { test: 'test' } };
+
+            const newState = app.reducer(initialState.app, action);
+
+            expect(newState).toBe(initialState.app);
+        });
+    });
+
+    describe('action creators', () => {
+        it('should create a login request when loginRequest is called', () => {
+            const action = app.creators.loginRequest('asdf', 'pw');
+
+            expect(action.data.username).toBe('asdf');
+            expect(action.data.password).toBe('pw');
         });
     });
 });

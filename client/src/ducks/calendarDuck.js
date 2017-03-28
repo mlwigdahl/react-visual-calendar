@@ -162,27 +162,27 @@ export const creators = {
     },
 
     loadDateIconSuccess: (icon, dateId) => {
-        return { type: actions.LOAD_DATE_ICON_SUCCESS, data: { icon, dateId } };
+        return { type: actions.LOAD_DATEICON_SUCCESS, data: { icon, dateId } };
     },
 
     loadDateIconFailure: (error) => {
-        return { type: actions.LOAD_DATE_ICON_FAILURE, data: { error } };
+        return { type: actions.LOAD_DATEICON_FAILURE, data: { error } };
     },
 
     loadDateIconRequest: (dateId, userId) => {
-        return { type: actions.LOAD_DATE_ICON_REQUEST, data: { dateId, userId } };
+        return { type: actions.LOAD_DATEICON_REQUEST, data: { dateId, userId } };
     },
 
     updateDateIconSuccess: (icon, dateId) => {
-        return { type: actions.UPDATE_DATE_ICON_SUCCESS, data: { icon, dateId } };
+        return { type: actions.UPDATE_DATEICON_SUCCESS, data: { icon, dateId } };
     },
 
     updateDateIconFailure: (error) => {
-        return { type: actions.UPDATE_DATE_ICON_FAILURE, data: { error } };
+        return { type: actions.UPDATE_DATEICON_FAILURE, data: { error } };
     },
 
     updateDateIconRequest: (icon, dateId, userId) => {
-        return { type: actions.UPDATE_DATE_ICON_REQUEST, data: { icon, dateId, userId } };
+        return { type: actions.UPDATE_DATEICON_REQUEST, data: { icon, dateId, userId } };
     },
 
     pushDates: (minDate, maxDate) => {

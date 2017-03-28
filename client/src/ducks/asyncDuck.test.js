@@ -74,6 +74,14 @@ describe('Async Duck', () => {
             expect(newState2.callsActive).toBe(1);
             expect(newState2.lastError).toBe('oopsie');
         });
+
+        it ('should leave the status alone if we get an unrecognized action', () => {
+            const action = { type: 'WHATEVER', data: { test: 'test' } };
+
+            const newState = async.reducer(initialState.async, action);
+
+            expect(newState).toBe(initialState.async);
+        });
     });
 });
 
