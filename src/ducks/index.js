@@ -17,7 +17,7 @@ const reducer = combineReducers({
 });
 
 function* sagaLoader(watchers) {
-    for(let watcher in watchers) {
+    for(const watcher in watchers) {
         yield watchers[watcher]();
     }
 }

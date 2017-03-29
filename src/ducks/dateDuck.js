@@ -32,8 +32,6 @@ export const actions = {
 
 export function reducer(state = initialState.dates, action) {
     switch(action.type) {
-        case calActions.LOAD_CALENDAR_SUCCESS:
-            return { ...action.data.dates };
 
         case actions.LOAD_DATE_RANGE_SUCCESS:
         {

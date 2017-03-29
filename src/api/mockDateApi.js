@@ -77,23 +77,30 @@ const DateApi = {
             return {}; // TODO more here
         }
     },
-/*
+
     updateDate: function* (date, userId) {
-        return new Promise((resolve) => {
-            setTimeout(() => {
-                resolve({...date});
-            }, delay);
-        });
+        try {
+            if (userId !== 1) {
+                throw('updateDate(): user ID not found');
+            }
+            yield 1; // to suppress lint error
+            return { events: [] };
+        } catch(error) {
+            return {}; // TODO more here
+        }
     },
 
     deleteDate: function* (dateId, userId) {
-        return new Promise((resolve) => {
-            setTimeout(() => {
-                resolve(dateId);
-            }, delay);
-        });
+        try {
+            if (userId !== 1) {
+                throw('updateDate(): user ID not found');
+            }
+            yield 1; // to suppress lint error
+            return { dateId };
+        } catch(error) {
+            return {}; // TODO more here
+        }
     },
-*/
 };
 
 export default DateApi;

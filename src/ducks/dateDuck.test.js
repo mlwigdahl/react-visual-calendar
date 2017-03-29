@@ -53,13 +53,87 @@ describe('Date Duck', () => {
             });            
         });
 
-        describe('insertDate()', () => {
+        describe('insertDateRequest()', () => {
             it ('should take two parameters and return a valid INSERT_DATE_REQUEST object', () => {
                 const action = date.creators.insertDateRequest('20170201', 1);
                 expect(action.type).toBe(date.actions.INSERT_DATE_REQUEST);
                 expect(action.data.dateId).toBe('20170201');
                 expect(action.data.userId).toBe(1);
                 expect(Object.keys(action.data).length).toBe(2);
+            });
+        });
+
+        describe('insertDateSuccess()', () => {
+            it ('should take one parameter and return a valid INSERT_DATE_SUCCESS object', () => {
+                const action = date.creators.insertDateSuccess({ events: [1, 2] });
+                expect(action.type).toBe(date.actions.INSERT_DATE_SUCCESS);
+                expect(action.data.date).toEqual({ events: [1, 2] });
+                expect(Object.keys(action.data).length).toBe(1);
+            });
+        });
+
+        describe('insertDateFailure()', () => {
+            it ('should take one parameter and return a valid INSERT_DATE_FAILURE object', () => {
+                const action = date.creators.insertDateFailure('oops');
+                expect(action.type).toBe(date.actions.INSERT_DATE_FAILURE);
+                expect(action.data.error).toBe('oops');
+                expect(Object.keys(action.data).length).toBe(1);
+            });
+        });
+
+        describe('updateDateRequest()', () => {
+            it ('should take two parameters and return a valid UPDATE_DATE_REQUEST object', () => {
+                const action = date.creators.updateDateRequest({ events: [1, 2] }, 1);
+                expect(action.type).toBe(date.actions.UPDATE_DATE_REQUEST);
+                expect(action.data.date).toEqual({ events: [1, 2] });
+                expect(action.data.userId).toBe(1);
+                expect(Object.keys(action.data).length).toBe(2);
+            });
+        });
+
+        describe('updateDateSuccess()', () => {
+            it ('should take one parameter and return a valid UPDATE_DATE_SUCCESS object', () => {
+                const action = date.creators.updateDateSuccess({ events: [1, 2] });
+                expect(action.type).toBe(date.actions.UPDATE_DATE_SUCCESS);
+                expect(action.data.date).toEqual({ events: [1, 2] });
+                expect(Object.keys(action.data).length).toBe(1);
+            });
+        });
+
+        describe('updateDateFailure()', () => {
+            it ('should take one parameter and return a valid UPDATE_DATE_FAILURE object', () => {
+                const action = date.creators.updateDateFailure('oops');
+                expect(action.type).toBe(date.actions.UPDATE_DATE_FAILURE);
+                expect(action.data.error).toBe('oops');
+                expect(Object.keys(action.data).length).toBe(1);
+            });
+        });
+
+        describe('deleteDateRequest()', () => {
+            it ('should take two parameters and return a valid DELETE_DATE_REQUEST object', () => {
+                const action = date.creators.deleteDateRequest(2, 1);
+                expect(action.type).toBe(date.actions.DELETE_DATE_REQUEST);
+                expect(action.data.dateId).toBe(2);
+                expect(action.data.userId).toBe(1);
+                expect(Object.keys(action.data).length).toBe(2);
+            });
+        });
+
+        describe('deleteDateSuccess()', () => {
+            it ('should take one parameter and return a valid DELETE_DATE_SUCCESS object', () => {
+                const action = date.creators.deleteDateSuccess(2);
+                expect(action.type).toBe(date.actions.DELETE_DATE_SUCCESS);
+                expect(action.data.dateId).toBe(2);
+                expect(Object.keys(action.data).length).toBe(1);
+            });
+        });
+
+        describe('deleteDateFailure()', () => {
+            it ('should take one parameter and return a valid DELETE_DATE_FAILURE object', () => {
+                const action = date.creators.deleteDateFailure('oops');
+                expect(action.type).toBe(date.actions.DELETE_DATE_FAILURE);
+                expect(action.data.error).toBe('oops');
+                expect(Object.keys(action.data).length).toBe(1);
             });
         });
     });
@@ -80,6 +154,24 @@ describe('Date Duck', () => {
                 .take(date.actions.INSERT_DATE_REQUEST)
                 .dispatch(date.creators.insertDateRequest('20170201', 1))
                 .dispatch(date.creators.insertDateRequest('20170202', 2))
+                .run({ silenceTimeout: true });
+        });
+
+        it ('should have UPDATE_DATE_REQUEST pick up multiple requests', () => {
+            return expectSaga(date.sagas.watchers.UPDATE_DATE_REQUEST)
+                .take(date.actions.UPDATE_DATE_REQUEST)
+                .take(date.actions.UPDATE_DATE_REQUEST)
+                .dispatch(date.creators.updateDateRequest('20170201', 1))
+                .dispatch(date.creators.updateDateRequest('20170202', 2))
+                .run({ silenceTimeout: true });
+        });
+
+        it ('should have DELETE_DATE_REQUEST pick up multiple requests', () => {
+            return expectSaga(date.sagas.watchers.DELETE_DATE_REQUEST)
+                .take(date.actions.DELETE_DATE_REQUEST)
+                .take(date.actions.DELETE_DATE_REQUEST)
+                .dispatch(date.creators.deleteDateRequest(2, 1))
+                .dispatch(date.creators.deleteDateRequest(2, 2))
                 .run({ silenceTimeout: true });
         });
     });
@@ -118,6 +210,34 @@ describe('Date Duck', () => {
                 .call(DateApi.insertDate, '20170201', 1)
                 .next(dt)
                 .put(date.creators.insertDateSuccess(dt))
+                .next()
+                .isDone();
+        });
+
+        it('should have updateDate start an async request and return success', () => {
+            const dt = { events: [] };
+
+            testSaga(date.sagas.workers.updateDate, date.creators.updateDateRequest({ events: [] }, 1))
+                .next()
+                .put(asyncCreators.asyncRequest()) // starts AJAX
+                .next()
+                .call(DateApi.updateDate, { events: [] }, 1)
+                .next(dt)
+                .put(date.creators.updateDateSuccess(dt))
+                .next()
+                .isDone();
+        });
+
+        it('should have deleteDate start an async request and return success', () => {
+            const dt = 1;
+
+            testSaga(date.sagas.workers.deleteDate, date.creators.deleteDateRequest(1, 1))
+                .next()
+                .put(asyncCreators.asyncRequest()) // starts AJAX
+                .next()
+                .call(DateApi.deleteDate, 1, 1)
+                .next(dt)
+                .put(date.creators.deleteDateSuccess(dt))
                 .next()
                 .isDone();
         });
@@ -173,8 +293,120 @@ describe('Date Duck', () => {
             expect(newState).toEqual({});
         });
 
-        // TODO probably need a test that looks at the event loading as chained from the date range loading also.
-    });
+        it ("should have UPDATE_DATE_SUCCESS update the status", () => {
+            const dt = {
+                events: [],
+            };
+            const action = date.creators.updateDateSuccess({ id: '20170201', data: dt });
 
+            const newState = date.reducer(initialState.dates, action);
+
+            expect(newState).not.toBeUndefined;
+            expect(Object.keys(newState).length).toBe(1);
+            expect(Object.keys(newState)[0]).toBe('20170201');
+            expect(newState['20170201'].events.length).toBe(0);
+        });
+
+        it ("should have UPDATE_DATE_FAILURE update the status (although it doesn't actually do anything at the moment", () => {
+            const action = date.creators.updateDateFailure("oops");
+
+            const newState = date.reducer(initialState.dates, action);
+
+            expect(newState).not.toBeUndefined;
+            expect(newState).toEqual({});
+        });
+
+        it ("should have DELETE_DATE_SUCCESS update the status", () => {
+            const dt = {
+                events: [],
+            };
+            const action = date.creators.deleteDateSuccess(1);
+
+            const newState = date.reducer(initialState.dates, action);
+
+            expect(newState).not.toBeUndefined;
+            expect(Object.keys(newState).length).toBe(0);
+        });
+
+        it ("should have DELETE_DATE_FAILURE update the status (although it doesn't actually do anything at the moment", () => {
+            const action = date.creators.deleteDateFailure("oops");
+
+            const newState = date.reducer(initialState.dates, action);
+
+            expect(newState).not.toBeUndefined;
+            expect(newState).toEqual({});
+        });
+
+        it ('should return an unchanged state for an unrecognized action', () => {
+            const action = calendarCreators.loadCalendarFailure('error');
+
+            const newState = date.reducer(initialState.dates, action);
+
+            expect(newState).not.toBeUndefined;
+            expect(newState).toBe(initialState.dates);
+        });
+
+        it ("should have INSERT_EVENT_SUCCESS update the status", () => {
+            const evt = {
+                icon: 'scissors.jpg',
+                label: 'Haircut',
+                startTime: '08:15 AM',
+                endTime: '10:15 AM',
+                endDate: '20170101',
+            };
+
+            const state = {
+                dates:  {
+                    '20170101': {
+                        events: [1],
+                    },
+                },
+                events: {
+                    1: {
+                        icon: 'test.jpg',
+                        label: 'something',
+                        startTime: 'xyz',
+                        entTime: 'abc',
+                        endDate: '20170101',
+                    },
+                    2: { ...evt },
+                }
+            }; 
+
+            const action = eventCreators.insertEventSuccess('20170101', { id: 2, data: evt });
+
+            const newState = date.reducer(state.dates, action);
+
+            expect(newState).not.toBeUndefined;
+            expect(newState['20170101'].events.length).toBe(2);
+            expect(newState['20170101'].events[1]).toBe(2);
+        });
+
+        it ("should have DELETE_EVENT_SUCCESS update the status", () => {
+            const state = {
+                dates:  {
+                    '20170101': {
+                        events: [1],
+                    },
+                },
+                events: {
+                    1: {
+                        icon: 'test.jpg',
+                        label: 'something',
+                        startTime: 'xyz',
+                        entTime: 'abc',
+                        endDate: '20170101',
+                    },
+                },
+            }; 
+
+            const action = eventCreators.deleteEventSuccess('20170101', 1);
+
+            const newState = date.reducer(state.dates, action);
+
+            expect(newState).not.toBeUndefined;
+            expect(newState['20170101'].events.length).toBe(0);
+        });
+    });
 });
 
