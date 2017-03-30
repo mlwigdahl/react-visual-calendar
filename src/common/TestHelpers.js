@@ -7,5 +7,3 @@ export function drainGenerator(gen) {
     } while (!val.done);
     return val.value;
 }
-
-export const mockBrowserHistory = { push: () => {} }; // mock browserHistory

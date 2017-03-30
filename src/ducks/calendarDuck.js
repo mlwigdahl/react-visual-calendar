@@ -1,12 +1,12 @@
 // TODO -- need to make sure the saga exceptions are properly cracked into strings...
 
-import { put, call, takeEvery } from 'redux-saga/effects';
+import { put, call, apply, takeEvery } from 'redux-saga/effects';
+import { browserHistory } from 'react-router';
 
 import initialState from './initialState';
 import CalendarApi from '../api/mockCalendarApi';
 import * as async from './asyncDuck';
 import { sagas as dateSagas } from './dateDuck';
-import * as helpers from '../common/Helpers';
 
 // actions
 
@@ -115,8 +115,7 @@ export const sagas = {
                 
                 yield* dateSagas.helpers.loadDateRange(calendar.minDate, calendar.maxDate, action.data.userId);
 
-                const bh = yield call(helpers.getBrowserHistory);
-                yield call(bh.push, `/`);
+                yield apply(browserHistory, browserHistory.push, [`/`]);
             }
             catch (e) {
                 yield put(async.creators.asyncError(e));

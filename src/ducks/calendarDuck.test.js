@@ -1,5 +1,6 @@
 
 import { testSaga, expectSaga } from 'redux-saga-test-plan';
+import { browserHistory } from 'react-router';
 
 import * as async from './asyncDuck';
 import * as calendar from './calendarDuck';
@@ -8,8 +9,7 @@ import * as event from './eventDuck';
 import CalendarApi from '../api/mockCalendarApi';
 import DateApi from '../api/mockDateApi';
 import EventApi from '../api/mockEventApi';
-import { drainGenerator, mockBrowserHistory } from '../common/TestHelpers';
-import * as helpers from '../common/Helpers';
+import { drainGenerator } from '../common/TestHelpers';
 
 // TODO: deleteEvent testing
 
@@ -183,9 +183,7 @@ describe('Calendar Duck', () => {
                 .next(er)
                 .put(event.creators.loadEventRangeSuccess(er, 1))
                 .next()
-                .call(helpers.getBrowserHistory)
-                .next(mockBrowserHistory)
-                .call(mockBrowserHistory.push, '/')
+                .apply(browserHistory, browserHistory.push, [`/`])
                 .next()
                 .isDone();
         });

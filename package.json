@@ -20,7 +20,7 @@
     "remove-dist": "rimraf ./dist",
     "prebuild": "npm run clean-dist && npm run lint && npm run test",
     "build": "babel-node tools/build.js && npm run open:dist",
-    "test": "jest --verbose",
+    "test": "jest",
     "test:cover": "npm run test -- --coverage ",
     "test:cover:travis": "babel-node node_modules/isparta/bin/isparta cover --root src --report lcovonly _mocha -- --require babel-polyfill ./tools/testSetup.js \"./{,!(node_modules)/**/}*.test.js\" && cat ./coverage/lcov.info | node_modules/coveralls/bin/coveralls.js",
     "test:watch": "npm run test -- --watch",

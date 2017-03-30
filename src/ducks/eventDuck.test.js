@@ -1,4 +1,5 @@
 import { testSaga, expectSaga } from 'redux-saga-test-plan';
+import { browserHistory } from 'react-router';
 
 import { creators as asyncCreators } from './asyncDuck';
 import { creators as dateCreators, reducer as dateReducer } from './dateDuck';
@@ -7,8 +8,7 @@ import * as event from './eventDuck';
 import DateApi from '../api/mockDateApi';
 import CalendarApi from '../api/mockCalendarApi';
 import EventApi from '../api/mockEventApi';
-import { drainGenerator, mockBrowserHistory } from '../common/TestHelpers';
-import * as helpers from '../common/Helpers';
+import { drainGenerator } from '../common/TestHelpers';
 
 // setup
 
@@ -194,9 +194,7 @@ describe('Event Duck', () => {
                 .next(evt)
                 .put(event.creators.insertEventSuccess(1, evt))
                 .next()
-                .call(helpers.getBrowserHistory)
-                .next(mockBrowserHistory)
-                .call(mockBrowserHistory.push, `/day/1`)
+                .apply(browserHistory, browserHistory.push, [`/day/1`])
                 .next()
                 .isDone();
         });
@@ -216,9 +214,7 @@ describe('Event Duck', () => {
                 .next(evt)
                 .put(event.creators.updateEventSuccess(1, evt))
                 .next()
-                .call(helpers.getBrowserHistory)
-                .next(mockBrowserHistory)
-                .call(mockBrowserHistory.push, `/day/1`)
+                .apply(browserHistory, browserHistory.push, [`/day/1`])
                 .next()
                 .isDone();
         });

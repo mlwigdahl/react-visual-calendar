@@ -1,10 +1,10 @@
-import { put, call, takeEvery } from 'redux-saga/effects';
+import { put, call, apply, takeEvery } from 'redux-saga/effects';
+import { browserHistory } from 'react-router';
 
 import initialState from './initialState';
 import EventApi from '../api/mockEventApi';
 import { actions as calActions } from './calendarDuck';
 import * as async from './asyncDuck';
-import * as helpers from '../common/Helpers';
 
 // actions
 
@@ -109,8 +109,7 @@ export const sagas = {
                 yield put(async.creators.asyncRequest());
                 const eventRet = yield call(EventApi.insertEvent, action.data.dateId, action.data.event, action.data.userId);
                 yield put(creators.insertEventSuccess(action.data.dateId, eventRet));
-                const bh = yield call(helpers.getBrowserHistory);
-                yield call(bh.push, `/day/${action.data.dateId}`);
+                yield apply(browserHistory, browserHistory.push, [`/day/${action.data.dateId}`]);
             }
             catch (e) {
                 yield put(async.creators.asyncError(e));
@@ -121,8 +120,7 @@ export const sagas = {
                 yield put(async.creators.asyncRequest());
                 const eventRet = yield call(EventApi.updateEvent, action.data.dateId, action.data.eventId, action.data.event, action.data.userId);
                 yield put(creators.updateEventSuccess(action.data.dateId, eventRet));
-                const bh = yield call(helpers.getBrowserHistory);
-                yield call(bh.push, `/day/${action.data.dateId}`);
+                yield apply(browserHistory, browserHistory.push, [`/day/${action.data.dateId}`]);
             }
             catch (e) {
                 yield put(async.creators.asyncError(e));

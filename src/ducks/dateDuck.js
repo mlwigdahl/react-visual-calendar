@@ -6,7 +6,6 @@ import DateApi from '../api/mockDateApi';
 import * as async from './asyncDuck';
 import { actions as eventActions, sagas as eventSagas} from './eventDuck';
 import { actions as calActions, creators as calCreators } from './calendarDuck';
-//import * as helpers from '../common/Helpers';
 
 // actions
 
