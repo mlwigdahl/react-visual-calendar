@@ -256,7 +256,7 @@ describe('Event Duck', () => {
             expect(newState3.events['4'].icon).toBe('lunch-icon-url');
         });
 
-        it ("should have LOAD_DATE_RANGE_FAILURE update the status (although it doesn't actually do anything at the moment)", () => {
+        it ("should have LOAD_EVENT_RANGE_FAILURE update the status (although it doesn't actually do anything at the moment)", () => {
             const action = event.creators.loadEventRangeFailure("oops");
 
             const newState = event.reducer(initialState.events, action);
@@ -360,6 +360,15 @@ describe('Event Duck', () => {
 
             expect(newState).not.toBeUndefined;
             expect(newState).toEqual({});
+        });
+
+        it ('should have unrecognized events return the status', () => {
+            const action = { type: 'WHATEVER', data: { test: 'test' } };
+
+            const newState = event.reducer(initialState.events, action);
+
+            expect(newState).not.toBeUndefined;
+            expect(newState).toBe(initialState.events);
         });
     });
 
