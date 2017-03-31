@@ -38,7 +38,7 @@ const DateApi = {
             const compDates = { ...dates, ...datesNew };
             /*
             yield call(fetch,
-                `http://${target}:${port}/${apiPath}/user/${userId}/dateRange?${startDate}&${endDate}`,
+                `http://${target}:${port}/${apiPath}/user/${userId}/date?${startDate}&${endDate}`,
                 { method: 'GET', mode: cors });
             const resp = new Response(); // minor differences to the main API since we don't actually call fetch...
             yield apply(resp, resp.json);
