@@ -166,17 +166,6 @@ function mapStateToProps(state) {
     };
 }
 
-// TODO START HERE -- 
-//  X 1. start with selectedDate (which should be app.currentDate to start with), 
-//      set window state to -1 month and +1 month (full months + rest of week)
-//  X 2. when scrolled to top or bottom, set window another month in the appropriate direction (+ rest of week)
-//  X 3. also shift the other side of the window, preserving a fixed width
-//  X 4. if doing so leads to a window that's out of range, fire off an async update 
-//      to load the dates corresponding to the overlap
-//  5. update app.scrollPos according to the window shift
-//  X 6. update scroll bar position back to center (or whatever is needed to keep the window stable) (?)
-//  7. implement shouldComponentUpdate on this and the InitialScroll wrapper to prevent scroll bounce
-
 function mapDispatchToProps(dispatch) {
     return {
         actions: bindActionCreators({

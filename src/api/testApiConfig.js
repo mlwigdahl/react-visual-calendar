@@ -1,5 +1,5 @@
-import 'isomorphic-fetch';
-//import { apply, call } from 'redux-saga/effects';
+
+export const testApiConfig = 'local'; // 'local' or 'remote'
 
 export const target = 'www.wigdahl.net';
 export const apiPath = 'api/react-visual-calendar';
