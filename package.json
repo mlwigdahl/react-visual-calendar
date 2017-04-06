@@ -83,7 +83,7 @@
     "jsdom-global": "2.1.0",
     "json-loader": "0.5.4",
     "mockdate": "1.0.4",
-    "node-sass": "3.10.1",
+    "node-sass": "^3.10.1",
     "npm-run-all": "3.1.1",
     "open": "0.0.5",
     "postcss-loader": "1.0.0",
