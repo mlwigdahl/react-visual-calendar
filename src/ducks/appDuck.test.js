@@ -1,14 +1,11 @@
 
 import { testSaga, expectSaga } from 'redux-saga-test-plan';
-
 import * as app from './appDuck';
 import * as async from './asyncDuck';
 import * as calendar from './calendarDuck';
 import AppApi from '../api/mockAppApi';
 // import AppApi, { target, apiPath, port } from '../api/appApi'; // when we have a real API to test...
 import * as testhelpers from '../common/TestHelpers';
-
-
 
 // setup
 
@@ -139,4 +136,3 @@ describe('App Duck', () => {
         });
     });
 });
-

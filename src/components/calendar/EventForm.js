@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 
 function EventForm({onSubmit, onChange, onCancel, title, startTime, endTime, add, isSubmitValid}) {
     return (

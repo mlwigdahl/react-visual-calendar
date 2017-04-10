@@ -1,6 +1,7 @@
 // This component handles the App template used on every page.
 
-import React, {PropTypes} from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import Header from './common/Header';
 import {connect} from 'react-redux';
 
